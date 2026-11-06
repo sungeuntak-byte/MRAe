@@ -2357,11 +2357,13 @@ buildNavRows();
 (function init(){
   if(!DATA.settings) DATA.settings = {seenIntro:false, alwaysShowIntro:false};
   applyMode();
-  if(DATA.settings.seenIntro && !DATA.settings.alwaysShowIntro){
+  let standalone=false; try{ standalone=!!(window.matchMedia&&matchMedia('(display-mode: standalone)').matches); }catch(x){}
+  const introKey=standalone?'seenIntroApp':'seenIntro';
+  if(DATA.settings[introKey] && !DATA.settings.alwaysShowIntro){
     navStack = ['library'];
     show('library');
   }else{
-    DATA.settings.seenIntro = true;
+    DATA.settings.seenIntro = true; DATA.settings[introKey] = true;
     save();
     navStack = ['intro'];
     show('intro');
