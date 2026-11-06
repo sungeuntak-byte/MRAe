@@ -389,6 +389,9 @@ html:has(#memoWrite.active){overflow:hidden;}
 .acro{margin:22px auto 0;font-size:12.5px;line-height:1.7;color:#8a7a6c;}
 .acro b{color:var(--brown);font-weight:800;}
 .acro b.ee{color:var(--terracotta);}
+.updbanner{display:flex;align-items:center;justify-content:space-between;gap:10px;background:#F1E4D3;border:1px solid var(--btn);color:var(--brown);border-radius:14px;padding:8px 8px 8px 16px;font-size:14px;font-weight:700;margin:0 auto 14px;max-width:320px;}
+.updbanner button{min-height:40px;padding:0 16px;border:none;border-radius:10px;background:var(--btn);color:#fff;font-size:14px;font-weight:700;cursor:pointer;}
+.notice.updbanner{max-width:none;margin:0 0 12px;}
 .devfoot{margin-top:20px;font-size:13px;font-style:italic;color:#8a7a6c;}
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -400,6 +403,7 @@ html:has(#memoWrite.active){overflow:hidden;}
 <div class="screen active" id="intro">
   <div class="logo">MRA<span class="e">e</span></div>
   <div class="slogan"><b class="hl1">오늘</b> 읽는 내가 <b class="hl1">미래</b>의 나에게</div>
+  <div class="updbanner" id="updIntro" style="display:none;"><span>🔔 새 버전이 있어요</span><button type="button" onclick="applyUpdate()">업데이트</button></div>
   <button class="mainbtn" onclick="enterLibrary()">내 서재로 들어가기</button>
   <div class="subtext">언제 어디서든 발전하는 나</div>
   <div class="divider"></div>
@@ -418,6 +422,7 @@ html:has(#memoWrite.active){overflow:hidden;}
   </div>
   <div class="catbar" id="catbar" style="margin-bottom:14px;"></div>
   <div class="card resume" id="resumeCard" style="display:none;" onclick="resumeReading()"></div>
+  <div class="notice updbanner" id="updLib" style="display:none;"><span>🔔 새 버전이 있어요</span><button type="button" onclick="applyUpdate()">업데이트</button></div>
   <div class="notice" id="backupNotice" style="display:none;cursor:pointer;" onclick="go('backup')"></div>
   <input type="text" id="bookSearch" style="display:none;">
   <div class="listhead"><span class="lt" id="libScope">전체 책</span><button class="sharebtn icononly" id="libShareBtn" aria-label="전체 공유" onclick="openShare(currentCatFilter?'shelf':'all')"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="3.6" cy="12" r="2"/><circle cx="9.3" cy="5.1" r="2"/><circle cx="9.3" cy="18.9" r="2"/><path d="m5.2 10 2.4-2.9M5.2 14l2.4 2.9"/><path d="M19.5 4.5v10M16.3 11.6l3.2 3.2 3.2-3.2"/><path d="M15.7 19.6h7.6" stroke-width="2"/></svg></button></div>
@@ -574,6 +579,7 @@ html:has(#memoWrite.active){overflow:hidden;}
     <div class="setrow" onclick="go('trash')"><span>휴지통</span><span class="v">›</span></div>
     <div class="setrow" onclick="openNotice()"><span>이용 시 유의사항 (저작권·출처 표기)</span><span class="v">›</span></div>
     <div class="setrow" onclick="installApp()"><span>앱으로 설치 (홈 화면에 추가)</span><span class="v" id="installState">›</span></div>
+    <div class="setrow" onclick="checkUpdate(true)"><span>앱 버전 · 업데이트 확인</span><span class="v" id="verState"></span></div>
   </div>
 </div>
 
@@ -879,7 +885,7 @@ function renderForScreen(screenId){
   if(screenId==='search'){renderSearchScreen();}
   if(screenId==='marks'){renderMarks();}
   if(screenId==='log'){renderLog();}
-  if(screenId==='settings'){renderRsControls();document.getElementById('alwaysIntro').checked=!!DATA.settings.alwaysShowIntro;applyMode();renderOcrFix();}
+  if(screenId==='settings'){renderRsControls();document.getElementById('alwaysIntro').checked=!!DATA.settings.alwaysShowIntro;{const vs=document.getElementById('verState'); if(vs) vs.textContent='v'+APP_VERSION;}applyMode();renderOcrFix();}
 }
 function updateNavButtons(){
   document.querySelectorAll('.navrow').forEach(r=>{
@@ -2351,6 +2357,29 @@ function renderSearchScreen(){
   if(!bks.length&&!any) host.innerHTML='<div class="empty">검색 결과가 없습니다.</div>';
 }
 function tabSearch(){ go('search'); setTimeout(()=>{const i=document.getElementById('searchInput'); if(i) i.focus();},80); }
+
+/* ---------- 버전 · 업데이트 확인 ---------- */
+const APP_VERSION='2026.11.06-1';
+let updateAvail=false;
+function showUpdateBanners(){ ['updIntro','updLib'].forEach(id=>{ const e=document.getElementById(id); if(e) e.style.display=updateAvail?'flex':'none'; }); }
+async function checkUpdate(manual){
+  const vs=document.getElementById('verState'); if(vs) vs.textContent='v'+APP_VERSION;
+  if(!/^https?:/.test(location.protocol)){ if(manual) showToast('인터넷 주소로 접속했을 때 확인할 수 있습니다.'); return; }
+  try{
+    const r=await fetch(location.pathname+'?chk='+Date.now(),{cache:'no-store'}); const t=await r.text();
+    const m=t.match(/const APP_VERSION='([^']+)'/);
+    if(m&&m[1]!==APP_VERSION){ updateAvail=true; showUpdateBanners(); if(manual) showToast('새 버전이 있어요. 위의 업데이트 버튼을 눌러 주세요.'); if(manual) go('library'); }
+    else if(manual) showToast('최신 버전입니다. (v'+APP_VERSION+')');
+  }catch(x){ if(manual) showToast('확인하지 못했습니다. 인터넷 연결을 확인하세요.'); }
+}
+async function applyUpdate(){
+  showToast('업데이트 중입니다…');
+  try{ await fetch(location.pathname,{cache:'reload'}); }catch(x){}
+  try{ if(window.caches){ const ks=await caches.keys(); await Promise.all(ks.map(k=>caches.delete(k))); } }catch(x){}
+  try{ const rg=await navigator.serviceWorker.getRegistration(); if(rg) await rg.update(); }catch(x){}
+  location.reload();
+}
+setTimeout(()=>{ try{checkUpdate(false);}catch(x){} },1500);
 
 /* ---------- 초기화 ---------- */
 buildNavRows();
