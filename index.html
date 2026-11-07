@@ -125,6 +125,22 @@ textarea{min-height:140px;line-height:1.7;resize:vertical;}
 .modal{background:var(--surface);width:100%;border-radius:18px 18px 0 0;padding:20px 18px calc(24px + env(safe-area-inset-bottom,0px));
   max-height:80vh;overflow-y:auto;}
 .modal{position:relative;}
+.guidebody h4{margin:14px 0 4px;font-size:14px;color:var(--brown);}
+.guidebody p{margin:0 0 6px;font-size:13.5px;line-height:1.65;}
+#newsState{color:var(--btn);font-weight:800;}
+.thumb.saved{border:2px solid var(--btn);}
+.thumb .sv{position:absolute;left:0;right:0;bottom:0;background:rgba(101,82,71,.88);color:#fff;font-size:10px;text-align:center;padding:1px 0;}
+.pvbg{background:#1d1a18;flex-direction:column;align-items:stretch;z-index:60;}
+.pvtop,.pvbot{display:flex;align-items:center;gap:8px;padding:8px 10px;color:#fff;}
+.pvbot{justify-content:center;padding-bottom:calc(10px + env(safe-area-inset-bottom,0px));}
+.pvtop .pvt{flex:1;text-align:center;font-size:14px;}
+.pvtop button,.pvbot button{min-width:44px;min-height:44px;border:1px solid rgba(255,255,255,.4);background:transparent;color:#fff;border-radius:12px;font-size:14px;cursor:pointer;padding:0 12px;}
+.pvbox{flex:1;overflow:auto;-webkit-overflow-scrolling:touch;}
+.pvbox img{width:100%;height:auto;max-width:none;display:block;margin:0 auto;}
+.pvbox.zoom img{width:250%;}
+.pendbox{padding:96px 18px 28px;text-align:center;color:var(--brown);line-height:1.7;}
+.pendbox p{font-size:14px;margin:8px 0 16px;}
+.pendbtns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
 .modal h3{margin:0 0 14px;color:var(--brown);padding-right:44px;}
 .xbtn{position:absolute;top:8px;right:8px;width:44px;height:44px;border:none;background:none;font-size:22px;color:var(--brown);border-radius:12px;cursor:pointer;}
 .xbtn:active{background:var(--beige);}
@@ -510,6 +526,8 @@ html:has(#memoWrite.active){overflow:hidden;}
   <div class="thumbs" id="thumbs"></div>
   <button class="btn primary" id="ocrBtn" style="display:none;width:100%;" onclick="runOcr()">글자 인식하기</button>
   <label class="ocropt"><input type="checkbox" id="ocrEnhance" onchange="DATA.settings.ocrEnhance=this.checked;save();"> 사진 보정 (그림자·흐림 완화) 후 인식</label>
+  <label class="ocropt"><input type="checkbox" id="keepPhotos" onchange="DATA.settings.keepPhotos=this.checked;save();"> 원본 사진 보관 (나중에 글자와 대조해 볼 수 있어요)</label>
+  <div class="hint" id="photoHint" style="margin:0 0 6px;">글자 인식은 나중에 해도 괜찮아요. 본문을 비워 두고 저장하면 사진만 안전하게 보관돼요.</div>
   <div class="ocrstatus" id="ocrStatus"></div>
   <button class="btn outline" style="width:100%;margin:4px 0;" onclick="reflowBody()">줄바꿈 정리 (문단으로 묶기)</button>
   <label>페이지</label>
@@ -517,7 +535,7 @@ html:has(#memoWrite.active){overflow:hidden;}
   <label>발췌문 제목</label>
   <input type="text" id="exTitle" placeholder="원문 소제목이나 핵심 문구">
   <label>본문 (인식된 글자를 여기서 교정하세요)</label>
-  <textarea id="exBody" placeholder="사진을 인식하거나 직접 입력하세요."></textarea>
+  <textarea id="exBody" placeholder="사진을 인식하거나 직접 입력하세요. 비워 두고 사진만 저장해도 돼요."></textarea>
   <label>나의 메모 (선택)</label>
   <textarea id="exMemo" style="min-height:70px;" placeholder="생각이나 느낀 점"></textarea>
   <div class="btnrow">
@@ -531,6 +549,7 @@ html:has(#memoWrite.active){overflow:hidden;}
   <div class="rtop" id="rTop"><div class="rtopin">
     <button class="navbtn" onclick="goBack()" aria-label="이전">←</button>
     <div class="rtitle"><h1 id="readerTitle">발췌문</h1><div class="readmeta" id="readerMeta"></div></div>
+    <button class="navbtn" id="rPhotoBtn" onclick="openPhotoViewer(currentExcerptId)" aria-label="원본 사진 보기" style="width:48px;padding:0;display:none;align-items:center;justify-content:center;"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="1.8"/><path d="m21 16-5-5L6 20"/></svg></button>
     <button class="navbtn mainbtn2" onclick="goMain()" aria-label="전체 책장" style="width:48px;padding:0;display:flex;align-items:center;justify-content:center;"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 3.5h16v17H4z"/><path d="M4 12h16"/><path d="M8 5.5v4.5M11.5 6.5v3.5M15.5 5.5v4.5"/><path d="M8 14.5v4M12 15.5v3M16 14.5v4"/></svg></button>
     
   </div></div>
@@ -577,6 +596,8 @@ html:has(#memoWrite.active){overflow:hidden;}
     <div class="setrow" onclick="openOcrFix()"><span>글자 인식 교정 사전</span><span class="v" id="ocrFixCount">›</span></div>
     <div class="setrow" onclick="go('log')"><span>저장 기록</span><span class="v">›</span></div>
     <div class="setrow" onclick="go('trash')"><span>휴지통</span><span class="v">›</span></div>
+    <div class="setrow" onclick="openGuide()"><span>사용법</span><span class="v">›</span></div>
+    <div class="setrow" onclick="openNews()"><span>새 소식 (업데이트 내용)</span><span class="v" id="newsState">›</span></div>
     <div class="setrow" onclick="openNotice()"><span>이용 시 유의사항 (저작권·출처 표기)</span><span class="v">›</span></div>
     <div class="setrow" onclick="installApp()"><span>앱으로 설치 (홈 화면에 추가)</span><span class="v" id="installState">›</span></div>
     <div class="setrow" onclick="checkUpdate(true)"><span>앱 버전 · 업데이트 확인</span><span class="v" id="verState"></span></div>
@@ -607,6 +628,8 @@ html:has(#memoWrite.active){overflow:hidden;}
     <div class="cardtitle">백업 파일 만들기</div>
     <div class="cardsub" id="bkInfo"></div>
     <div class="hint" style="margin:8px 0 12px;">책·발췌문·메모·설정이 한 파일(JSON)에 담깁니다. 파일을 만든 뒤 폰의 '내 파일' 또는 '다운로드' 폴더에서 실제로 있는지 꼭 확인하세요.</div>
+    <label class="ocropt"><input type="checkbox" id="bkPhotos" checked> 원본 사진도 함께 담기 (파일이 커집니다)</label>
+    <div class="hint" id="bkPhotoInfo" style="margin:0 0 10px;"></div>
     <button class="btn primary" style="width:100%;margin-bottom:8px;" onclick="downloadBackup()">백업 파일 내려받기</button>
     <button class="btn outline" id="shareBackupBtn" style="width:100%;display:none;" onclick="shareBackup()">공유로 보내기 (드라이브·카카오톡 등)</button>
     <div class="hint" id="shareHint" style="margin-top:8px;"></div>
@@ -714,6 +737,47 @@ html:has(#memoWrite.active){overflow:hidden;}
   </div>
 </div>
 
+<div class="modal-bg" id="guideBg" onclick="closeOnBg(event,'guideBg')">
+  <div class="modal"><button class="xbtn" aria-label="닫기" onclick="closeModal('guideBg')">✕</button>
+    <h3>사용법</h3>
+    <div class="noticebody guidebody">
+      <h4>1. 발췌문 저장하기</h4>
+      <p>책을 열고 사진 아이콘(또는 + 버튼)을 눌러 책 페이지를 촬영하거나 사진을 고릅니다. '글자 인식하기'를 누르면 사진 속 글자가 본문에 들어갑니다. 틀린 글자를 고친 뒤 저장하세요. 시간이 없으면 본문을 비워 둔 채 사진만 저장해도 되고, 나중에 읽기 화면에서 '글자 인식하기'로 이어서 할 수 있어요.</p>
+      <h4>2. 원본 사진 보기</h4>
+      <p>사진이 보관된 발췌문은 읽기 화면 위쪽에 사진 아이콘이 나타납니다. 누르면 원본을 볼 수 있고, 화면을 탭하면 확대됩니다. 이상한 글자를 발견하면 원본과 대조해 보세요. 사진은 '이 사진 교체'로 바꿀 수 있습니다.</p>
+      <h4>3. 메뉴 보기</h4>
+      <p>발췌문 읽기 화면에서 본문 가운데를 한 번 누르면 메뉴가 나타나고, 다시 누르면 사라집니다.</p>
+      <p><b>위쪽</b>: ← 이전 화면 · 사진 아이콘(원본 보기) · 책장 아이콘(전체 책장으로 이동)<br>
+      <b>아래쪽</b>: 모든 메모 보기 · 발췌문 전체 메모 추가 · 본문 수정 · 공유·다운로드 · T(글자 크기·배경 등 읽기 설정)<br>
+      가운데 ‹ › 로 쪽을 넘깁니다.</p>
+      <h4>4. 문장에 표시하기</h4>
+      <p>발췌문에서 문장을 길게 눌러 드래그하면 작은 도구 막대가 나타납니다. 형광펜, 굵게, 밑줄, 메모, 복사, 공유를 고를 수 있습니다. 메모를 쓰는 창에서는 화면 아래 도구줄로 형광펜, 굵게, 밑줄을 넣고 '서식 삭제'로 지웁니다.</p>
+      <h4>5. 정리하기</h4>
+      <p>책이나 발췌문을 길게 누르거나 ⋮ 를 누르면 다른 책장·다른 책으로 옮기거나 삭제할 수 있습니다. 삭제한 것은 휴지통에서 복원됩니다.</p>
+      <h4>6. 공유와 백업</h4>
+      <p>공유 아이콘으로 문장·발췌문·책·책장을 공유하거나 Word·텍스트 파일로 내려받을 수 있습니다. 저장된 출처가 함께 담깁니다. 설정 → 백업·복원에서 백업 파일을 만들어 두세요. 원본 사진도 함께 담을 수 있습니다. 데이터는 이 폰에만 저장되니, 폰을 바꾸기 전에는 꼭 백업하세요.</p>
+    </div>
+    <button class="btn primary" style="width:100%;margin-top:16px;" onclick="closeModal('guideBg')">닫기</button>
+  </div>
+</div>
+<div class="modal-bg" id="newsBg" onclick="closeOnBg(event,'newsBg')">
+  <div class="modal"><button class="xbtn" aria-label="닫기" onclick="closeModal('newsBg')">✕</button>
+    <h3>새 소식</h3>
+    <div class="noticebody guidebody">
+      <h4>2026.11.07</h4>
+      <p>· 원본 사진을 보관해요. 글자 인식을 하지 않고 사진만 저장해 두었다가 나중에 인식할 수 있어요.<br>
+      · 읽기 화면에서 원본 사진을 보고 확대하고 교체할 수 있어요.<br>
+      · 백업 파일에 원본 사진을 함께 담을 수 있어요.<br>
+      · 설정에 '사용법'과 '새 소식'이 생겼어요.</p>
+      <h4>2026.11.06</h4>
+      <p>· 새 버전이 있으면 시작 화면과 서재에 안내가 떠요.<br>
+      · 앱으로 설치(홈 화면에 추가)할 수 있어요.<br>
+      · 공유와 다운로드(Word·텍스트)를 한 아이콘으로 합쳤어요.<br>
+      · 책·발췌문을 다른 책장·책으로 옮길 수 있어요.</p>
+    </div>
+    <button class="btn primary" style="width:100%;margin-top:16px;" onclick="closeModal('newsBg')">닫기</button>
+  </div>
+</div>
 <div class="modal-bg" id="noticeBg" onclick="closeOnBg(event,'noticeBg')">
   <div class="modal"><button class="xbtn" aria-label="닫기" onclick="closeModal('noticeBg')">✕</button>
     <h3>이용 시 유의사항</h3>
@@ -808,6 +872,12 @@ html:has(#memoWrite.active){overflow:hidden;}
     <button class="btn ghost" style="width:100%" onclick="savedChoiceLib()">서재로</button>
   </div>
 </div>
+<div class="modal-bg pvbg" id="pvBg">
+  <div class="pvtop"><button type="button" onclick="closeModal('pvBg')" aria-label="닫기">✕</button><div class="pvt" id="pvTitle"></div><button type="button" id="pvZoomBtn" onclick="pvZoom()">확대</button></div>
+  <div class="pvbox" id="pvBox" onclick="pvZoom()"><img id="pvImg" alt="원본 사진"></div>
+  <div class="pvbot"><button type="button" id="pvPrev" onclick="pvStep(-1)">‹ 이전</button><button type="button" id="pvReplace" onclick="document.getElementById('pvFile').click()">이 사진 교체</button><button type="button" id="pvNext" onclick="pvStep(1)">다음 ›</button></div>
+  <input id="pvFile" type="file" accept="image/*" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0" onchange="pvReplaceFile(this)">
+</div>
 <div class="toast" id="toast"></div>
 
 <nav class="tabbar" id="tabbar"><div class="tabin">
@@ -817,6 +887,9 @@ html:has(#memoWrite.active){overflow:hidden;}
   <button class="tab" data-tab="settings" onclick="go('settings')" aria-label="설정"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button>
 </div></nav>
 <script>
+function openGuide(){ document.getElementById("guideBg").classList.add("show"); }
+function newsMark(){ const el=document.getElementById('newsState'); if(el) el.textContent=(DATA.settings.notesSeen===APP_VERSION)?'›':'NEW'; }
+function openNews(){ document.getElementById("newsBg").classList.add("show"); DATA.settings.notesSeen=APP_VERSION; save(); newsMark(); }
 let deferredInstall=null;
 window.addEventListener('beforeinstallprompt',ev=>{ ev.preventDefault(); deferredInstall=ev; });
 window.addEventListener('appinstalled',()=>{ deferredInstall=null; try{showToast('설치되었습니다. 홈 화면에서 열어 보세요.');}catch(x){} });
@@ -885,7 +958,7 @@ function renderForScreen(screenId){
   if(screenId==='search'){renderSearchScreen();}
   if(screenId==='marks'){renderMarks();}
   if(screenId==='log'){renderLog();}
-  if(screenId==='settings'){renderRsControls();document.getElementById('alwaysIntro').checked=!!DATA.settings.alwaysShowIntro;{const vs=document.getElementById('verState'); if(vs) vs.textContent='v'+APP_VERSION;}applyMode();renderOcrFix();}
+  if(screenId==='settings'){renderRsControls();document.getElementById('alwaysIntro').checked=!!DATA.settings.alwaysShowIntro;{const vs=document.getElementById('verState'); if(vs) vs.textContent='v'+APP_VERSION;}newsMark();applyMode();renderOcrFix();}
 }
 function updateNavButtons(){
   document.querySelectorAll('.navrow').forEach(r=>{
@@ -1212,8 +1285,9 @@ function renderBookDetail(){
   exs.forEach(e=>{
     const card = document.createElement('div');
     card.className = 'card';
-    card.innerHTML = `<div class="cardtitle">${escapeHtml(e.title||'(제목 없음)')}</div>
-      <div class="cardsub">p.${escapeHtml(e.page||'-')}</div>`;
+    const pend=!e.body&&(e.photoIds||[]).length, hasPh=(e.photoIds||[]).length;
+    card.innerHTML = `<div class="cardtitle">${escapeHtml(e.title||(pend?'사진만 저장됨':'(제목 없음)'))}</div>
+      <div class="cardsub">p.${escapeHtml(e.page||'-')}${pend?' · 📷 글자 인식 전':(hasPh?' · 📷':'')}</div>`;
     card.style.cssText='display:flex;align-items:center;gap:8px;';
     const tx=document.createElement('div'); tx.style.cssText='flex:1;min-width:0;'; while(card.firstChild) tx.appendChild(card.firstChild); card.appendChild(tx);
     const mb=document.createElement('button'); mb.type='button'; mb.className='morebtn'; mb.setAttribute('aria-label','더보기'); mb.textContent='⋮'; mb.onclick=ev=>{ev.stopPropagation();excerptMenu(e.id);}; card.appendChild(mb);
@@ -1227,7 +1301,8 @@ function renderBookDetail(){
 function openExcerptEditor(excerptId){
   document.getElementById('ocrEnhance').checked=(DATA.settings.ocrEnhance!==false);
   editingExcerptId = excerptId || null;
-  photos=[]; currentOcrRaw=''; renderPhotos(); document.getElementById('ocrStatus').textContent='';
+  photos=[]; removedPhotoIds=[]; currentOcrRaw=''; renderPhotos(); document.getElementById('ocrStatus').textContent='';
+  document.getElementById('keepPhotos').checked=(DATA.settings.keepPhotos!==false);
   (function(){const bk=DATA.books.find(x=>x.id===currentBookId);document.getElementById('exBookLabel').textContent=bk?('📕 '+bk.title):'';})();
   document.querySelector('#excerptEditor h1').textContent = excerptId ? '발췌문 수정' : '새 발췌문';
   if(excerptId){
@@ -1237,6 +1312,7 @@ function openExcerptEditor(excerptId){
     document.getElementById('exTitle').value = e.title||'';
     document.getElementById('exBody').value = e.body||'';
     document.getElementById('exMemo').value = e.memo||'';
+    loadSavedPhotos(e);
   }else{
     document.getElementById('exPage').value='';
     document.getElementById('exTitle').value='';
@@ -1250,29 +1326,48 @@ function cancelExcerptEdit(){
   goBack('bookDetail');
 }
 let savingExcerpt = false;
-function saveExcerpt(){
+async function saveExcerpt(){
   if(savingExcerpt) return;
   const body = document.getElementById('exBody').value.trim();
-  if(!body){showToast('본문을 입력해 주세요.');return;}
+  if(!body && !photos.length){showToast('본문을 입력하거나 사진을 추가해 주세요.');return;}
   savingExcerpt = true;
   const page = document.getElementById('exPage').value.trim();
   const title = document.getElementById('exTitle').value.trim();
   const memo = document.getElementById('exMemo').value.trim();
+  const keep = document.getElementById('keepPhotos').checked;
+  const prev = editingExcerptId ? DATA.excerpts.find(x=>x.id===editingExcerptId) : null;
+  const prevIds = (prev&&prev.photoIds)||[];
+  const keptIds = []; let photoFail=false;
+  for(const p of photos){
+    if(p.id){ keptIds.push(p.id); continue; }
+    if(!keep) continue;
+    try{ const blob=await compressPhoto(p.file); const pid='ph'+uid(); await phPut(pid,blob); keptIds.push(pid); }
+    catch(x){ photoFail=true; }
+  }
+  if(!body && !keptIds.length){
+    savingExcerpt=false;
+    showToast(photoFail?'사진을 저장하지 못했어요. 저장 공간을 확인한 뒤 다시 시도하세요.':'본문을 입력하거나 "원본 사진 보관"을 켜 주세요.');
+    return;
+  }
   let id;
   if(editingExcerptId){
-    const e = DATA.excerpts.find(x=>x.id===editingExcerptId);
-    e.marks=remapMarks(e.marks,e.body,body); e.page=page; e.title=title; e.body=body; e.memo=memo; e.updatedAt=Date.now(); if(currentOcrRaw) e.ocrRaw=currentOcrRaw;
+    const e = prev;
+    e.marks=remapMarks(e.marks,e.body,body); e.page=page; e.title=title; e.body=body; e.memo=memo; e.photoIds=keptIds; e.updatedAt=Date.now(); if(currentOcrRaw) e.ocrRaw=currentOcrRaw;
     id = e.id;
   }else{
     id = uid();
-    DATA.excerpts.push({id, bookId:currentBookId, page, title, body, memo, ocrRaw:currentOcrRaw, marks:[],
+    DATA.excerpts.push({id, bookId:currentBookId, page, title, body, memo, ocrRaw:currentOcrRaw, photoIds:keptIds, marks:[],
       deleted:false, createdAt:Date.now(), updatedAt:Date.now()});
   }
-  learnOcrFixes(currentOcrRaw,body);
+  if(body) learnOcrFixes(currentOcrRaw,body);
   logSave(editingExcerptId?'수정':'저장',id);
   const ok = save();
   savingExcerpt = false;
   if(!ok) return;
+  const toDel = prevIds.filter(x=>!keptIds.includes(x)).concat(removedPhotoIds.filter(x=>!prevIds.includes(x)&&!keptIds.includes(x)));
+  if(toDel.length) phDel(toDel);
+  removedPhotoIds=[];
+  if(photoFail) showToast('글은 저장했지만 일부 사진은 저장하지 못했어요.');
   currentExcerptId = id;
   editingExcerptId = null;
   showExcerptSavedChoice();
@@ -1319,6 +1414,7 @@ function renderReader(){
   document.getElementById('readerMeta').textContent = `${b.title} · p.${e.page||'-'}`;
   applyReading();
   pg=window._startPg||0;
+  document.getElementById('rPhotoBtn').style.display=((e.photoIds||[]).length)?'flex':'none';
   paintBody(e);
   document.getElementById('readerMemo').style.display='none';
   const n=(e.marks||[]).filter(m=>m.t==='memo').length+(e.memo?1:0);
@@ -1374,6 +1470,7 @@ function renderTrash(){
   wrap.querySelectorAll('[data-purge-book]').forEach(btn=>btn.onclick=()=>{
     askConfirm('영구 삭제하면 되돌릴 수 없습니다. 계속할까요?', ()=>{
       const id = btn.dataset.purgeBook;
+      phDel(DATA.excerpts.filter(e=>e.bookId===id).reduce((a,e)=>a.concat(e.photoIds||[]),[]));
       DATA.excerpts = DATA.excerpts.filter(e=>e.bookId!==id);
       DATA.books = DATA.books.filter(b=>b.id!==id);
       save();renderTrash();
@@ -1385,6 +1482,7 @@ function renderTrash(){
   });
   wrap.querySelectorAll('[data-purge-ex]').forEach(btn=>btn.onclick=()=>{
     askConfirm('영구 삭제하면 되돌릴 수 없습니다. 계속할까요?', ()=>{
+      const _pe=DATA.excerpts.find(e=>e.id===btn.dataset.purgeEx); if(_pe) phDel(_pe.photoIds||[]);
       DATA.excerpts = DATA.excerpts.filter(e=>e.id!==btn.dataset.purgeEx);
       save();renderTrash();
     });
@@ -1399,9 +1497,17 @@ function pad2(n){return String(n).padStart(2,'0');}
 function stamp(d){d=d||new Date();return d.getFullYear()+pad2(d.getMonth()+1)+pad2(d.getDate())+'-'+pad2(d.getHours())+pad2(d.getMinutes());}
 function fmtDate(t){const d=new Date(t);return d.getFullYear()+'.'+pad2(d.getMonth()+1)+'.'+pad2(d.getDate())+' '+pad2(d.getHours())+':'+pad2(d.getMinutes());}
 function liveCounts(d){return {books:d.books.filter(b=>!b.deleted).length, excerpts:d.excerpts.filter(e=>!e.deleted).length};}
-function buildBackupJson(){
-  return JSON.stringify({app:'MRAe', schemaVersion:SCHEMA_VERSION, exportedAt:new Date().toISOString(),
-    data:{categories:DATA.categories, books:DATA.books, excerpts:DATA.excerpts, settings:DATA.settings}}, null, 1);
+function blobToDataUrl(b){ return new Promise((res,rej)=>{ const r=new FileReader(); r.onload=()=>res(r.result); r.onerror=()=>rej(r.error); r.readAsDataURL(b); }); }
+async function buildBackupJson(){
+  const obj={app:'MRAe', schemaVersion:SCHEMA_VERSION, exportedAt:new Date().toISOString(),
+    data:{categories:DATA.categories, books:DATA.books, excerpts:DATA.excerpts, settings:DATA.settings}};
+  const inc=document.getElementById('bkPhotos')&&document.getElementById('bkPhotos').checked;
+  if(inc){
+    const ph={};
+    for(const e of DATA.excerpts){ for(const id of (e.photoIds||[])){ try{ const b=await phGet(id); if(b) ph[id]=await blobToDataUrl(b); }catch(x){} } }
+    obj.photos=ph;
+  }
+  return JSON.stringify(obj,null,inc?0:1);
 }
 function downloadFile(name,text,type){
   const blob=new Blob([text],{type}); const url=URL.createObjectURL(blob);
@@ -1409,15 +1515,18 @@ function downloadFile(name,text,type){
   setTimeout(()=>{a.remove();URL.revokeObjectURL(url);},1500);
 }
 function markBackedUp(){ DATA.settings.lastBackupAt=Date.now(); save(); renderBackup(); }
-function downloadBackup(){
+async function downloadBackup(){
   try{
-    downloadFile('MRAe-backup-'+stamp()+'.json', buildBackupJson(), 'application/json');
+    showToast('백업 파일을 만드는 중…');
+    const _j=await buildBackupJson();
+    downloadFile('MRAe-backup-'+stamp()+'.json', _j, 'application/json');
     markBackedUp();
     showToast('백업 파일을 만들었습니다. 내 파일/다운로드 폴더에서 꼭 확인하세요.');
   }catch(e){ showToast('백업 파일을 만들지 못했습니다. 전체 TXT로 먼저 내려받아 보세요.'); }
 }
 async function shareBackup(){
-  const json=buildBackupJson(); const name='MRAe-backup-'+stamp()+'.json';
+  showToast('백업 파일을 만드는 중…');
+  const json=await buildBackupJson(); const name='MRAe-backup-'+stamp()+'.json';
   try{
     const file=new File([json],name,{type:'application/json'});
     if(navigator.canShare && navigator.canShare({files:[file]})){
@@ -1446,6 +1555,8 @@ function downloadAllTxt(){
 function renderBackup(){
   const n=liveCounts(DATA), last=DATA.settings&&DATA.settings.lastBackupAt;
   document.getElementById('bkInfo').textContent='지금 책 '+n.books+'권 · 발췌문 '+n.excerpts+'개 · '+(last?'마지막 백업 시도: '+fmtDate(last):'아직 백업한 적 없음');
+  (function(){ const c=DATA.excerpts.filter(e=>!e.deleted).reduce((a,e)=>a+(e.photoIds||[]).length,0);
+    document.getElementById('bkPhotoInfo').textContent=c?('이 폰에 원본 사진 '+c+'장이 보관되어 있어요. 사진을 빼고 백업하면 원본 사진은 이 폰에만 남습니다.'):'아직 보관된 원본 사진이 없어요.'; })();
   document.getElementById('shareBackupBtn').style.display='block';
   document.getElementById('shareHint').textContent=(navigator.canShare&&window.isSecureContext)?'':'지금은 공유창이 지원되지 않는 방식(파일로 직접 연 상태)이라 누르면 파일로 저장됩니다. 앱을 https 주소에 올리면 카카오톡·드라이브 공유창이 열립니다.';
   let prev=null; try{prev=localStorage.getItem(PREV_KEY);}catch(e){}
@@ -1472,20 +1583,20 @@ function validateBackup(obj){
   const books=d.books.filter(x=>ok(x)&&typeof x.title==='string');
   const exs=d.excerpts.filter(x=>ok(x)&&typeof x.bookId==='string'&&typeof x.body==='string');
   const dropped=(d.categories.length-cats.length)+(d.books.length-books.length)+(d.excerpts.length-exs.length);
-  return {categories:cats,books:books,excerpts:exs,settings:(d.settings&&typeof d.settings==='object')?d.settings:{},dropped:dropped,exportedAt:obj.exportedAt};
+  return {photos:(obj.photos&&typeof obj.photos==='object')?obj.photos:{},categories:cats,books:books,excerpts:exs,settings:(d.settings&&typeof d.settings==='object')?d.settings:{},dropped:dropped,exportedAt:obj.exportedAt};
 }
 function handleRestoreFile(input){
   const f=input.files&&input.files[0]; input.value='';
   const msg=document.getElementById('restoreMsg'); msg.textContent='';
   if(!f) return;
-  if(f.size>30*1024*1024){msg.textContent='파일이 너무 큽니다. MRAe 백업 파일이 맞는지 확인하세요.';return;}
+  if(f.size>300*1024*1024){msg.textContent='파일이 너무 큽니다. MRAe 백업 파일이 맞는지 확인하세요.';return;}
   const r=new FileReader();
   r.onload=()=>{
     try{
       const d=validateBackup(JSON.parse(r.result));
       pendingRestore=d;
       const live={books:d.books.filter(b=>!b.deleted).length,excerpts:d.excerpts.filter(e=>!e.deleted).length};
-      document.getElementById('restoreSummary').innerHTML='백업 날짜: '+(d.exportedAt?fmtDate(d.exportedAt):'알 수 없음')+'<br>책 '+live.books+'권 · 발췌문 '+live.excerpts+'개'+(d.dropped?'<br><b>읽을 수 없는 항목 '+d.dropped+'개는 제외됩니다.</b>':'');
+      document.getElementById('restoreSummary').innerHTML='백업 날짜: '+(d.exportedAt?fmtDate(d.exportedAt):'알 수 없음')+'<br>책 '+live.books+'권 · 발췌문 '+live.excerpts+'개'+(Object.keys(d.photos||{}).length?' · 원본 사진 '+Object.keys(d.photos).length+'장':'')+(d.dropped?'<br><b>읽을 수 없는 항목 '+d.dropped+'개는 제외됩니다.</b>':'');
       document.getElementById('restoreBg').classList.add('show');
     }catch(e){
       msg.textContent=(e&&e.message&&!/JSON|Unexpected/.test(e.message))?e.message:'파일을 읽지 못했습니다. MRAe에서 만든 .json 백업 파일인지 확인하세요.';
@@ -1520,6 +1631,15 @@ function doRestore(mode){
   pendingRestore=null; renderBackup();
   document.getElementById('restoreMsg').textContent=(mode==='replace'?'전체 교체 완료.':'합치기 완료. 새로 추가 '+added+'개, 더 최신 내용으로 갱신 '+updated+'개.')+' 서재에서 확인해 보세요.';
   showToast('복원했습니다.');
+  restorePhotos(d.photos);
+}
+async function restorePhotos(ph){
+  const ids=Object.keys(ph||{}); if(!ids.length) return; let ok=0;
+  for(const id of ids){
+    const u=ph[id]; if(typeof u!=='string'||!/^data:image\//.test(u)) continue;
+    try{ const b=await (await fetch(u)).blob(); await phPut(id,b); ok++; }catch(x){}
+  }
+  if(ok) showToast('원본 사진 '+ok+'장도 복원했습니다.');
 }
 function undoRestore(){
   askConfirm('방금 복원하기 전 상태로 되돌릴까요? 복원 이후에 추가한 내용은 사라집니다.',()=>{
@@ -1573,6 +1693,78 @@ function openBookPicker(){
 }
 window.onerror = function(msg){ try{ showToast('오류: '+String(msg).slice(0,80)); }catch(e){} };
 
+/* ---------- 원본 사진 보관 (IndexedDB) ---------- */
+const PH_DB='mrae_photos', PH_ST='p';
+let removedPhotoIds=[];
+function phDb(){ return new Promise((res,rej)=>{
+  if(!window.indexedDB) return rej(new Error('저장소를 쓸 수 없어요'));
+  const r=indexedDB.open(PH_DB,1);
+  r.onupgradeneeded=()=>{ try{ r.result.createObjectStore(PH_ST); }catch(e){} };
+  r.onsuccess=()=>res(r.result); r.onerror=()=>rej(r.error||new Error('저장소 오류'));
+}); }
+function phTx(mode,fn){ return phDb().then(db=>new Promise((res,rej)=>{
+  let out; let tx;
+  try{ tx=db.transaction(PH_ST,mode); out=fn(tx.objectStore(PH_ST)); }catch(e){ try{db.close();}catch(x){} rej(e); return; }
+  tx.oncomplete=()=>{ try{db.close();}catch(x){} res(out&&('result' in out)?out.result:undefined); };
+  tx.onerror=tx.onabort=()=>{ try{db.close();}catch(x){} rej(tx.error||new Error('저장 실패')); };
+})); }
+function phPut(id,blob){ return phTx('readwrite',st=>{ st.put(blob,id); }); }
+function phGet(id){ return phTx('readonly',st=>st.get(id)); }
+function phDel(ids){ if(!ids||!ids.length) return Promise.resolve(); return phTx('readwrite',st=>{ ids.forEach(i=>st.delete(i)); }).catch(()=>{}); }
+function compressPhoto(file){
+  return new Promise((resolve,reject)=>{
+    const url=URL.createObjectURL(file); const img=new Image();
+    img.onload=()=>{
+      const r=Math.min(1,2000/Math.max(img.width,img.height));
+      const cv=document.createElement('canvas'); cv.width=Math.round(img.width*r); cv.height=Math.round(img.height*r);
+      cv.getContext('2d').drawImage(img,0,0,cv.width,cv.height); URL.revokeObjectURL(url);
+      cv.toBlob(b=>b?resolve(b):reject(new Error('사진 압축 실패')),'image/jpeg',0.82);
+    };
+    img.onerror=()=>{ URL.revokeObjectURL(url); reject(new Error('사진을 읽지 못했습니다')); };
+    img.src=url;
+  });
+}
+async function loadSavedPhotos(e){
+  const mine=e.id;
+  for(const id of (e.photoIds||[])){
+    try{ const b=await phGet(id); if(b && editingExcerptId===mine) photos.push({id:id,blob:b,url:URL.createObjectURL(b)}); }catch(x){}
+  }
+  if(editingExcerptId===mine) renderPhotos();
+}
+let pv={urls:[],ids:[],i:0,ctx:null,rev:[]};
+function openPhotoList(urls,i,ctx,ids){
+  pv.rev.forEach(u=>{ try{URL.revokeObjectURL(u);}catch(e){} }); pv.rev=[];
+  pv.urls=urls; pv.i=i||0; pv.ctx=ctx||null; pv.ids=ids||[];
+  pvPaint(); document.getElementById('pvBg').classList.add('show');
+}
+function pvPaint(){
+  const box=document.getElementById('pvBox'); box.classList.remove('zoom'); box.scrollTop=0; box.scrollLeft=0;
+  document.getElementById('pvImg').src=pv.urls[pv.i];
+  document.getElementById('pvTitle').textContent='원본 사진 '+(pv.i+1)+' / '+pv.urls.length;
+  document.getElementById('pvZoomBtn').textContent='확대';
+  document.getElementById('pvPrev').style.visibility=pv.i>0?'visible':'hidden';
+  document.getElementById('pvNext').style.visibility=pv.i<pv.urls.length-1?'visible':'hidden';
+  document.getElementById('pvReplace').style.display=pv.ctx?'':'none';
+}
+function pvStep(d){ pv.i=Math.max(0,Math.min(pv.urls.length-1,pv.i+d)); pvPaint(); }
+function pvZoom(){ const b=document.getElementById('pvBox'); b.classList.toggle('zoom'); document.getElementById('pvZoomBtn').textContent=b.classList.contains('zoom')?'축소':'확대'; }
+async function pvReplaceFile(input){
+  const f=input.files&&input.files[0]; input.value=''; if(!f||!pv.ctx) return;
+  try{
+    const blob=await compressPhoto(f); await phPut(pv.ids[pv.i],blob);
+    const u=URL.createObjectURL(blob); pv.rev.push(u); pv.urls[pv.i]=u; pvPaint(); showToast('사진을 교체했습니다.');
+  }catch(e){ showToast('사진을 교체하지 못했습니다.'); }
+}
+async function openPhotoViewer(exId){
+  const e=DATA.excerpts.find(x=>x.id===exId);
+  if(!e||!(e.photoIds||[]).length){ showToast('저장된 원본 사진이 없습니다.'); return; }
+  const urls=[],ids=[],rev=[];
+  for(const id of e.photoIds){ try{ const b=await phGet(id); if(b){ const u=URL.createObjectURL(b); urls.push(u); ids.push(id); rev.push(u); } }catch(x){} }
+  if(!urls.length){ showToast('이 폰에는 원본 사진이 없습니다. (백업에 사진을 담지 않았거나, 저장 공간이 정리되었을 수 있어요.)'); return; }
+  openPhotoList(urls,0,{exId:exId},ids); pv.rev=rev;
+}
+function pendOcr(){ const e=curEx(); if(!e) return; currentBookId=e.bookId; openExcerptEditor(e.id); }
+
 /* ---------- 사진 + 글자 인식(OCR) ---------- */
 let photos = [];
 let currentOcrRaw = '';
@@ -1585,9 +1777,14 @@ function renderPhotos(){
   try{ if(window.top!==window.self) document.getElementById('embedNotice').style.display='block'; }catch(e){ document.getElementById('embedNotice').style.display='block'; }
   const wrap = document.getElementById('thumbs'); wrap.innerHTML='';
   photos.forEach((p,i)=>{
-    const d = document.createElement('div'); d.className='thumb';
-    d.innerHTML='<img src="'+p.url+'"><button>✕</button>';
-    d.querySelector('button').onclick=()=>{photos.splice(i,1);renderPhotos();};
+    const d = document.createElement('div'); d.className='thumb'+(p.id?' saved':'');
+    d.innerHTML='<img src="'+p.url+'" alt="사진 '+(i+1)+'"><button type="button" aria-label="사진 빼기">✕</button>'+(p.id?'<span class="sv">보관됨</span>':'');
+    d.querySelector('img').onclick=()=>openPhotoList(photos.map(x=>x.url),i);
+    d.querySelector('button').onclick=ev=>{
+      ev.stopPropagation(); const rm=photos[i];
+      const doRm=()=>{ if(rm.id) removedPhotoIds.push(rm.id); const k=photos.indexOf(rm); if(k>=0) photos.splice(k,1); renderPhotos(); };
+      if(rm.id) askConfirm('이미 보관된 원본 사진입니다. 지금 빼고 저장하면 사진이 삭제됩니다. 빼 둘까요?',doRm); else doRm();
+    };
     wrap.appendChild(d);
   });
   document.getElementById('ocrBtn').style.display = photos.length ? 'block' : 'none';
@@ -1754,7 +1951,7 @@ function paintBody(e){
     sp.className=cls.join(' '); host.appendChild(sp);
     (memoEnds[t]||[]).forEach(m=>{ const ic=document.createElement('span'); ic.className='memoico'; ic.dataset.mid=m.id; ic.onclick=ev=>{ev.stopPropagation();openMemoView(m.id);}; host.appendChild(ic); });
   }
-  if(!body.length) host.textContent='';
+  if(!body.length){ host.textContent=''; if((e.photoIds||[]).length){ host.innerHTML='<div class="pendbox"><b>아직 글자로 옮기지 않은 사진이에요.</b><p>원본 사진은 안전하게 보관되어 있어요. 시간이 날 때 글자 인식을 해 주세요.</p><div class="pendbtns"><button type="button" class="btn outline" onclick="openPhotoViewer(currentExcerptId)">원본 사진 보기</button><button type="button" class="btn primary" onclick="pendOcr()">글자 인식하기</button></div></div>'; } }
   window._findNode=findNode; if(findNode&&RS().flow!=='page'){ setTimeout(()=>{try{findNode.scrollIntoView({block:'center',behavior:'smooth'});}catch(x){}},80); }
 }
 function rangeOffsets(){
@@ -2238,6 +2435,7 @@ if(document.fonts&&document.fonts.ready){ document.fonts.ready.then(()=>{ if(doc
 /* ===== 읽기 화면에서 바로 수정 ===== */
 function startInlineEdit(){
   const e=curEx(); if(!e) return; hideSelBar(); toggleReaderMenu(false);
+  if(!e.body && (e.photoIds||[]).length){ pendOcr(); return; }
   document.getElementById('ieTitle').value=e.title||''; document.getElementById('iePage').value=e.page||''; document.getElementById('ieBody').value=e.body||''; document.getElementById('ieMemo').value=e.memo||'';
   document.getElementById('readPaper').style.display='none'; document.getElementById('rMini').style.display='none'; document.getElementById('readEdit').style.display='block';
   window.scrollTo(0,0); setTimeout(()=>{document.getElementById('ieBody').focus();},50);
@@ -2359,7 +2557,7 @@ function renderSearchScreen(){
 function tabSearch(){ go('search'); setTimeout(()=>{const i=document.getElementById('searchInput'); if(i) i.focus();},80); }
 
 /* ---------- 버전 · 업데이트 확인 ---------- */
-const APP_VERSION='2026.11.06-1';
+const APP_VERSION='2026.11.07-2';
 let updateAvail=false;
 function showUpdateBanners(){ ['updIntro','updLib'].forEach(id=>{ const e=document.getElementById(id); if(e) e.style.display=updateAvail?'flex':'none'; }); }
 async function checkUpdate(manual){
