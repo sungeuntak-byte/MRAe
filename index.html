@@ -277,6 +277,14 @@ mark{background:#FFE58A;color:inherit;border-radius:3px;padding:0 1px;}
 .booktop{display:flex;gap:14px;align-items:center;margin-bottom:14px;}
 #bookDetailMeta{margin:0;font-size:14px;line-height:1.6;}
 .topbar h1{letter-spacing:-.2px;}
+.crumbs{display:flex;flex-wrap:wrap;gap:0 6px;margin-top:2px;}
+.crumb{border:none;background:none;padding:6px 4px 6px 0;min-height:34px;color:var(--btn);font-size:13px;font-weight:700;cursor:pointer;}
+.recent{position:fixed;left:0;right:92px;bottom:calc(68px + env(safe-area-inset-bottom,0px));z-index:14;display:flex;align-items:center;gap:6px;border:none;background:var(--ivory);border-radius:0 14px 14px 0;color:#8a7a6c;font-size:12px;padding:7px 14px 7px 16px;text-align:left;cursor:pointer;}
+.recent .rtag{font-weight:800;color:var(--btn);flex:0 0 auto;}
+.recent .rarr{flex:0 0 auto;}
+.recent .rtxt{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0;}
+body.hastab #library{padding-bottom:150px;}
+.sel2{min-height:40px;border:1px solid var(--beige);border-radius:10px;background:var(--surface);color:var(--text);font-size:14px;padding:0 8px;}
 .shelfpill{margin-top:6px;min-height:34px;padding:0 12px;border-radius:17px;border:1px solid var(--beige);background:var(--surface);color:var(--btn);font-size:13px;font-weight:700;cursor:pointer;}
 
 /* 화면 모드 */
@@ -453,9 +461,8 @@ html:has(#memoWrite.active){overflow:hidden;}
     <button class="navbtn" onclick="go('shelves')" aria-label="책장 관리" style="width:44px;padding:0;display:flex;align-items:center;justify-content:center;"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9l-4-4L4 16v4z"/><path d="m13.5 6.5 4 4"/></svg></button>
   </div>
   <div class="catbar" id="catbar" style="margin-bottom:14px;"></div>
-  <div class="card resume" id="resumeCard" style="display:none;" onclick="resumeReading()"></div>
+  <button type="button" class="recent" id="recentLine" style="display:none;" onclick="resumeReading()" aria-label="마지막으로 읽던 곳으로"><span class="rtag">최근</span><span class="rarr">›</span><span class="rtxt" id="recentTxt"></span></button>
   <div class="notice updbanner" id="updLib" style="display:none;"><span>🔔 새 업데이트가 있어요</span><button type="button" onclick="applyUpdate()">업데이트</button></div>
-  <div class="notice" id="backupNotice" style="display:none;cursor:pointer;" onclick="go('backup')"></div>
   <input type="text" id="bookSearch" style="display:none;">
   <div class="listhead"><span class="lt" id="libScope">전체 책</span><button class="sharebtn icononly" id="libShareBtn" aria-label="전체 공유" onclick="openShare(currentCatFilter?'shelf':'all')"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="3.6" cy="12" r="2"/><circle cx="9.3" cy="5.1" r="2"/><circle cx="9.3" cy="18.9" r="2"/><path d="m5.2 10 2.4-2.9M5.2 14l2.4 2.9"/><path d="M19.5 4.5v10M16.3 11.6l3.2 3.2 3.2-3.2"/><path d="M15.7 19.6h7.6" stroke-width="2"/></svg></button></div>
   <div id="bookList"></div>
@@ -511,7 +518,7 @@ html:has(#memoWrite.active){overflow:hidden;}
 
 <div class="screen" id="bookDetail">
   <div class="topbar">
-    <span style="width:92px;display:flex;"><button class="navbtn" id="bdShelfBtn" onclick="backToShelf()" aria-label="책장으로" style="min-width:44px;width:44px;padding:0;">←</button></span>
+    <span style="width:92px;display:flex;"></span>
     <h1 id="bookDetailTitle">책 이름</h1>
     <span style="display:flex;gap:4px;width:92px;justify-content:flex-end;">
       <button class="navbtn" onclick="tabSearch()" aria-label="검색" style="min-width:44px;padding:0;display:flex;align-items:center;justify-content:center;border:none;background:none;"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/></svg></button>
@@ -608,9 +615,8 @@ html:has(#memoWrite.active){overflow:hidden;}
   </div>
   <div class="secdiv">관리</div>
   <div class="card" style="padding:4px 16px;">
-    <div class="setrow" onclick="go('backup')"><span>백업 · 복원</span><span class="v">›</span></div>
+    <div class="setrow" onclick="go('backup')"><span>백업 · 복원</span><span class="v" id="bkState">›</span></div>
     <div class="setrow" onclick="openOcrFix()"><span>글자 인식 교정 사전</span><span class="v" id="ocrFixCount">›</span></div>
-    <div class="setrow" onclick="go('log')"><span>저장 기록</span><span class="v">›</span></div>
     <div class="setrow" onclick="go('trash')"><span>휴지통</span><span class="v">›</span></div>
   </div>
   <div class="secdiv">정보</div>
@@ -655,6 +661,12 @@ html:has(#memoWrite.active){overflow:hidden;}
     <div class="hint" id="shareHint" style="margin-top:8px;"></div>
   </div>
   <div class="card" style="cursor:default">
+    <div class="cardtitle">백업 알림</div>
+    <div class="hint" style="margin:6px 0 4px;">조건이 되면 설정 아이콘 오른쪽 위에 빨간 점이 떠요. 백업을 하면 사라집니다.</div>
+    <label class="setrow" style="cursor:default"><span>발췌문이 이 개수 이상일 때부터</span><select class="sel2" id="bkMinSel" onchange="setBkPref()"><option value="1">1개</option><option value="3">3개</option><option value="5">5개</option><option value="10">10개</option><option value="20">20개</option><option value="30">30개</option><option value="50">50개</option></select></label>
+    <label class="setrow" style="cursor:default"><span>알림 주기</span><select class="sel2" id="bkDaysSel" onchange="setBkPref()"><option value="7">7일</option><option value="14">14일</option><option value="30">30일</option><option value="0">끄기</option></select></label>
+  </div>
+  <div class="card" style="cursor:default">
     <div class="cardtitle">백업에서 복원하기</div>
     <div class="hint" style="margin:6px 0 12px;">복원하기 직전의 내 데이터는 자동으로 따로 보관되어, 잘못 복원해도 되돌릴 수 있습니다.</div>
     <button class="btn ghost" style="width:100%;" onclick="document.getElementById('restoreInput').click()">백업 파일 선택</button>
@@ -667,6 +679,7 @@ html:has(#memoWrite.active){overflow:hidden;}
     <div class="hint" style="margin:6px 0 12px;">책별로 정리한 일반 텍스트(TXT)입니다. 다른 앱에서 열어 보는 용도이며, 앱으로 복원할 수는 없습니다.</div>
     <button class="btn ghost" style="width:100%;" onclick="downloadAllTxt()">전체 TXT 내려받기</button>
   </div>
+  <div class="card" style="padding:4px 16px;"><div class="setrow" onclick="go('log')"><span>저장 기록 보기</span><span class="v">›</span></div></div>
   <div class="hint" id="persistInfo" style="margin-top:6px;"></div>
 </div>
 
@@ -818,13 +831,14 @@ html:has(#memoWrite.active){overflow:hidden;}
 
       <h4>4. 정리하기</h4>
       <p>서재 오른쪽 위 연필은 책장 관리(추가·이름 바꾸기·삭제), 책 화면 오른쪽 위 연필은 책 수정(이름·저자·표지·책장 이동·삭제)이에요. 책이나 발췌문을 길게 누르거나 ⋮ 를 누르면 다른 책장·다른 책으로 옮기거나 삭제할 수 있고, 삭제한 것은 설정의 휴지통에서 복원돼요.</p>
+      <p>책 화면에서는 '› 기독교  › 내 서재'를 눌러 위로 올라갈 수 있어요. 설정·검색·북마크에서 ← 를 누르면 출발했던 화면으로 돌아가고, 서재 아래의 '최근'을 누르면 마지막에 읽던 곳으로 이어져요.</p>
 
       <h4>5. 공유와 백업</h4>
       <p>공유 아이콘으로 문장·발췌문·책·책장을 공유하거나 Word·텍스트 파일로 내려받을 수 있어요. 저장된 출처가 함께 담깁니다.</p>
       <p>설정 → 백업·복원에서 백업 파일을 만들어 두세요. 원본 사진도 함께 담을 수 있어요. 데이터는 이 폰에만 저장되니, 폰을 바꾸기 전에는 꼭 백업하세요.</p>
 
-      <h4>6. 업데이트 알림</h4>
-      <p>새 업데이트가 있으면 시작 화면과 서재 위, 설정 맨 위에 안내가 뜨고 아래 설정 아이콘 오른쪽 위에 빨간 점이 나타나요. 설정의 '정보'에서 앱 소개, 버전, 새 소식, 사용법, 이용 시 유의사항을 볼 수 있어요. 업데이트를 눌러도 저장한 글과 사진은 그대로예요.</p>
+      <h4>6. 알림 점</h4>
+      <p>새 업데이트가 있거나, 안 읽은 새 소식이 있거나, 백업할 때가 되면 아래 설정 아이콘 오른쪽 위에 빨간 점이 나타나요. 설정에서 표시가 있는 줄을 확인하세요. 백업 알림 기준(발췌문 개수·주기)은 백업·복원 화면에서 바꿀 수 있고, 업데이트를 눌러도 저장한 글과 사진은 그대로예요. 설정의 '정보'에서 앱 소개, 버전, 새 소식, 사용법, 이용 시 유의사항을 볼 수 있어요.</p>
     </div>
     <button class="btn primary" style="width:100%;margin-top:16px;" onclick="closeModal('guideBg')">닫기</button>
   </div>
@@ -833,6 +847,13 @@ html:has(#memoWrite.active){overflow:hidden;}
   <div class="modal"><button class="xbtn" aria-label="닫기" onclick="closeModal('newsBg')">✕</button>
     <h3>새 소식</h3>
     <div class="noticebody guidebody">
+      <h4>2026.11.07 (4)</h4>
+      <p>· 설정·검색·북마크에서 ← 를 누르면 출발했던 화면(서재, 책 화면 등)으로 돌아가요.<br>
+      · 책 화면에 '› 책장 › 내 서재' 이동 경로가 생기고, 왼쪽 위 ← 는 없앴어요.<br>
+      · 아래 서재 탭이 서재 화면에서도 보여요.<br>
+      · 백업 안내는 설정 아이콘의 빨간 점으로 바꿨고, 알림 기준을 정할 수 있어요.<br>
+      · 이어 읽기 카드를 아래의 '최근' 한 줄로 바꿨어요.<br>
+      · 저장 기록은 백업·복원 화면 아래로 옮겼어요.</p>
       <h4>2026.11.07 (3)</h4>
       <p>· 설정에 '정보' 묶음이 생겼어요. 앱 소개, 버전, 새 소식, 사용법, 이용 시 유의사항이 모여 있어요.<br>
       · 서재와 책 화면 오른쪽 위 아이콘을 연필로 바꿨어요.<br>
@@ -960,7 +981,7 @@ html:has(#memoWrite.active){overflow:hidden;}
   <button class="tab" data-tab="library" onclick="goMain()" aria-label="전체 책장"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 3.5h16v17H4z"/><path d="M4 12h16"/><path d="M8 5.5v4.5M11.5 6.5v3.5M15.5 5.5v4.5"/><path d="M8 14.5v4M12 15.5v3M16 14.5v4"/></svg></button>
   <button class="tab" data-tab="search" onclick="tabSearch()" aria-label="검색"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/></svg></button>
   <button class="tab" data-tab="marks" onclick="openMarks('all')" aria-label="메모와 하이라이트 모아보기"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3.5h12v17l-6-4-6 4z"/></svg></button>
-  <button class="tab" data-tab="settings" onclick="go('settings')" aria-label="설정"><i class="tabbdg" id="setBadge"></i><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button>
+  <button class="tab" data-tab="settings" onclick="tabGo('settings')" aria-label="설정"><i class="tabbdg" id="setBadge"></i><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button>
 </div></nav>
 <script>
 function guideIcons(){
@@ -1008,6 +1029,7 @@ let DATA = loadData();
 function save(){
   try{
     localStorage.setItem(KEY, JSON.stringify(DATA));
+    try{ showUpdateBanners(); }catch(e){}
     return true;
   }catch(e){
     showToast('저장 공간이 부족합니다. 내보내기로 백업하세요.');
@@ -1067,6 +1089,12 @@ function show(screenId){
 function go(screenId){
   if(navStack[navStack.length-1] !== screenId){ navStack.push(screenId); fwdStack=[]; }
   show(screenId);
+}
+const TAB_AREA=['search','marks','settings','backup','trash','log'];
+function tabOrigin(){ let i=navStack.length-1; while(i>0&&TAB_AREA.indexOf(navStack[i])>=0) i--; return navStack[i]; }
+function tabGo(id){
+  let i=navStack.length-1; while(i>0&&TAB_AREA.indexOf(navStack[i])>=0) i--;
+  navStack=navStack.slice(0,i+1); navStack.push(id); fwdStack=[]; show(id);
 }
 function replaceScreen(screenId){
   if(navStack.length>0) navStack.pop();
@@ -1361,7 +1389,9 @@ function renderBookDetail(){
   const bc=document.getElementById('bookDetailCover'); bc.innerHTML=''; bc.appendChild(coverEl(b.cover,b.title,54,72,22));
   const md=document.getElementById('bookDetailMeta'); md.innerHTML='';
   md.appendChild(document.createTextNode(`${b.author||'저자 미상'}${b.publisher?' · '+b.publisher:''}`)); md.appendChild(document.createElement('br'));
-  const sc=document.createElement('button'); sc.type='button'; sc.className='shelfpill'; sc.textContent='📚 '+(cat?cat.name:'책장 없음')+' ›'; sc.onclick=backToShelf; md.appendChild(sc);
+  const crumbs=document.createElement('div'); crumbs.className='crumbs';
+  if(cat){ const c1=document.createElement('button'); c1.type='button'; c1.className='crumb'; c1.textContent='› '+cat.name; c1.onclick=backToShelf; crumbs.appendChild(c1); }
+  const c2=document.createElement('button'); c2.type='button'; c2.className='crumb'; c2.textContent='› 내 서재'; c2.onclick=()=>goMain(); crumbs.appendChild(c2); md.appendChild(crumbs);
   const list = document.getElementById('excerptList');
   const exs = DATA.excerpts.filter(e=>e.bookId===currentBookId && !e.deleted)
     .sort((a,b2)=>(b2.updatedAt||0)-(a.updatedAt||0));
@@ -1646,6 +1676,7 @@ function renderBackup(){
   document.getElementById('bkInfo').textContent='지금 책 '+n.books+'권 · 발췌문 '+n.excerpts+'개 · '+(last?'마지막 백업 시도: '+fmtDate(last):'아직 백업한 적 없음');
   (function(){ const c=DATA.excerpts.filter(e=>!e.deleted).reduce((a,e)=>a+(e.photoIds||[]).length,0);
     document.getElementById('bkPhotoInfo').textContent=c?('이 폰에 원본 사진 '+c+'장이 보관되어 있어요. 사진을 빼고 백업하면 원본 사진은 이 폰에만 남습니다.'):'아직 보관된 원본 사진이 없어요.'; })();
+  { const s=DATA.settings; document.getElementById('bkMinSel').value=String(s.bkMin==null?10:s.bkMin); document.getElementById('bkDaysSel').value=String(s.bkDays==null?14:s.bkDays); }
   document.getElementById('shareBackupBtn').style.display='block';
   document.getElementById('shareHint').textContent=(navigator.canShare&&window.isSecureContext)?'':'지금은 공유창이 지원되지 않는 방식(파일로 직접 연 상태)이라 누르면 파일로 저장됩니다. 앱을 https 주소에 올리면 카카오톡·드라이브 공유창이 열립니다.';
   let prev=null; try{prev=localStorage.getItem(PREV_KEY);}catch(e){}
@@ -1653,14 +1684,17 @@ function renderBackup(){
   const pi=document.getElementById('persistInfo');
   if(navigator.storage&&navigator.storage.persisted){navigator.storage.persisted().then(p=>{pi.textContent=p?'브라우저가 이 앱의 저장 공간을 보호하도록 설정되어 있습니다.':'브라우저가 저장 공간을 자동 정리할 수도 있으니, 주기적으로 백업 파일을 만들어 두세요.';}).catch(()=>{});}
 }
-function updateBackupNotice(){
-  const el=document.getElementById('backupNotice'); if(!el) return;
-  const n=liveCounts(DATA), last=DATA.settings&&DATA.settings.lastBackupAt;
-  const days=last?Math.floor((Date.now()-last)/86400000):null;
-  if(n.excerpts>0 && (last===undefined||last===null||days>=14)){
-    el.style.display='block';
-    el.textContent=last?('백업한 지 '+days+'일이 지났어요. 눌러서 백업하기'):'아직 백업한 적이 없어요. 눌러서 백업하기';
-  }else el.style.display='none';
+function updateBackupNotice(){}
+function backupInfo(){
+  const s=DATA.settings||{}, min=(s.bkMin==null?10:s.bkMin), days=(s.bkDays==null?14:s.bkDays);
+  const n=liveCounts(DATA).excerpts, last=s.lastBackupAt;
+  const ago=last?Math.floor((Date.now()-last)/86400000):null;
+  return {due:(days>0&&n>=min&&(!last||ago>=days)), ago:ago, last:last};
+}
+function setBkPref(){
+  DATA.settings.bkMin=parseInt(document.getElementById('bkMinSel').value,10);
+  DATA.settings.bkDays=parseInt(document.getElementById('bkDaysSel').value,10);
+  save(); showUpdateBanners();
 }
 function validateBackup(obj){
   if(!obj||obj.app!=='MRAe'||typeof obj.schemaVersion!=='number'||!obj.data) throw new Error('MRAe 백업 파일이 아닙니다.');
@@ -2385,7 +2419,7 @@ function renderSearchResults(q,hostArg){
 
 
 /* ===== 하단 탭 · 화면 모드 · 쪽 넘기기 ===== */
-function marksCtx(){ const cur=navStack[navStack.length-1]; if(cur==='bookDetail') return 'book'; if(cur==='library'&&currentCatFilter) return 'shelf'; return 'all'; }
+function marksCtx(){ const cur=tabOrigin(); if(cur==='bookDetail') return 'book'; if(cur==='library'&&currentCatFilter) return 'shelf'; return 'all'; }
 function updateTabbar(id){
   const ts=document.querySelector('.tab[data-tab=search]'), tm=document.querySelector('.tab[data-tab=marks]');
   if(ts&&tm){
@@ -2396,7 +2430,7 @@ function updateTabbar(id){
   }
   const show_=['library','bookDetail','trash','backup','settings','marks','log','shelves','search'].indexOf(id)>=0;
   document.getElementById('tabbar').style.display=show_?'block':'none';
-  const lt=document.querySelector('.tab[data-tab=library]'); if(lt) lt.style.display=(id==='library')?'none':'';
+  const lt=document.querySelector('.tab[data-tab=library]'); if(lt) lt.style.display='';
   document.body.classList.toggle('hastab',show_);
   document.querySelectorAll('.tab').forEach(t=>{
     const k=t.dataset.tab; t.classList.toggle('on',(k==='library'&&(id==='library'||id==='bookDetail'||id==='shelves'))||(k==='search'&&id==='search')||(k==='marks'&&id==='marks')||(k==='settings'&&(id==='settings'||id==='backup'||id==='trash'||id==='log')));
@@ -2464,7 +2498,7 @@ function pageGo(d){ if(RS().flow!=='page') return; toggleReaderMenu(false); cons
 
 /* ===== 마크 모아보기 · 이어 읽기 · 저장 기록 ===== */
 let marksState={kind:'all',bookId:null,filter:'all'};
-function openMarks(kind){ marksState={kind:kind,bookId:kind==='book'?currentBookId:null,catId:kind==='shelf'?currentCatFilter:null,filter:'all'}; go('marks'); }
+function openMarks(kind){ marksState={kind:kind,bookId:kind==='book'?currentBookId:null,catId:kind==='shelf'?currentCatFilter:null,filter:'all'}; tabGo('marks'); }
 function renderMarks(){
   const st=marksState; const b=DATA.books.find(x=>x.id===st.bookId);
   const isBook=st.kind==='book'&&b; const mt=document.getElementById('marksTitle');
@@ -2511,11 +2545,12 @@ function renderLog(){
     if(ex) d.onclick=()=>{ currentBookId=ex.bookId; openReader(ex.id); }; host.appendChild(d); });
 }
 function renderResume(){
-  const el=document.getElementById('resumeCard'); if(!el) return; const lr=DATA.settings.lastRead; const q=(document.getElementById('bookSearch').value||'').trim();
+  const el=document.getElementById('recentLine'); if(!el) return;
+  const lr=DATA.settings.lastRead; const qs=(document.getElementById('bookSearch').value||'').trim();
   const e=lr&&DATA.excerpts.find(x=>x.id===lr.id&&!x.deleted); const b=e&&DATA.books.find(x=>x.id===e.bookId&&!x.deleted);
-  if(!e||!b||q){ el.style.display='none'; return; }
-  el.style.display='block'; el.innerHTML='<div class="tag">이어 읽기</div><div class="cardtitle"></div><div class="cardsub"></div><div class="cardsub" style="margin-top:6px;"><span style="color:var(--btn);font-weight:700;" onclick="event.stopPropagation();go(\'log\')">저장 기록 보기 ›</span></div>';
-  el.children[1].textContent=e.title||'(제목 없음)'; el.children[2].textContent=b.title+' · p.'+(e.page||'-')+' · '+fmtDate(lr.at);
+  if(!e||!b||qs){ el.style.display='none'; return; }
+  const c=DATA.categories.find(x=>x.id===b.categoryId&&!x.deleted);
+  document.getElementById('recentTxt').textContent=(c?c.name+': ':'')+b.title; el.style.display='flex';
 }
 function resumeReading(){ const lr=DATA.settings.lastRead; const e=lr&&DATA.excerpts.find(x=>x.id===lr.id&&!x.deleted); if(!e) return; currentBookId=e.bookId; window._startPg=lr.pg||0; openReader(e.id); }
 
@@ -2643,17 +2678,22 @@ function renderSearchScreen(){
   const any=renderSearchResults(q,host);
   if(!bks.length&&!any) host.innerHTML='<div class="empty">검색 결과가 없습니다.</div>';
 }
-function tabSearch(){ go('search'); setTimeout(()=>{const i=document.getElementById('searchInput'); if(i) i.focus();},80); }
+function tabSearch(){ tabGo('search'); setTimeout(()=>{const i=document.getElementById('searchInput'); if(i) i.focus();},80); }
 
 /* ---------- 버전 · 업데이트 확인 ---------- */
-const APP_VERSION='2026.11.07-6';
+const APP_VERSION='2026.11.07-7';
 let updateAvail=false;
 function showUpdateBanners(){
   ['updIntro','updLib','updSet'].forEach(id=>{ const e=document.getElementById(id); if(e) e.style.display=updateAvail?'flex':'none'; });
   const vs=document.getElementById('verState'); if(vs){ vs.textContent=updateAvail?'🔔 새 업데이트 있음':'v'+APP_VERSION; vs.style.color=updateAvail?'#D93025':''; vs.style.fontWeight=updateAvail?'800':''; }
   const unseen=(DATA.settings.notesSeen!==APP_VERSION);
   const nt=document.getElementById('newsState'); if(nt) nt.textContent=unseen?'NEW':'›';
-  const n=(updateAvail?1:0)+(unseen?1:0);
+  const bi=backupInfo();
+  const bs=document.getElementById('bkState'); if(bs){
+    bs.textContent=bi.due?'백업 필요':(bi.last?('마지막 백업 '+(bi.ago===0?'오늘':bi.ago+'일 전')):'›');
+    bs.style.color=bi.due?'#D93025':''; bs.style.fontWeight=bi.due?'800':'';
+  }
+  const n=(updateAvail?1:0)+(unseen?1:0)+(bi.due?1:0);
   const sb=document.getElementById('setBadge'); if(sb){ sb.textContent=''; sb.style.display=n?'block':'none'; }
 }
 function verRowClick(){ if(updateAvail){ askConfirm('업데이트할까요? 저장한 글과 사진은 그대로 유지됩니다.',applyUpdate); } else checkUpdate(true); }
