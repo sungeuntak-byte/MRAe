@@ -442,6 +442,10 @@ body.hastab .toast{bottom:90px;}
 .shelfrow .cnt{color:#7A776E;font-size:14px;}
 .shelfrow .ib{width:44px;height:44px;border:none;background:none;color:var(--brown);display:flex;align-items:center;justify-content:center;border-radius:10px;cursor:pointer;}
 .shelfrow .ib:active{background:var(--beige);}
+.shelfrow .mv{display:flex;flex-direction:column;gap:2px;}
+.shelfrow .mv button{width:40px;height:26px;border:none;background:none;color:var(--brown);display:flex;align-items:center;justify-content:center;border-radius:8px;cursor:pointer;padding:0;}
+.shelfrow .mv button:active{background:var(--beige);}
+.shelfrow .mv button:disabled{opacity:.25;cursor:default;}
 .mvta{width:100%;min-height:120px;font-family:var(--rfont);font-size:var(--rsize);line-height:var(--rline);background:transparent;color:var(--rtext);border:1.5px dashed var(--btn);border-radius:10px;padding:10px;resize:vertical;}
 .mwta{width:100%;min-height:50vh;font-family:var(--rfont);font-size:var(--rsize);line-height:var(--rline);padding:14px;border-radius:12px;border:1.5px solid var(--beige);background:var(--surface);color:var(--text);white-space:pre-wrap;word-break:keep-all;overflow-wrap:break-word;outline:none;}
 .mwta:focus{border-color:var(--btn);}
@@ -871,6 +875,8 @@ html[data-mode=dark] .tab{color:#A7A398;}
     <h3>새 소식</h3>
     <div class="updbanner" id="newsUpd" style="display:none;margin:0 0 12px;"><span>🔔 새 업데이트가 있어요</span><button type="button" onclick="askConfirm('업데이트할까요? 저장한 글과 사진은 그대로 유지됩니다.',applyUpdate)">업데이트 적용</button></div>
     <div class="noticebody guidebody">
+      <h4>2026.11.10</h4>
+      <p>· 책장 관리에서 ▲ ▼ 버튼으로 책장 순서를 바꿀 수 있어요. 홈의 책장 칩, 책 저장 화면의 책장 선택에도 같은 순서로 보여요.</p>
       <h4>2026.11.09 (2)</h4>
       <p>· 사진을 찍거나 고르면 바로 자르기 화면이 열려요. 처음엔 사진 전체가 틀이라 ‘자르지 않고 쓰기’도 쉬워요. 저장 화면에서 켜고 끌 수 있어요.<br>
       · 자르는 틀은 자유예요. 책 표지도 자유롭게 자르고, 칸에는 잘리지 않고 전체가 보여요.</p>
@@ -2957,15 +2963,22 @@ let shelfDraft=null;
 function renderShelves(){
   const host=document.getElementById('shelfList'); if(!host) return; host.innerHTML='';
   const cats=activeCats(); if(!cats.length){ host.innerHTML='<div class="empty">책장이 없습니다. 위 버튼으로 추가하세요.</div>'; return; }
-  cats.forEach(cat=>{
+  cats.forEach((cat,i)=>{
     const n=DATA.books.filter(b=>b.categoryId===cat.id&&!b.deleted).length;
     const r=document.createElement('div'); r.className='shelfrow';
-    r.innerHTML='<span class="nm"></span><span class="cnt"></span><button class="ib" aria-label="이름·표지 수정">'+'<svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9l-4-4L4 16v4z"/><path d="m13.5 6.5 4 4"/></svg>'+'</button><button class="ib" aria-label="삭제">'+'<svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg>'+'</button>';
+    r.innerHTML='<span class="mv"><button type="button" class="up" aria-label="위로"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m6 15 6-6 6 6"/></svg></button><button type="button" class="dn" aria-label="아래로"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></button></span><span class="nm"></span><span class="cnt"></span><button class="ib" aria-label="이름·표지 수정">'+'<svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9l-4-4L4 16v4z"/><path d="m13.5 6.5 4 4"/></svg>'+'</button><button class="ib" aria-label="삭제">'+'<svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg>'+'</button>';
     r.querySelector('.nm').textContent=cat.name; r.querySelector('.cnt').textContent='('+n+')';
+    const up=r.querySelector('.up'), dn=r.querySelector('.dn'); up.disabled=(i===0); dn.disabled=(i===cats.length-1); up.onclick=()=>moveShelf(cat.id,-1); dn.onclick=()=>moveShelf(cat.id,1);
     const [be,bd]=r.querySelectorAll('.ib'); be.onclick=()=>openShelfEdit(cat.id); bd.onclick=()=>requestDeleteCategory(cat.id);
     r.querySelector('.nm').onclick=()=>{ currentCatFilter=cat.id; goMain(); currentCatFilter=cat.id; renderCatbar(); renderBooks(); };
     host.appendChild(r);
   });
+}
+function moveShelf(id,d){
+  const cats=activeCats(); const i=cats.findIndex(c=>c.id===id), j=i+d; if(i<0||j<0||j>=cats.length) return;
+  const t=cats[i]; cats[i]=cats[j]; cats[j]=t; cats.forEach((c,k)=>{c.order=k;});
+  save(); renderShelves(); try{renderCatbar();}catch(x){}
+  const row=document.querySelectorAll('#shelfList .shelfrow')[j]; if(row){ const b=row.querySelector(d<0?'.up':'.dn'); if(b&&!b.disabled) b.focus(); }
 }
 function openShelfEdit(id){
   const cat=id?DATA.categories.find(x=>x.id===id):null;
@@ -2993,7 +3006,7 @@ function renderSearchScreen(){
 function tabSearch(){ tabGo('search'); setTimeout(()=>{const i=document.getElementById('searchInput'); if(i) i.focus();},80); }
 
 /* ---------- 버전 · 업데이트 확인 ---------- */
-const APP_VERSION='2026.11.09-2';
+const APP_VERSION='2026.11.10';
 let updateAvail=false;
 let latestVer='';
 function pendingState(){
