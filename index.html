@@ -951,6 +951,9 @@ html[data-mode=dark] .tab{color:#A7A398;}
     <h3>새 소식</h3>
     <div class="updbanner" id="newsUpd" style="display:none;margin:0 0 12px;"><span>🔔 새 업데이트가 있어요</span><button type="button" onclick="askConfirm('업데이트할까요? 저장한 글과 사진은 그대로 유지됩니다.',applyUpdate)">업데이트 적용</button></div>
     <div class="noticebody guidebody">
+      <h4>2026.11.11 (7)</h4>
+      <p>· 새 버전이 자동 적용돼 앱이 다시 열릴 때 시작 화면으로 돌아가지 않고 책장이 바로 보여요. 책을 읽거나 쓰는 중에는 자동으로 다시 열리지 않아요.<br>
+      · 뒤로가기 안내가 뜬 뒤 화면을 한 번이라도 누르면 처음 상태로 돌아가요.</p>
       <h4>2026.11.11 (6)</h4>
       <p>· 쪽 넘기기로 읽을 때 폰의 뒤로가기 버튼이 한 쪽씩 앞으로 돌아가요. 발췌문 첫 쪽이면 이전 발췌문의 마지막 쪽으로, 첫 발췌문의 첫 쪽이면 책 화면으로 나가요. 앱이 바로 꺼지지 않아요.</p>
       <h4>2026.11.11 (5)</h4>
@@ -3203,6 +3206,7 @@ function saveInlineEdit(){
     ['pointerup','touchend','mouseup','keydown','click'].forEach(t=>window.addEventListener(t,armGuard,{capture:true,passive:true}));
     window._armGuard=armGuard;
     let armed=0; const guard=()=>{ try{history.pushState({mrae:'guard'},'');}catch(e){} };
+    window.addEventListener('pointerup',()=>{ armed=0; },{capture:true,passive:true});
     window.addEventListener('popstate',()=>{
       const prevArmed=(armed>(window._navAt||0))?armed:0; armed=0;
       const open=document.querySelector('.modal-bg.show');
@@ -3352,7 +3356,7 @@ function renderSearchScreen(){
 function tabSearch(){ tabGo('search'); setTimeout(()=>{const i=document.getElementById('searchInput'); if(i) i.focus();},80); }
 
 /* ---------- 버전 · 업데이트 확인 ---------- */
-const APP_VERSION='2026.11.11-6';
+const APP_VERSION='2026.11.11-7';
 let updateAvail=false;
 let latestVer='';
 function pendingState(){
@@ -3387,6 +3391,7 @@ function safeToReload(){
 }
 function tryAutoApply(){
   if(!updateAvail||!safeToReload()) return false;
+  { const ac=document.querySelector('.screen.active'); if(!ac||(ac.id!=='library'&&ac.id!=='intro')) return false; }
   try{ const t=parseInt(sessionStorage.getItem('mrae_auto')||'0',10); if(Date.now()-t<300000) return false; sessionStorage.setItem('mrae_auto',String(Date.now())); }catch(e){ return false; }
   applyUpdate(); return true;
 }
@@ -3404,6 +3409,7 @@ async function checkUpdate(manual){
 }
 async function applyUpdate(){
   showToast('업데이트 중입니다…');
+  try{ sessionStorage.setItem('mrae_skipIntro','1'); }catch(x){}
   try{ await fetch(location.pathname,{cache:'reload'}); }catch(x){}
   try{ if(window.caches){ const ks=await caches.keys(); await Promise.all(ks.map(k=>caches.delete(k))); } }catch(x){}
   try{ const rg=await navigator.serviceWorker.getRegistration(); if(rg) await rg.update(); }catch(x){}
@@ -3421,7 +3427,8 @@ buildNavRows();
   applyMode();
   let standalone=false; try{ standalone=!!(window.matchMedia&&matchMedia('(display-mode: standalone)').matches); }catch(x){}
   const introKey=standalone?'seenIntroApp':'seenIntro';
-  if(DATA.settings[introKey] && !DATA.settings.alwaysShowIntro){
+  let skipIntro=false; try{ skipIntro=sessionStorage.getItem('mrae_skipIntro')==='1'; sessionStorage.removeItem('mrae_skipIntro'); }catch(x){}
+  if(skipIntro || (DATA.settings[introKey] && !DATA.settings.alwaysShowIntro)){
     navStack = ['library'];
     show('library');
   }else{
