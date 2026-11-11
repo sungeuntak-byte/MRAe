@@ -951,6 +951,8 @@ html[data-mode=dark] .tab{color:#A7A398;}
     <h3>새 소식</h3>
     <div class="updbanner" id="newsUpd" style="display:none;margin:0 0 12px;"><span>🔔 새 업데이트가 있어요</span><button type="button" onclick="askConfirm('업데이트할까요? 저장한 글과 사진은 그대로 유지됩니다.',applyUpdate)">업데이트 적용</button></div>
     <div class="noticebody guidebody">
+      <h4>2026.11.11 (8)</h4>
+      <p>· 폰의 뒤로가기를 연달아 눌러도 한 번에 앱이 꺼지지 않게 고쳤어요. 어느 하단 메뉴에서 돌아와도 책장에서 뒤로가기를 누르면 ‘한 번 더 누르면 종료’ 안내가 먼저 떠요.</p>
       <h4>2026.11.11 (7)</h4>
       <p>· 새 버전이 자동 적용돼 앱이 다시 열릴 때 시작 화면으로 돌아가지 않고 책장이 바로 보여요. 책을 읽거나 쓰는 중에는 자동으로 다시 열리지 않아요.<br>
       · 뒤로가기 안내가 뜬 뒤 화면을 한 번이라도 누르면 처음 상태로 돌아가요.</p>
@@ -3201,13 +3203,17 @@ function saveInlineEdit(){
 /* ===== 하드웨어 뒤로가기 ===== */
 (function(){
   try{
-    history.replaceState({mrae:'base'},'');
-    const armGuard=()=>{ try{ if(history.state&&history.state.mrae==='guard') return; history.pushState({mrae:'guard'},''); }catch(e){} };
-    ['pointerup','touchend','mouseup','keydown','click'].forEach(t=>window.addEventListener(t,armGuard,{capture:true,passive:true}));
-    window._armGuard=armGuard;
-    let armed=0; const guard=()=>{ try{history.pushState({mrae:'guard'},'');}catch(e){} };
+    history.replaceState({mrae:'base',n:0},'');
+    /* 폰에서는 사용자가 화면을 누른 순간에 쌓은 기록만 뒤로가기에 확실히 반응한다 → 눌렀을 때 여러 칸을 미리 쌓아 둔다 */
+    let gd=0, exiting=false;
+    const topUp=()=>{ try{ while(gd<3){ gd++; history.pushState({mrae:'guard',n:gd},''); } }catch(e){} };
+    ['pointerup','touchend','mouseup','keydown','click'].forEach(t=>window.addEventListener(t,topUp,{capture:true,passive:true}));
+    window._armGuard=topUp;
+    let armed=0; const guard=()=>{ if(gd===0){ try{ history.pushState({mrae:'guard',n:1},''); gd=1; }catch(e){} } };
     window.addEventListener('pointerup',()=>{ armed=0; },{capture:true,passive:true});
-    window.addEventListener('popstate',()=>{
+    window.addEventListener('popstate',ev=>{
+      const st=ev.state; gd=(st&&st.mrae==='guard')?(st.n||0):0;
+      if(exiting){ if(gd>0) history.go(-gd); else history.back(); return; }
       const prevArmed=(armed>(window._navAt||0))?armed:0; armed=0;
       const open=document.querySelector('.modal-bg.show');
       if(open){ open.classList.remove('show'); guard(); return; }
@@ -3224,7 +3230,7 @@ function saveInlineEdit(){
       }
       if(navStack.length>1){ goBack(); guard(); return; }
       { const ac=document.querySelector('.screen.active'); if(ac&&ac.id!=='library'&&ac.id!=='intro'){ try{ navStack=['library']; fwdStack=[]; if(ac.id==='reader'&&currentBookId&&DATA.books.find(b=>b.id===currentBookId)) openBookDetail(currentBookId); else show('library'); }catch(x){ show('library'); } guard(); return; } }
-      if(prevArmed&&Date.now()-prevArmed<2200){ history.back(); return; }
+      if(prevArmed&&Date.now()-prevArmed<2200){ exiting=true; if(gd>0) history.go(-gd); else history.back(); return; }
       armed=Date.now(); showToast('한 번 더 누르면 앱이 종료됩니다.'); guard();
     });
   }catch(e){}
@@ -3356,7 +3362,7 @@ function renderSearchScreen(){
 function tabSearch(){ tabGo('search'); setTimeout(()=>{const i=document.getElementById('searchInput'); if(i) i.focus();},80); }
 
 /* ---------- 버전 · 업데이트 확인 ---------- */
-const APP_VERSION='2026.11.11-7';
+const APP_VERSION='2026.11.11-8';
 let updateAvail=false;
 let latestVer='';
 function pendingState(){
