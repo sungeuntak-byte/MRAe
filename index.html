@@ -951,6 +951,10 @@ html[data-mode=dark] .tab{color:#A7A398;}
     <h3>새 소식</h3>
     <div class="updbanner" id="newsUpd" style="display:none;margin:0 0 12px;"><span>🔔 새 업데이트가 있어요</span><button type="button" onclick="askConfirm('업데이트할까요? 저장한 글과 사진은 그대로 유지됩니다.',applyUpdate)">업데이트 적용</button></div>
     <div class="noticebody guidebody">
+      <h4>2026.11.11 (6)</h4>
+      <p>· 쪽 넘기기로 읽을 때 폰의 뒤로가기 버튼이 한 쪽씩 앞으로 돌아가요. 발췌문 첫 쪽이면 이전 발췌문의 마지막 쪽으로, 첫 발췌문의 첫 쪽이면 책 화면으로 나가요. 앱이 바로 꺼지지 않아요.</p>
+      <h4>2026.11.11 (5)</h4>
+      <p>· 뒤로가기를 눌러 ‘한 번 더 누르면 종료’ 안내가 뜬 뒤 다른 화면에 다녀오면, 안내가 처음 상태로 돌아가요. 전체 책장에서 다시 뒤로가기를 누르면 안내가 다시 떠요.</p>
       <h4>2026.11.11 (4)</h4>
       <p>· 본문 수정 화면에서도 글자를 드래그하면 도구 막대가 떠요. ‘소제목’이 맨 앞에 있고, 하이라이트·굵게·밑줄·해제가 이어져요. ‘소제목’은 필요하면 앞뒤에 빈 줄을 넣어 문단으로 나눠 줘요. 모양은 저장한 뒤 읽기 화면에서 보여요.<br>
       · 바꾼 내용이 바로 적용되고 닫기만 하는 창(세부 설정, 화면 스타일, 사용법, 새 소식 등)의 닫기 버튼을 ✕ 대신 ✓로 바꿨어요. 저장하지 않은 내용을 버리는 ✕는 그대로예요.</p>
@@ -1343,6 +1347,7 @@ function updateNavButtons(){
   });
 }
 function show(screenId){
+  window._navAt=Date.now();
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById(screenId).classList.add('active');
   renderForScreen(screenId);
@@ -3194,19 +3199,28 @@ function saveInlineEdit(){
 (function(){
   try{
     history.replaceState({mrae:'base'},'');
-    let guardOn=false; const armGuard=()=>{ if(guardOn) return; guardOn=true; try{ history.pushState({mrae:'guard'},''); }catch(e){} };
-    ['pointerdown','touchstart','mousedown','keydown','click'].forEach(t=>window.addEventListener(t,armGuard,{capture:true,passive:true}));
+    const armGuard=()=>{ try{ if(history.state&&history.state.mrae==='guard') return; history.pushState({mrae:'guard'},''); }catch(e){} };
+    ['pointerup','touchend','mouseup','keydown','click'].forEach(t=>window.addEventListener(t,armGuard,{capture:true,passive:true}));
     window._armGuard=armGuard;
     let armed=0; const guard=()=>{ try{history.pushState({mrae:'guard'},'');}catch(e){} };
     window.addEventListener('popstate',()=>{
+      const prevArmed=(armed>(window._navAt||0))?armed:0; armed=0;
       const open=document.querySelector('.modal-bg.show');
       if(open){ open.classList.remove('show'); guard(); return; }
       if(document.getElementById('readEdit').style.display==='block'){ tryCancelInline(); guard(); return; }
       { const ac=document.querySelector('.screen.active'); if(ac&&ac.id==='excerptEditor'&&exDirty()){ tryCancelExcerpt(); guard(); return; } if(ac&&ac.id==='memoWrite'&&mwDirty()){ tryCancelMemo(); guard(); return; } }
       if(mvEditing){ mvEditing=false; mvAddNew=false; renderMemoView(); showToast('수정을 취소했습니다.'); guard(); return; }
-      if(document.getElementById('reader').classList.contains('active')&&menuOn()){ toggleReaderMenu(false); guard(); return; }
+      if(document.getElementById('reader').classList.contains('active')){
+        if(menuOn()){ toggleReaderMenu(false); guard(); return; }
+        if(window._pm){ if(PS.i>0){ photoStep(-1); guard(); return; } }
+        else if(RS().flow==='page'){
+          if(pg>0){ pageGo(-1); guard(); return; }
+          if(exHas(-1)){ exStep(-1); pg=1e6; layoutPages(); guard(); return; }
+        }
+      }
       if(navStack.length>1){ goBack(); guard(); return; }
-      if(Date.now()-armed<2200){ history.back(); return; }
+      { const ac=document.querySelector('.screen.active'); if(ac&&ac.id!=='library'&&ac.id!=='intro'){ try{ navStack=['library']; fwdStack=[]; if(ac.id==='reader'&&currentBookId&&DATA.books.find(b=>b.id===currentBookId)) openBookDetail(currentBookId); else show('library'); }catch(x){ show('library'); } guard(); return; } }
+      if(prevArmed&&Date.now()-prevArmed<2200){ history.back(); return; }
       armed=Date.now(); showToast('한 번 더 누르면 앱이 종료됩니다.'); guard();
     });
   }catch(e){}
@@ -3338,7 +3352,7 @@ function renderSearchScreen(){
 function tabSearch(){ tabGo('search'); setTimeout(()=>{const i=document.getElementById('searchInput'); if(i) i.focus();},80); }
 
 /* ---------- 버전 · 업데이트 확인 ---------- */
-const APP_VERSION='2026.11.11-4';
+const APP_VERSION='2026.11.11-6';
 let updateAvail=false;
 let latestVer='';
 function pendingState(){
