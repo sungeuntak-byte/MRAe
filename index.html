@@ -391,7 +391,7 @@ body.hastab .toast{bottom:90px;}
 .setrow .v{color:#7A776E;font-size:14px;}
 .setrow+.setrow{border-top:1px solid var(--beige);}
 .readpaper.paged{overflow:hidden;position:relative;}
-.readpaper.paged #readerBody{column-fill:auto;position:relative;overflow:hidden;white-space:pre-wrap;}
+.readpaper.paged #readerBody{position:relative;overflow:hidden;white-space:pre-wrap;}
 .pagenav{display:none;align-items:center;justify-content:center;gap:14px;margin-top:10px;}
 .pagenav .pgi{min-width:70px;text-align:center;font-size:14px;color:var(--brown);}
 
@@ -1014,6 +1014,8 @@ html[data-mode=dark] .undosnack button{background:rgba(0,0,0,.12);color:#262624;
     <h3>새 소식</h3>
     <div class="updbanner" id="newsUpd" style="display:none;margin:0 0 12px;"><span>🔔 새 업데이트가 있어요</span><button type="button" onclick="askConfirm('업데이트할까요? 저장한 글과 사진은 그대로 유지됩니다.',applyUpdate)">업데이트 적용</button></div>
     <div class="noticebody guidebody">
+      <h4>2026.11.12 (3)</h4>
+      <p>· 쪽 넘기기의 방식을 한 번 더 바꿨어요. 글을 여러 단으로 나누지 않고 한 줄기로 두고, 한 쪽씩 위로 넘겨 보여 줘요. 아이폰에서 두 번째 쪽부터 글자 선택이 안 되던 문제를 고치려는 거예요. 쪽 번호·쪽 넘기기·이어 읽기는 그대로예요.</p>
       <h4>2026.11.12 (2)</h4>
       <p>· 쪽 넘기기를 실제 가로 스크롤 방식으로 바꿨어요. 아이폰 등에서 두 번째 쪽부터 글자 선택(하이라이트·밑줄)이 안 되던 문제를 고치기 위한 거예요. 모양과 쪽 넘기는 방법은 그대로예요.<br>
       · 읽기 본문의 양쪽 맞춤에서 줄 끝 단어 사이가 벌어지던 것을, 책처럼 글자 단위로 줄이 바뀌도록 고쳤어요. 읽기 설정(Aa)에서 ‘양쪽 맞춤’과 ‘한글 잘림 허용’을 각각 켜고 끌 수 있어요.<br>
@@ -3126,7 +3128,7 @@ function openModeModal(){
     d.onclick=()=>{ DATA.settings.mode=m[0]; save(); applyMode(); closeModal('modeBg'); flashSaved(); }; host.appendChild(d); });
   document.getElementById('modeBg').classList.add('show');
 }
-let pg=0, pgCount=1, pgGeom=null;
+let pg=0, pgCount=1, pgGeom=null, pgStarts=[0];
 function layoutPages(){
   const paper=document.getElementById('readPaper'), body=document.getElementById('readerBody'), nav=document.getElementById('pageNav'), hint=document.getElementById('readHint');
   if(!paper) return;
@@ -3137,16 +3139,28 @@ function layoutPages(){
   if(!paper.clientWidth) return;
   const H=Math.max(300,window.innerHeight-64); paper.style.height=H+'px';
   const cs=getComputedStyle(paper); const W=Math.floor(paper.clientWidth-parseFloat(cs.paddingLeft)-parseFloat(cs.paddingRight)); const bh=Math.floor(H-parseFloat(cs.paddingTop)-parseFloat(cs.paddingBottom)-2);
-  const gap=32; body.style.width=W+'px'; body.style.height=bh+'px'; body.style.columnWidth=W+'px'; body.style.columnGap=gap+'px'; body.scrollLeft=0;
-  pgGeom={W:W,gap:gap};
-  pgCount=Math.max(1,Math.round((body.scrollWidth+gap)/(W+gap)));
-  if(window._findNode){ pg=Math.floor(window._findNode.offsetLeft/(W+gap)); window._findNode=null; }
+  body.style.width=W+'px'; body.style.height=bh+'px'; body.scrollTop=0;
+  pgGeom={W:W,bh:bh};
+  /* 단 없이 한 줄기로 두고, 줄이 잘리지 않는 위치를 쪽 시작점으로 삼는다 */
+  const rr=document.createRange(); rr.selectNodeContents(body); const b0=body.getBoundingClientRect().top;
+  const lines=Array.from(rr.getClientRects()).filter(r=>r.height>1).map(r=>({t:r.top-b0,b:r.bottom-b0})).sort((a,b)=>a.t-b.t);
+  const total=body.scrollHeight; pgStarts=[0]; let st=0, guard=0;
+  while(guard++<3000){
+    const lim=st+bh; if(total<=lim+1) break;
+    const nx=lines.find(l=>l.b>lim+0.5&&l.t>st+1);
+    if(nx&&nx.t>st+1){ pgStarts.push(nx.t); st=nx.t; }
+    else if(!nx){ if(total>lim+1){ const last=Math.max(st+1,total-bh); if(last>st+1) pgStarts.push(last); } break; }
+    else { pgStarts.push(lim); st=lim; }
+  }
+  pgCount=Math.max(1,pgStarts.length);
+  if(window._findNode){ const ft=window._findNode.offsetTop; let k=0; pgStarts.forEach((v,n)=>{ if(v<=ft+1) k=n; }); pg=k; window._findNode=null; }
   pg=Math.max(0,Math.min(pg,pgCount-1)); pageApply();
 }
-(function(){ const b=document.getElementById('readerBody'); b.addEventListener('scroll',()=>{ if(!pgGeom||!document.getElementById('readPaper').classList.contains('paged')) return; const t=pg*(pgGeom.W+pgGeom.gap); if(Math.abs(b.scrollLeft-t)>1) b.scrollLeft=t; }); })();
+(function(){ const b=document.getElementById('readerBody'); b.addEventListener('scroll',()=>{ if(!pgGeom||!document.getElementById('readPaper').classList.contains('paged')) return; const t=pgStarts[pg]||0; if(Math.abs(b.scrollTop-t)>1) b.scrollTop=t; if(b.scrollLeft) b.scrollLeft=0; }); })();
 function pageApply(){
   const body=document.getElementById('readerBody'); if(!pgGeom) return;
-  body.scrollLeft=pg*(pgGeom.W+pgGeom.gap);
+  { const h=(pgStarts[pg+1]!=null)?pgStarts[pg+1]-pgStarts[pg]:pgGeom.bh; body.style.height=Math.max(1,Math.min(pgGeom.bh,Math.ceil(h)))+'px'; }
+  body.scrollTop=pgStarts[pg]||0;
   document.getElementById('pgInd').textContent=(pg+1)+' / '+pgCount;
   const mi=document.getElementById('rMini'); if(mi) mi.textContent=(pg+1)+' / '+pgCount;
   const lr=DATA.settings.lastRead; if(lr&&lr.id===currentExcerptId){ lr.pg=pg; clearTimeout(window._lrT); window._lrT=setTimeout(save,700); }
@@ -3599,7 +3613,7 @@ function renderSearchScreen(){
 function tabSearch(){ tabGo('search'); setTimeout(()=>{const i=document.getElementById('searchInput'); if(i) i.focus();},80); }
 
 /* ---------- 버전 · 업데이트 확인 ---------- */
-const APP_VERSION='2026.11.12-2';
+const APP_VERSION='2026.11.12-3';
 let updateAvail=false;
 let latestVer='';
 function pendingState(){
