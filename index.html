@@ -391,7 +391,7 @@ body.hastab .toast{bottom:90px;}
 .setrow .v{color:#7A776E;font-size:14px;}
 .setrow+.setrow{border-top:1px solid var(--beige);}
 .readpaper.paged{overflow:hidden;position:relative;}
-.readpaper.paged #readerBody{column-fill:auto;position:relative;transition:transform .2s ease;white-space:pre-wrap;}
+.readpaper.paged #readerBody{column-fill:auto;position:relative;overflow:hidden;white-space:pre-wrap;}
 .pagenav{display:none;align-items:center;justify-content:center;gap:14px;margin-top:10px;}
 .pagenav .pgi{min-width:70px;text-align:center;font-size:14px;color:var(--brown);}
 
@@ -562,7 +562,7 @@ html[data-mode=dark] #ieSelBar .ier button.ic.on{background:#4A4238;color:#F1E6D
 .readpaper{position:relative;padding-top:28px;}
 .readpaper::after{content:attr(data-pg);position:absolute;top:8px;right:16px;font-size:12px;color:var(--rtext);opacity:.55;}
 .readpaper[data-pg=""]::after{display:none;}
-#reader .readbody{text-align:justify;}
+#reader .readbody{text-align:var(--ralign,justify);word-break:var(--rbreak,normal);}
 .readpaper .memobox{text-align:left;}
 #readerBody::before{content:attr(data-title);display:block;margin:0 0 14px;padding:7px 12px;background:var(--rbandbg);border-left:5px solid var(--rbandbd);border-radius:3px 8px 8px 3px;color:var(--rbandtx);font-weight:700;font-size:.92em;line-height:1.45;text-align:left;white-space:normal;}
 #readerBody[data-title=""]::before,#readerBody:not([data-title])::before{display:none;}
@@ -841,7 +841,7 @@ html[data-mode=dark] .undosnack button{background:rgba(0,0,0,.12);color:#262624;
     <button type="button" id="selMemoBtn" aria-label="부분 메모" onclick="selMemo()"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3.5h10l4 4V20.5H5z"/><path d="M15 3.5v4h4M8.5 12h7M8.5 16h5"/></svg></button>
     <button type="button" aria-label="복사" onclick="selCopy()"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8.5" y="8.5" width="12" height="12" rx="2"/><path d="M15.5 8.5V6A2 2 0 0 0 13.5 4H6A2 2 0 0 0 4 6v7.5A2 2 0 0 0 6 15.5h2.5"/></svg></button>
     <button type="button" aria-label="공유·다운로드" onclick="selShare()"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="3.6" cy="12" r="2"/><circle cx="9.3" cy="5.1" r="2"/><circle cx="9.3" cy="18.9" r="2"/><path d="m5.2 10 2.4-2.9M5.2 14l2.4 2.9"/><path d="M19.5 4.5v10M16.3 11.6l3.2 3.2 3.2-3.2"/><path d="M15.7 19.6h7.6" stroke-width="2"/></svg></button>
-    <button type="button" id="selHeadBtn" aria-label="소제목" onclick="selHead()"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round"><path d="M4 5h16" stroke-width="3.6"/><path d="M4 11h16M4 15h16M4 19h11" stroke-width="1.6"/></svg></button>
+    <button type="button" id="selHeadBtn" aria-label="소제목" onclick="selHead()"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round"><path d="M4 4h16" stroke-width="4.4"/><g style="opacity:.55" stroke-width="1.3"><path d="M4 12.5h16M4 16.2h16M4 19.9h11"/></g></svg></button>
   </div>
   <div class="selsw" id="selSw"><span id="swatchRow" style="display:flex;gap:8px;"></span><button type="button" class="selx" onclick="selApply('clear')">서식 삭제</button></div>
 </div>
@@ -1014,6 +1014,10 @@ html[data-mode=dark] .undosnack button{background:rgba(0,0,0,.12);color:#262624;
     <h3>새 소식</h3>
     <div class="updbanner" id="newsUpd" style="display:none;margin:0 0 12px;"><span>🔔 새 업데이트가 있어요</span><button type="button" onclick="askConfirm('업데이트할까요? 저장한 글과 사진은 그대로 유지됩니다.',applyUpdate)">업데이트 적용</button></div>
     <div class="noticebody guidebody">
+      <h4>2026.11.12 (2)</h4>
+      <p>· 쪽 넘기기를 실제 가로 스크롤 방식으로 바꿨어요. 아이폰 등에서 두 번째 쪽부터 글자 선택(하이라이트·밑줄)이 안 되던 문제를 고치기 위한 거예요. 모양과 쪽 넘기는 방법은 그대로예요.<br>
+      · 읽기 본문의 양쪽 맞춤에서 줄 끝 단어 사이가 벌어지던 것을, 책처럼 글자 단위로 줄이 바뀌도록 고쳤어요. 읽기 설정(Aa)에서 ‘양쪽 맞춤’과 ‘한글 잘림 허용’을 각각 켜고 끌 수 있어요.<br>
+      · 소제목 아이콘의 윗선을 더 진하고 굵게, 아랫선을 연하게 다듬었어요.</p>
       <h4>2026.11.12</h4>
       <p>· ‘합치기’ 버튼이 생겼어요(읽기 화면 아래 메뉴). 다음 발췌문과 합치기, 사진을 더 찍어 이어붙이기, 다른 발췌문을 골라 합치기를 할 수 있어요. 쪽수는 자동으로 정리돼요(이어지면 48-49, 떨어져 있으면 48-49, 52). 합친 직후 ‘되돌리기’로 취소할 수 있어요.<br>
       · 읽기 화면 위쪽 메뉴에는 책 제목만 보이고, 본문 종이 오른쪽 위에 쪽수, 아래 오른쪽에 발췌한 날짜가 보여요. 발췌문 제목은 색띠로 보여요.<br>
@@ -1138,7 +1142,7 @@ html[data-mode=dark] .undosnack button{background:rgba(0,0,0,.12);color:#262624;
 <div id="ieSelBar" onmousedown="event.preventDefault()">
   <div class="ier sws" id="ieSws"></div>
   <div class="ier">
-    <button type="button" class="ic" id="ieBtnH" onclick="ieHeadBtn()"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round"><path d="M4 5h16" stroke-width="3.6"/><path d="M4 11h16M4 15h16M4 19h11" stroke-width="1.6"/></svg><span>소제목</span></button>
+    <button type="button" class="ic" id="ieBtnH" onclick="ieHeadBtn()"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round"><path d="M4 4h16" stroke-width="4.4"/><g style="opacity:.55" stroke-width="1.3"><path d="M4 12.5h16M4 16.2h16M4 19.9h11"/></g></svg><span>소제목</span></button>
     <button type="button" class="ic" id="ieBtnHl" onclick="ieSwToggle()"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9.6 14.4 7.6-7.6a1.7 1.7 0 0 1 2.4 2.4L12 16.8z"/><path d="m9.6 14.4-3 3 1.2 1.9 4.2-.5"/><path d="M3.5 21.2h9.5" stroke="#FFE066" stroke-width="3.2"/></svg><span>형광</span></button>
     <button type="button" class="ic" id="ieBtnB" onclick="ieApply('b')"><b class="gl">B</b><span>굵게</span></button>
     <button type="button" class="ic" id="ieBtnU" onclick="ieApply('u')"><u class="gl">U</u><span>밑줄</span></button>
@@ -3023,12 +3027,12 @@ const THEMES={white:{n:'흰색',bg:'#FFFFFF',tx:'#38332F',bd:'#E9DED1',memo:'#F1
   beige:{n:'은은한 베이지',bg:'#F3EADB',tx:'#1F1E1D',bd:'#E4D8C4',memo:'#E8E6DC',bb:'#F9F3E8',bl:'#B8896D',bt:'#7A5A47'},
   brown:{n:'은은한 갈색',bg:'#D9C7B0',tx:'#2F2620',bd:'#C6B197',memo:'#CDB99F',bb:'#E8DBC8',bl:'#A07458',bt:'#6A4A38'},
   dark:{n:'음영 반전',bg:'#1F1B18',tx:'#E8E6DC',bd:'#3A332D',memo:'#2E2823',bb:'#2E2823',bl:'#B98A6E',bt:'#DCC4AE'}};
-function RS(){ const s=DATA.settings; s.reader=Object.assign({theme:'beige',size:18,line:1.7,font:'serif',flow:'page'},s.reader||{}); return s.reader; }
+function RS(){ const s=DATA.settings; s.reader=Object.assign({theme:'beige',size:18,line:1.7,font:'serif',flow:'page',just:true,cut:true},s.reader||{}); return s.reader; }
 function applyReading(){
   const r=RS(); let t=THEMES[r.theme]||THEMES.beige; const st=document.documentElement.style;
   if(document.documentElement.getAttribute('data-mode')==='eink') t={bg:'#FFFFFF',tx:'#000000',bd:'#000000',memo:'#E6E6E6',bb:'#E6E6E6',bl:'#000000',bt:'#000000'};
   st.setProperty('--rbandbg',t.bb||t.memo); st.setProperty('--rbandbd',t.bl||t.bd); st.setProperty('--rbandtx',t.bt||t.tx); st.setProperty('--rbg',t.bg); st.setProperty('--rtext',t.tx); st.setProperty('--rborder',t.bd); st.setProperty('--rmemo',t.memo);
-  st.setProperty('--rsize',r.size+'px'); st.setProperty('--rline',r.line);
+  st.setProperty('--ralign',r.just===false?'left':'justify'); st.setProperty('--rbreak',r.cut===false?'keep-all':'normal'); st.setProperty('--rsize',r.size+'px'); st.setProperty('--rline',r.line);
   st.setProperty('--rfont',FONTS[fontKey(r.font)].f);
 }
 function rsSet(k,v){ const r=RS(); r[k]=v; if(k==='flow') pg=0; if(k==='font'&&document.fonts&&document.fonts.load){ document.fonts.load('16px '+FONTS[fontKey(v)].f.split(',')[0]).then(()=>{ if(document.getElementById('reader').classList.contains('active')) layoutPages(); }); } r.size=Math.max(14,Math.min(34,r.size)); r.line=Math.max(1.3,Math.min(2.4,Math.round(r.line*10)/10)); save(); applyReading(); renderRsControls(); if(document.getElementById('reader').classList.contains('active')) layoutPages(); flashSaved(); }
@@ -3040,6 +3044,8 @@ function renderRsControls(){
   <div class="sectitle" style="margin-top:4px">글꼴</div>
   <div class="fontgrid">${Object.keys(FONTS).map(k=>`<button class="fontchip ${fontKey(r.font)===k?'on':''}" style="font-family:${FONTS[k].f}" onclick="rsSet('font','${k}')">${FONTS[k].n}</button>`).join('')}</div>
   <div class="ctlrow"><span class="lab">읽는 방식</span><button class="segbtn ${r.flow==='scroll'?'on':''}" onclick="rsSet('flow','scroll')">스크롤</button><button class="segbtn ${r.flow==='page'?'on':''}" onclick="rsSet('flow','page')">쪽 넘기기</button></div>
+  <label class="ocropt"><input type="checkbox" ${r.just!==false?'checked':''} onchange="rsSet('just',this.checked)"> 양쪽 맞춤</label>
+  <label class="ocropt"><input type="checkbox" ${r.cut!==false?'checked':''} onchange="rsSet('cut',this.checked)"> 한글 잘림 허용 (끄면 단어를 끊지 않아요)</label>
   <div class="readprev">미래는 오늘 읽는 한 줄에서 시작됩니다.</div>
   <button class="btn ghost" style="width:100%;margin-top:12px;" onclick="resetReading()">기본값으로 되돌리기</button>`;
   ['rsControls','rsControlsM'].forEach(id=>{const el=document.getElementById(id); if(el) el.innerHTML=html;});
@@ -3131,15 +3137,16 @@ function layoutPages(){
   if(!paper.clientWidth) return;
   const H=Math.max(300,window.innerHeight-64); paper.style.height=H+'px';
   const cs=getComputedStyle(paper); const W=Math.floor(paper.clientWidth-parseFloat(cs.paddingLeft)-parseFloat(cs.paddingRight)); const bh=Math.floor(H-parseFloat(cs.paddingTop)-parseFloat(cs.paddingBottom)-2);
-  const gap=32; body.style.width=W+'px'; body.style.height=bh+'px'; body.style.columnWidth=W+'px'; body.style.columnGap=gap+'px'; body.style.transform='none';
+  const gap=32; body.style.width=W+'px'; body.style.height=bh+'px'; body.style.columnWidth=W+'px'; body.style.columnGap=gap+'px'; body.scrollLeft=0;
   pgGeom={W:W,gap:gap};
   pgCount=Math.max(1,Math.round((body.scrollWidth+gap)/(W+gap)));
   if(window._findNode){ pg=Math.floor(window._findNode.offsetLeft/(W+gap)); window._findNode=null; }
   pg=Math.max(0,Math.min(pg,pgCount-1)); pageApply();
 }
+(function(){ const b=document.getElementById('readerBody'); b.addEventListener('scroll',()=>{ if(!pgGeom||!document.getElementById('readPaper').classList.contains('paged')) return; const t=pg*(pgGeom.W+pgGeom.gap); if(Math.abs(b.scrollLeft-t)>1) b.scrollLeft=t; }); })();
 function pageApply(){
   const body=document.getElementById('readerBody'); if(!pgGeom) return;
-  body.style.transform='translateX('+(-pg*(pgGeom.W+pgGeom.gap))+'px)';
+  body.scrollLeft=pg*(pgGeom.W+pgGeom.gap);
   document.getElementById('pgInd').textContent=(pg+1)+' / '+pgCount;
   const mi=document.getElementById('rMini'); if(mi) mi.textContent=(pg+1)+' / '+pgCount;
   const lr=DATA.settings.lastRead; if(lr&&lr.id===currentExcerptId){ lr.pg=pg; clearTimeout(window._lrT); window._lrT=setTimeout(save,700); }
@@ -3592,7 +3599,7 @@ function renderSearchScreen(){
 function tabSearch(){ tabGo('search'); setTimeout(()=>{const i=document.getElementById('searchInput'); if(i) i.focus();},80); }
 
 /* ---------- 버전 · 업데이트 확인 ---------- */
-const APP_VERSION='2026.11.12-1';
+const APP_VERSION='2026.11.12-2';
 let updateAvail=false;
 let latestVer='';
 function pendingState(){
