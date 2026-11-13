@@ -255,6 +255,8 @@ html[data-mode=dark] .shwarn{background:#3A3936;color:#E8E6DC;}
 #reader .readbody .blk{display:block;}
 #reader .readbody .blk.al-c{text-align:center;}
 #reader .readbody .blk.al-r{text-align:right;}
+#reader .readbody .blk.al-l{text-align:left;}
+#reader .readbody .blk.al-j{text-align:justify;}
 #reader .readbody .blk.al{margin:var(--lh1) 0;}
 #reader .readbody .blk.hd{margin:calc(var(--lh1) + 3pt) 0 6pt;}
 #reader .readbody .blk.hd1{margin:calc(var(--lh1) + 6pt) 0 12pt;}
@@ -585,6 +587,7 @@ html[data-mode=eink] .segbtn.on,html[data-mode=eink] #ordBtn.on{background:#D0D0
 .selbar .selsub button{min-height:36px;padding:0 10px;border:1px solid rgba(255,255,255,.35);border-radius:8px;background:none;color:#fff;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;}
 .selbar .selsub button .ico{width:22px;height:22px;vertical-align:middle;}
 .selbar .selsub .full{flex:1 1 100%;text-align:center;}
+.selbar .selsub button.on{background:rgba(255,255,255,.24);border-color:#fff;}
 .pvtoggle{display:flex;align-items:center;gap:10px;margin:2px 0 8px;}
 .pvtoggle .seg2{display:flex;border:1px solid var(--btn);border-radius:10px;overflow:hidden;flex:none;}
 .pvtoggle .seg2 button{border:none;background:none;padding:8px 11px;font-size:14px;font-weight:700;color:var(--btn);cursor:pointer;font-family:inherit;}
@@ -601,11 +604,6 @@ html[data-mode=eink]{--pf:#000;--pt:#fff;--pb:#000;--pu:#000;}
 .pvtoggle .seg2 button{color:var(--pu);}
 .pvtoggle .seg2 button+button{border-left:1px solid var(--pb);}
 .pvtoggle .seg2 button.on{background:var(--pf);color:var(--pt);}
-.mainbtn{background:var(--pf);color:var(--pt);font-weight:700;}
-.pgseg button.on{background:var(--pf);color:var(--pt);}
-.gtab.on{background:var(--pf);border-color:var(--pf);color:var(--pt);}
-.sharebtn.on{background:var(--pf);border-color:var(--pf);color:var(--pt);}
-.updbanner button{background:var(--pf);color:var(--pt);}
 .thumb .ck{border-color:var(--pf);}
 .thumb .ck.on{background:var(--pf);}
 .pvb,.pvt{display:none;}
@@ -670,7 +668,7 @@ html[data-mode=eink]{--rcbg:#FFFFFF;--rcln:#000000;--rcln2:#999999;--rctx:#00000
 .tab .fsico{display:flex;align-items:baseline;justify-content:center;height:24px;font-weight:800;line-height:1;}
 .tab .fsico .s{font-size:12px;opacity:.5;}
 .tab .fsico .b{font-size:22px;}
-.fsopts{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:10px 0;}
+.fsopts{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:10px 0;}
 .fsopts .segbtn{flex:none;padding:0 2px;font-size:14px;min-height:48px;}
 .fsprev{border:1px solid var(--beige);border-radius:12px;padding:12px 14px;margin-top:6px;font-size:15px;line-height:1.6;color:var(--tx2);}
 #library .recent{left:0;right:0;bottom:calc(76px + env(safe-area-inset-bottom,0px));height:88px;box-sizing:border-box;border-radius:0;background:var(--rcbg);border:none;border-top:1px solid var(--rcln2);padding:14px 46px 12px 16px;color:var(--rctx);display:block;text-align:left;overflow:hidden;}
@@ -1126,6 +1124,14 @@ body.hasrecent #library{padding-bottom:250px;}
     <h3>새 소식</h3>
     <div class="updbanner" id="newsUpd" style="display:none;margin:0 0 12px;"><span>🔔 새 업데이트가 있어요</span><button type="button" onclick="askConfirm('업데이트할까요? 저장한 글과 사진은 그대로 유지됩니다.',applyUpdate)">업데이트 적용</button></div>
     <div class="noticebody guidebody">
+      <h4>2026.11.13 (6)</h4>
+      <p>· 글자 인식 결과의 곧은 따옴표(" ')를 둥근 따옴표(“ ” ‘ ’)로 바꿔 줘요. 「 」 같은 괄호 모양은 그대로예요.<br>
+      · 직접 입력하는 따옴표도 둥글게 바뀌어요. 설정의 ‘세부 설정’에서 ‘따옴표 둥글게’로 끌 수 있어요.</p>
+      <h4>2026.11.13 (5)</h4>
+      <p>· 글자 크기(가가)가 다섯 단계가 됐어요. 작게·보통·크게·아주 크게·가장 크게예요. 이전에 고른 크기는 같은 크기로 이어져요.<br>
+      · 소제목·대제목은 선택한 글자만 제목이 되고, 앞뒤 글은 줄이 바뀌어 별도 문단이 돼요. 한 단어만 선택해도 돼요. 되돌리기를 누르면 줄바꿈도 함께 돌아가요.<br>
+      · 맞춤 메뉴에 ‘양쪽’과 ‘기본’을 더했고, ‘왼쪽’은 설정과 상관없이 왼쪽으로 맞춰져요. 맞춤과 들여쓰기는 문단 안 어디를 선택해도 그 문단 전체에 적용돼요.<br>
+      · 서재에서 뒤로가기로 앱이 바로 닫히지 않도록 보강했어요.</p>
       <h4>2026.11.13 (4)</h4>
       <p>· 눌린 버튼과 선택된 칩의 채움 색을 한 단계 연하게 하고 글자를 굵게 했어요. 편집/미리보기 스위치에도 어울리는 연한 테두리를 넣었어요.<br>
       · · 글자 인식을 이전처럼 한글로 먼저 읽도록 되돌렸어요. 영어는 인식 뒤에 나타나는 [영어 보정] 버튼으로 따로 읽어, 영어 단어 자리만 바꿔 줘요. 보정 중에는 ‘영어 인식 중’이라고 보여요. 세부 설정에서 자동 실행으로 바꿀 수도 있어요.<br>
@@ -1287,6 +1293,7 @@ body.hasrecent #library{padding-bottom:250px;}
     <label class="ocropt"><input type="checkbox" id="autoCrop" onchange="DATA.settings.autoCrop=this.checked;save();"> 사진을 추가하면 바로 자르기 화면 열기</label>
     <label class="ocropt"><input type="checkbox" id="ocrEnhance" onchange="DATA.settings.ocrEnhance=this.checked;save();"> 사진 보정 (그림자·흐림 완화) 후 인식</label>
     <label class="ocropt"><input type="checkbox" id="ocrJamo" onchange="DATA.settings.ocrJamo=this.checked;save();"> 자음·모음만 찍힌 낱자 자동 제거</label>
+    <label class="ocropt"><input type="checkbox" id="quoteRound" onchange="DATA.settings.quoteRound=this.checked;save();"> 따옴표 둥글게 (직접 입력한 " ' 를 “ ” ‘ ’ 로 바꿔요)</label>
     <label class="ocropt"><input type="checkbox" id="ocrEngAuto" onchange="DATA.settings.ocrEngAuto=this.checked;save();"> 글자 인식 뒤 영어 보정 자동 실행 (시간이 더 걸려요)</label>
     <label class="ocropt"><input type="checkbox" id="keepPhotos" onchange="DATA.settings.keepPhotos=this.checked;save();"> 원본 사진 보관 (나중에 글자와 대조해 볼 수 있어요)</label>
     <div class="hint" id="photoHint">글자 인식은 나중에 해도 괜찮아요. 본문을 비워 두고 저장하면 사진만 안전하게 보관돼요.</div>
@@ -1987,7 +1994,7 @@ function placeNewExcerpt(id){
 }
 function openExOpt(){ document.getElementById('exOptBg').classList.add('show'); }
 function openExcerptEditor(excerptId){
-  document.getElementById('ocrEnhance').checked=(DATA.settings.ocrEnhance!==false); document.getElementById('autoCrop').checked=(DATA.settings.autoCrop!==false); document.getElementById('ocrJamo').checked=(DATA.settings.ocrJamo!==false); document.getElementById('ocrEngAuto').checked=!!DATA.settings.ocrEngAuto;
+  document.getElementById('ocrEnhance').checked=(DATA.settings.ocrEnhance!==false); document.getElementById('autoCrop').checked=(DATA.settings.autoCrop!==false); document.getElementById('ocrJamo').checked=(DATA.settings.ocrJamo!==false); document.getElementById('ocrEngAuto').checked=!!DATA.settings.ocrEngAuto; document.getElementById('quoteRound').checked=(DATA.settings.quoteRound!==false);
   editingExcerptId = excerptId || null; appendCtx=null; document.getElementById('apPanel').classList.remove('show');
   photos=[]; removedPhotoIds=[]; currentOcrRaw=''; exFmt={marks:[],hd:[],al:[],ix:[],base:''}; renderPhotos(); document.getElementById('ocrStatus').textContent='';
   document.getElementById('keepPhotos').checked=(DATA.settings.keepPhotos!==false);
@@ -2631,6 +2638,30 @@ function loadTesseract(){
     document.head.appendChild(s);
   });
 }
+function roundQuotes(t){
+  let out='';
+  for(let i=0;i<t.length;i++){
+    const c=t[i];
+    if(c!=='"'&&c!=="'"){ out+=c; continue; }
+    const p=i>0?t[i-1]:'', n=i<t.length-1?t[i+1]:'';
+    const open=(p===''||/[\s(\[{<\u2018\u201C\u2014\u2013\-\/]/.test(p));
+    if(c==='"') out+= open?'\u201C':'\u201D';
+    else if(/[A-Za-z0-9가-힣]/.test(p)&&/[A-Za-z]/.test(n)) out+='\u2019';
+    else out+= open?'\u2018':'\u2019';
+  }
+  return out;
+}
+document.addEventListener('input',function(ev){
+  try{
+    if(DATA.settings.quoteRound===false) return;
+    const el=ev.target; if(!el||el.tagName!=='TEXTAREA'||el.readOnly) return;
+    if(ev.inputType&&ev.inputType!=='insertText'&&ev.inputType!=='insertCompositionText') return;
+    const d=ev.data; if(d!=='"'&&d!=="'") return;
+    const pos=el.selectionStart; if(el.value[pos-1]!==d) return;
+    const conv=roundQuotes(el.value.slice(Math.max(0,pos-2),pos)).slice(-1);
+    if(conv&&conv!==d) el.setRangeText(conv,pos-1,pos,'end');
+  }catch(x){}
+},true);
 function reflowText(t){
   const blocks=t.replace(/\r/g,'').split(/\n\s*\n/);
   const out=[];
@@ -2667,6 +2698,7 @@ function openPreview(){
 }
 function pvLeave(){
   const d=window._pvDraft; if(d){ exFmt={marks:d.marks||[],hd:d.hd||[],al:d.al||[],ix:d.ix||[],base:d.body}; const c=document.getElementById('exIndent'); if(c) c.checked=(d.indent!==false); }
+  { const tb=document.getElementById('exBody'); if(d&&tb&&d.body!==tb.value){ tb.value=d.body; try{ growAll(); }catch(x){} } }
   window._pv=false; window._pvDraft=null; document.body.classList.remove('pvmode'); currentExcerptId=window._pvPrevId||currentExcerptId; FH={id:null,undo:[],redo:[]};
   try{ hideSelBar(); }catch(x){}
 }
@@ -2726,7 +2758,7 @@ async function runOcr(){
         const r = await withTimeout(worker.recognize(cv),240000,'인식 시간 초과');
         targets[i].kw=(r.data.words||[]).map(w=>({t:w.text,c:w.confidence,b:w.bbox}));
         let tx=r.data.text.trim(); if(jam){ const sj=stripJamo(tx); jamoN+=sj.count; tx=sj.text; }
-        texts.push(reflowText(tx));
+        texts.push(roundQuotes(reflowText(tx)));
       }
     } finally { try{ worker.terminate(); }catch(x){} }
     const result = texts.join('\n\n');
@@ -2884,11 +2916,11 @@ function headApply(e,s0,e0){
   hit.forEach(p=>{ const i=paras.indexOf(p); const auto=on&&autoIsHead(body.slice(p.s,p.e),i,paras.length); if(toHead!==auto) e.hd.push({id:uid(),t:toHead?'h':'n',s:p.s,e:p.e}); });
   return toHead;
 }
-function headSet(e,s0,e0,lv){
+function headSet(e,s0,e0,lv,force){
   const body=e.body||'', paras=bodyParas(body), hit=paras.filter(p=>p.s<e0&&p.e>s0); if(!hit.length) return null;
   const heads=headRanges(e), on=(e.autoHead!==false);
   const cur=p=>{ const h=heads.find(h=>h.s===p.s); return h?h.lv:0; };
-  const target=(lv===0)?0:(hit.every(p=>cur(p)===lv)?0:lv);
+  const target=(lv===0)?0:((!force&&hit.every(p=>cur(p)===lv))?0:lv);
   e.hd=(e.hd||[]).filter(x=>!hit.some(p=>x.s<p.e&&x.e>p.s));
   hit.forEach(p=>{ const i=paras.indexOf(p); const auto=on&&autoIsHead(body.slice(p.s,p.e),i,paras.length);
     if(target===1) e.hd.push({id:uid(),t:'H',s:p.s,e:p.e});
@@ -2898,21 +2930,39 @@ function headSet(e,s0,e0,lv){
 }
 /* ---- 서식 되돌리기 ---- */
 let FH={id:null,undo:[],redo:[]};
-function fmtSnap(e){ return JSON.stringify({m:(e.marks||[]).filter(x=>x.t!=='memo'),hd:e.hd||[],al:e.al||[],ix:e.ix||[],ind:e.indent!==false}); }
+function fmtSnap(e){ return JSON.stringify({b:e.body||'',m:(e.marks||[]).filter(x=>x.t!=='memo'),hd:e.hd||[],al:e.al||[],ix:e.ix||[],pm:e.pm||[],ind:e.indent!==false}); }
 function fmtPush(e){ if(FH.id!==e.id){ FH={id:e.id,undo:[],redo:[]}; } FH.undo.push(fmtSnap(e)); if(FH.undo.length>60) FH.undo.shift(); FH.redo=[]; }
-function fmtRestore(e,sn){ const o=JSON.parse(sn); e.marks=(e.marks||[]).filter(x=>x.t==='memo').concat(o.m); e.hd=o.hd; e.al=o.al; e.ix=o.ix; e.indent=o.ind; }
+function fmtRestore(e,sn){ const o=JSON.parse(sn); let memo=(e.marks||[]).filter(x=>x.t==='memo'); if(o.b!==(e.body||'')){ memo=remapMarks(memo,e.body||'',o.b); e.body=o.b; e.pm=o.pm; } e.marks=memo.concat(o.m); e.hd=o.hd; e.al=o.al; e.ix=o.ix; e.indent=o.ind; }
 function fmtUndo(){ const e=curEx(); if(!e||FH.id!==e.id||!FH.undo.length){ showToast('되돌릴 서식 변경이 없어요.'); return; } FH.redo.push(fmtSnap(e)); fmtRestore(e,FH.undo.pop()); fmtFin(e); showToast('되돌렸어요.'); }
 function fmtRedo(){ const e=curEx(); if(!e||FH.id!==e.id||!FH.redo.length){ showToast('다시 할 변경이 없어요.'); return; } FH.undo.push(fmtSnap(e)); fmtRestore(e,FH.redo.pop()); fmtFin(e); showToast('다시 적용했어요.'); }
 function fmtFin(e){ e.updatedAt=Date.now(); save(); window.getSelection().removeAllRanges(); hideSelBar(); paintBody(e); layoutPages(); }
+function brkAt(e,from,to){
+  const old=e.body||''; const nb=old.slice(0,from)+'\n\n'+old.slice(to);
+  ['marks','hd','al','ix','pm'].forEach(k=>{ if(e[k]) e[k]=remapMarks(e[k],old,nb); }); e.body=nb;
+}
+function headSplitSel(e,s,t){
+  let body=e.body||''; while(s<t&&/\s/.test(body[s])) s++; while(t>s&&/\s/.test(body[t-1])) t--; if(t<=s) return null;
+  const ps=bodyParas(body); const pf=ps.find(p=>s>=p.s&&s<p.e), pl=ps.find(p=>t-1>=p.s&&t-1<p.e); if(!pf||!pl) return {s:s,e:t};
+  let a=s; while(a>pf.s&&/\s/.test(body[a-1])) a--; const hasBefore=a>pf.s;
+  let b=t; while(b<pl.e&&/\s/.test(body[b])) b++; const hasAfter=b<pl.e;
+  if(!hasBefore&&!hasAfter) return {s:s,e:t};
+  e.hd=(e.hd||[]).filter(x=>!(x.s<pl.e&&x.e>pf.s));
+  if(hasAfter) brkAt(e,t,b);
+  if(hasBefore) brkAt(e,a,s);
+  const s2=hasBefore?a+2:s; return {s:s2,e:s2+(t-s)};
+}
 function selHeadLv(lv){
   const e=curEx(); const o=selR||rangeOffsets(); if(!e||!o||o.k!=='body') return;
-  const probe=JSON.parse(JSON.stringify({hd:e.hd||[]})); fmtPush(e);
-  const r=headSet(e,o.s,o.e,lv); if(r===null){ FH.undo.pop(); showToast('문단을 선택해 주세요.'); return; }
+  fmtPush(e);
+  const body0=e.body||''; const heads0=headRanges(e); const hit0=bodyParas(body0).filter(p=>p.s<o.e&&p.e>o.s);
+  const same=hit0.length>0&&hit0.every(p=>{ const h=heads0.find(h=>h.s===p.s); return h&&h.lv===lv; });
+  const rg=(same?null:headSplitSel(e,o.s,o.e))||{s:o.s,e:o.e};
+  const r=headSet(e,rg.s,rg.e,lv,(e.body||'')!==body0); if(r===null){ FH.undo.pop(); showToast('문단을 선택해 주세요.'); return; }
   fmtFin(e); showToast(r===1?'대제목으로 바꿨어요.':(r===2?'소제목으로 바꿨어요.':'일반 문단으로 바꿨어요.'));
 }
 function selHead(){ selHeadLv(2); }
 function selParasHit(){ const e=curEx(); const o=selR||rangeOffsets(); if(!e||!o||o.k!=='body') return null; const ps=bodyParas(e.body||'').filter(p=>p.s<o.e&&p.e>o.s); return ps.length?{e:e,o:o,ps:ps}:null; }
-function selAlign(a){ const c=selParasHit(); if(!c) return; fmtPush(c.e); c.e.al=(c.e.al||[]).filter(x=>!c.ps.some(p=>x.s<p.e&&x.e>p.s)); if(a!=='l') c.ps.forEach(p=>c.e.al.push({id:uid(),s:p.s,e:p.e,a:a})); fmtFin(c.e); showToast(a==='c'?'가운데 맞춤':(a==='r'?'오른쪽 맞춤':'왼쪽 맞춤')); }
+function selAlign(a){ const c=selParasHit(); if(!c) return; fmtPush(c.e); c.e.al=(c.e.al||[]).filter(x=>!c.ps.some(p=>x.s<p.e&&x.e>p.s)); if(a) c.ps.forEach(p=>c.e.al.push({id:uid(),s:p.s,e:p.e,a:a})); fmtFin(c.e); showToast(a==='c'?'가운데 맞춤':(a==='r'?'오른쪽 맞춤':(a==='l'?'왼쪽 맞춤':(a==='j'?'양쪽 맞춤':'맞춤을 기본으로 돌렸어요.')))); }
 function selFont(k){ const e=curEx(); const o=selR||rangeOffsets(); if(!e||!o||o.k!=='body') return; fmtPush(e); let arr=removeRangeArr((e.marks||[]).slice(),'f',o.s,o.e); if(k) arr.push({id:uid(),t:'f',s:o.s,e:o.e,f:k}); e.marks=arr; fmtFin(e); showToast(k?(FONTS[k].n+' 글꼴'):'기본 글꼴'); }
 function selIndent(scope,on){ const e=curEx(); if(!e) return; if(scope==='all'){ fmtPush(e); e.indent=!!on; e.ix=[]; fmtFin(e); showToast(on?'전체 들여쓰기를 켰어요.':'전체 들여쓰기를 껐어요.'); return; }
   const c=selParasHit(); if(!c) return; fmtPush(e); e.ix=(e.ix||[]).filter(x=>!c.ps.some(p=>x.s<p.e&&x.e>p.s)); c.ps.forEach(p=>e.ix.push({id:uid(),s:p.s,e:p.e,v:on?1:0})); fmtFin(e); showToast(on?'이 문단을 들여썼어요.':'이 문단 들여쓰기를 껐어요.'); }
@@ -2929,7 +2979,9 @@ function selSubOpen(k){
   const sub=document.getElementById('selSub'); if(!sub) return; if(_selSubK===k&&sub.classList.contains('on')){ sub.classList.remove('on'); _selSubK=null; placeSelBar(); return; }
   _selSubK=k; let h='';
   const ic=(d)=>'<svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="'+d+'"/></svg>';
-  if(k==='al') h='<button type="button" aria-label="왼쪽 맞춤" onclick="selAlign(\'l\')">'+ic('M4 6h16M4 11h10M4 16h16M4 21h10')+'</button><button type="button" aria-label="가운데 맞춤" onclick="selAlign(\'c\')">'+ic('M4 6h16M7 11h10M4 16h16M7 21h10')+'</button><button type="button" aria-label="오른쪽 맞춤" onclick="selAlign(\'r\')">'+ic('M4 6h16M10 11h10M4 16h16M10 21h10')+'</button>';
+  if(k==='al'){ let cur=''; try{ const c=selParasHit(); const a=c&&(c.e.al||[]).find(x=>x.s<c.ps[0].e&&x.e>c.ps[0].s); cur=a?a.a:''; }catch(x){}
+    const ab=(v,lab,d)=>'<button type="button" class="'+(cur===v?'on':'')+'" aria-label="'+lab+'" onclick="selAlign(\''+v+'\')">'+ic(d)+'</button>';
+    h=ab('l','왼쪽 맞춤','M4 6h16M4 11h10M4 16h16M4 21h10')+ab('c','가운데 맞춤','M4 6h16M7 11h10M4 16h16M7 21h10')+ab('r','오른쪽 맞춤','M4 6h16M10 11h10M4 16h16M10 21h10')+ab('j','양쪽 맞춤','M4 6h16M4 11h16M4 16h16M4 21h16')+'<button type="button" class="'+(cur===''?'on':'')+'" onclick="selAlign(\'\')">기본</button>'; }
   else if(k==='ft') h='<button type="button" onclick="selFont(\'\')">기본</button>'+Object.keys(FONTS).map(f=>'<button type="button" style="font-family:'+FONTS[f].f.replace(/"/g,"'")+'" onclick="selFont(\''+f+'\')">'+FONTS[f].n+'</button>').join('');
   else if(k==='ind') h='<button type="button" onclick="selIndent(\'p\',true)">이 문단 들여쓰기</button><button type="button" onclick="selIndent(\'p\',false)">이 문단 끄기</button><button type="button" onclick="selIndent(\'all\',true)">전체 켜기</button><button type="button" onclick="selIndent(\'all\',false)">전체 끄기</button>';
   else if(k==='clr') h='<button type="button" onclick="selClear(\'sel\')">선택 부분 서식 지우기</button><button type="button" onclick="selClear(\'all\')">이 발췌문 전체</button>';
@@ -2978,7 +3030,7 @@ function paintBody(e){
   if(pendingFind){ marks.push({id:'find',t:'find',s:pendingFind.s,e:pendingFind.e}); }
   const pts=new Set([0,body.length]); marks.forEach(m=>{pts.add(m.s);pts.add(m.e);});
   const paras=bodyParas(body), heads=headRanges(e), indAt=new Set(), blocks=new Map(), gaps=[];
-  paras.forEach((p,i)=>{ const h=heads.find(x=>x.s===p.s); const a=(e.al||[]).find(x=>x.s<p.e&&x.e>p.s); const al=a&&(a.a==='c'||a.a==='r')?a.a:'';
+  paras.forEach((p,i)=>{ const h=heads.find(x=>x.s===p.s); const a=(e.al||[]).find(x=>x.s<p.e&&x.e>p.s); const al=a&&('crlj'.indexOf(a.a)>=0)?a.a:'';
     if(h||al) blocks.set(p.s,{s:p.s,e:p.e,lv:h?h.lv:0,al:al,first:i===0,last:i===paras.length-1});
     else { const ov=(e.ix||[]).find(x=>x.s<p.e&&x.e>p.s); const on=ov?ov.v!==0:(e.indent!==false); if(on) indAt.add(p.s); } });
   paras.forEach((p,i)=>{ if(!blocks.has(p.s)) return; pts.add(p.s); pts.add(p.e); const g1=[i?paras[i-1].e:0,p.s], g2=[p.e,i<paras.length-1?paras[i+1].s:body.length]; [g1,g2].forEach(g=>{ if(g[1]>g[0]){ gaps.push(g); pts.add(g[0]); pts.add(g[1]); } }); });
@@ -3625,9 +3677,10 @@ function saveInlineEdit(){
 
 
 /* ===== 앱 전체 글자 크기 ===== */
-const UI_SCALES=[['작게',0.92],['보통',1],['크게',1.12],['가장 크게',1.25]];
+const UI_SCALES=[['작게',0.92],['보통',1],['크게',1.06],['아주 크게',1.12],['가장 크게',1.25]];
 function uiLevel(){ const v=DATA.settings&&DATA.settings.uiScale; return (typeof v==='number'&&v>=0&&v<UI_SCALES.length)?v:1; }
-function applyUiScale(){ document.documentElement.style.setProperty('--uz',String(UI_SCALES[uiLevel()][1])); }
+function applyUiScale(){ try{ if(DATA.settings&&DATA.settings.uiScaleV!==2){ const o=DATA.settings.uiScale; if(typeof o==='number'){ DATA.settings.uiScale=[0,1,3,4][o]!=null?[0,1,3,4][o]:1; } DATA.settings.uiScaleV=2; save(); } }catch(x){}
+  document.documentElement.style.setProperty('--uz',String(UI_SCALES[uiLevel()][1])); }
 function openFs(){ renderFs(); document.getElementById('fsBg').classList.add('show'); }
 function renderFs(){
   const h=document.getElementById('fsOpts'); h.innerHTML='';
@@ -3766,7 +3819,7 @@ function ieOnState(){
     /* 폰에서는 사용자가 화면을 누른 순간에 쌓은 기록만 뒤로가기에 확실히 반응한다 → 눌렀을 때 여러 칸을 미리 쌓아 둔다 (쪽 넘기기·화면 이동에 쓰이는 만큼 넉넉히) */
     const GUARD_N=20; let gd=0, exiting=false;
     const topUp=()=>{ try{ while(gd<GUARD_N){ gd++; history.pushState({mrae:'guard',n:gd},''); } }catch(e){} };
-    ['pointerup','touchend','mouseup','keydown','click'].forEach(t=>window.addEventListener(t,topUp,{capture:true,passive:true}));
+    ['pointerdown','touchstart','pointerup','touchend','mouseup','keydown','click'].forEach(t=>window.addEventListener(t,topUp,{capture:true,passive:true}));
     window._armGuard=topUp;
     let armed=0; const guard=()=>{ if(gd===0){ try{ history.pushState({mrae:'guard',n:1},''); gd=1; }catch(e){} } };
     window.addEventListener('pointerup',()=>{ armed=0; },{capture:true,passive:true});
@@ -3921,7 +3974,7 @@ function renderSearchScreen(){
 function tabSearch(){ tabGo('search'); setTimeout(()=>{const i=document.getElementById('searchInput'); if(i) i.focus();},80); }
 
 /* ---------- 버전 · 업데이트 확인 ---------- */
-const APP_VERSION='2026.11.13-4';
+const APP_VERSION='2026.11.13-6';
 let updateAvail=false;
 let latestVer='';
 function pendingState(){
