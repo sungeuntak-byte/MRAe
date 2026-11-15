@@ -246,6 +246,11 @@ html[data-mode=dark] .shwarn{background:#3A3936;color:#E8E6DC;}
 .sharebtn{display:inline-flex;align-items:center;gap:6px;min-height:40px;padding:0 14px;border-radius:20px;border:1px solid var(--beige);background:var(--surface);color:var(--btn);font-size:13px;font-weight:700;cursor:pointer;}
 .sharebtn.icononly{width:44px;min-height:44px;padding:0;justify-content:center;border-radius:22px;}
 .sharebtn .ico{width:24px;height:24px;}
+.libhead{position:sticky;top:0;z-index:12;background:var(--ivory);margin:-20px -18px 0;padding:20px 18px 0;}
+.libhead .topbar{margin-bottom:10px;}
+.catrow{display:flex;align-items:center;gap:6px;margin-bottom:6px;}
+.catrow .catbar{flex:1;min-width:0;margin-bottom:0;padding-bottom:6px;}
+.catrow .sharebtn.icononly{flex:0 0 auto;width:40px;min-height:40px;}
 .listhead{display:flex;align-items:center;justify-content:space-between;margin:2px 0 10px;}
 .listhead .lt{font-size:13px;font-weight:700;color:var(--brown);}
 .indsp{display:inline-block;width:1em;}
@@ -618,6 +623,12 @@ html[data-mode=eink] .segbtn.on,html[data-mode=eink] #ordBtn.on{background:#D0D0
 .selbar .selsub button{min-height:36px;padding:0 10px;border:1px solid rgba(255,255,255,.35);border-radius:8px;background:none;color:#fff;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;}
 .selbar .selsub button .ico{width:22px;height:22px;vertical-align:middle;}
 .selbar .selsub .full{flex:1 1 100%;text-align:center;}
+.selbar .indband{display:flex;align-items:center;gap:14px;border:1px solid rgba(255,255,255,.35);border-radius:10px;padding:8px 12px;text-align:left;}
+.selbar .indband .indt{font-weight:800;font-size:13.5px;margin-right:2px;}
+.selbar .indband .ck{display:inline-flex;align-items:center;gap:7px;font-size:14px;font-weight:600;cursor:pointer;}
+.selbar .indband .ck i{width:20px;height:20px;border:2px solid #fff;border-radius:5px;display:inline-block;position:relative;box-sizing:border-box;}
+.selbar .indband .ck i.on{background:#B77B56;border-color:#B77B56;}
+.selbar .indband .ck i.on::after{content:'';position:absolute;left:5px;top:1px;width:5px;height:10px;border:solid #fff;border-width:0 2.5px 2.5px 0;transform:rotate(45deg);}
 .selbar .selsub button.on{background:rgba(255,255,255,.24);border-color:#fff;}
 .pvtoggle{display:flex;align-items:center;gap:10px;margin:2px 0 8px;}
 .pvtoggle .seg2{display:flex;border:1px solid var(--btn);border-radius:10px;overflow:hidden;flex:none;}
@@ -742,15 +753,16 @@ body.hasrecent #library{padding-bottom:250px;}
 
 <!-- 서재 (책장 목록 + 책 목록) -->
 <div class="screen" id="library">
+<div class="libhead">
   <div class="topbar">
     <button class="navbtn" id="helpBtn" onclick="openGuide()" aria-label="사용법" style="width:44px;padding:0;display:flex;align-items:center;justify-content:center;"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.6 9.4a2.5 2.5 0 1 1 3.6 2.2c-.8.5-1.2 1-1.2 1.9"/><circle cx="12" cy="17.2" r=".7" fill="currentColor"/></svg></button>
     <h1>내 서재</h1>
     <button class="navbtn" onclick="go('shelves')" aria-label="책장 관리" style="width:44px;padding:0;display:flex;align-items:center;justify-content:center;"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9l-4-4L4 16v4z"/><path d="m13.5 6.5 4 4"/></svg></button>
   </div>
-  <div class="catbar" id="catbar" style="margin-bottom:14px;"></div>
+  <div class="catrow"><div class="catbar" id="catbar"></div><button class="sharebtn icononly" id="libShareBtn" aria-label="전체 공유" onclick="openShare(currentCatFilter?'shelf':'all')"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="3.6" cy="12" r="2"/><circle cx="9.3" cy="5.1" r="2"/><circle cx="9.3" cy="18.9" r="2"/><path d="m5.2 10 2.4-2.9M5.2 14l2.4 2.9"/><path d="M19.5 4.5v10M16.3 11.6l3.2 3.2 3.2-3.2"/><path d="M15.7 19.6h7.6" stroke-width="2"/></svg></button></div>
+</div>
   <button type="button" class="recent" id="recentLine" style="display:none;" onclick="resumeReading()" aria-label="마지막으로 읽던 곳으로"><span class="rtag">최근 읽은 곳</span><span class="rtxt" id="recentTxt"></span><span class="rsub" id="recentSub"></span><span class="rchev" aria-hidden="true">›</span></button>
   <input type="text" id="bookSearch" style="display:none;">
-  <div class="listhead"><span class="lt" id="libScope">전체 책</span><button class="sharebtn icononly" id="libShareBtn" aria-label="전체 공유" onclick="openShare(currentCatFilter?'shelf':'all')"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="3.6" cy="12" r="2"/><circle cx="9.3" cy="5.1" r="2"/><circle cx="9.3" cy="18.9" r="2"/><path d="m5.2 10 2.4-2.9M5.2 14l2.4 2.9"/><path d="M19.5 4.5v10M16.3 11.6l3.2 3.2 3.2-3.2"/><path d="M15.7 19.6h7.6" stroke-width="2"/></svg></button></div>
   <div id="bookList"></div>
   <button class="fab" onclick="openNewMenu()" aria-label="추가"><svg class="ico cplus" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5h3l1.5-2.4h5"/><path d="M3 9.5V19h16v-7.5"/><circle cx="11" cy="14.2" r="3.2"/><circle cx="18.2" cy="5.8" r="4.6" fill="currentColor" stroke="none"/><path class="pl" d="M18.2 3.5v4.6M15.9 5.8h4.6" stroke-width="1.8"/></svg></button>
 </div>
@@ -804,15 +816,8 @@ body.hasrecent #library{padding-bottom:250px;}
 </div>
 
 <div class="screen" id="bookDetail">
-  <div class="topbar">
-    <span style="width:92px;display:flex;"></span>
-    <h1 id="bookDetailTitle">책 이름</h1>
-    <span style="display:flex;gap:4px;width:92px;justify-content:flex-end;">
-      <button class="navbtn" onclick="tabSearch()" aria-label="검색" style="min-width:44px;padding:0;display:flex;align-items:center;justify-content:center;border:none;background:none;"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/></svg></button>
-      <button class="navbtn" onclick="openBookModal(currentBookId)" aria-label="책 수정" style="min-width:44px;padding:0;display:flex;align-items:center;justify-content:center;border:none;background:none;"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9l-4-4L4 16v4z"/><path d="m13.5 6.5 4 4"/></svg></button>
-    </span>
-  </div>
-  <div class="booktop"><div id="bookDetailCover"></div><div class="cardsub" id="bookDetailMeta"></div></div>
+  <div class="topbar"><h1 id="bookDetailTitle">책 이름</h1></div>
+  <div class="booktop"><div id="bookDetailCover"></div><div class="cardsub" id="bookDetailMeta" style="flex:1;min-width:0;"></div><button class="navbtn" onclick="openBookModal(currentBookId)" aria-label="책 수정" style="align-self:flex-start;margin-top:-4px;min-width:44px;padding:0;display:flex;align-items:center;justify-content:center;border:none;background:none;"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9l-4-4L4 16v4z"/><path d="m13.5 6.5 4 4"/></svg></button></div>
   <div class="listhead" style="margin-top:6px;"><span class="lt" id="bdCount">발췌 목차</span><span style="display:flex;gap:6px;align-items:center;"><button type="button" class="sharebtn icononly" id="ordBtn" aria-label="순서 바꾸기" onclick="toggleExOrder()"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 20V5M8 5 4.5 8.5M8 5l3.5 3.5M16 4v15M16 19l-3.5-3.5M16 19l3.5-3.5"/></svg></button><button class="sharebtn icononly" aria-label="책 공유" onclick="openShare('book')"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="3.6" cy="12" r="2"/><circle cx="9.3" cy="5.1" r="2"/><circle cx="9.3" cy="18.9" r="2"/><path d="m5.2 10 2.4-2.9M5.2 14l2.4 2.9"/><path d="M19.5 4.5v10M16.3 11.6l3.2 3.2 3.2-3.2"/><path d="M15.7 19.6h7.6" stroke-width="2"/></svg></button></span></div>
   <div class="ordpanel" id="ordPanel" style="display:none;">
     <div class="hint" style="margin:0 0 8px;">각 발췌문 옆의 ▲ ▼로 한 칸씩 옮겨요. 끝나면 위쪽의 ✓ 를 누르세요.</div>
@@ -969,14 +974,14 @@ body.hasrecent #library{padding-bottom:250px;}
     <button type="button" aria-label="하이라이트" onclick="selToggleHl()"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9.6 14.4 7.6-7.6a1.7 1.7 0 0 1 2.4 2.4L12 16.8z"/><path d="m9.6 14.4-3 3 1.2 1.9 4.2-.5"/><path d="M3.5 21.2h9.5" stroke="#FFE066" stroke-width="3.2"/></svg></button>
     <button type="button" aria-label="굵게" onclick="selApply('b')"><b class="gl">B</b></button>
     <button type="button" aria-label="밑줄" onclick="selApply('u')"><u class="gl">U</u></button>
+    <button type="button" id="selImgBtn" aria-label="이미지 넣기" onclick="selImage()"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5H6a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2v-6"/><circle cx="9" cy="11" r="1.5"/><path d="m4 18 4.5-4.5 3 3L14 14l5 5"/><path d="M18 2.5v6M15 5.5h6"/></svg></button>
     <button type="button" id="selMemoBtn" aria-label="부분 메모" onclick="selMemo()"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3.5h10l4 4V20.5H5z"/><path d="M15 3.5v4h4M8.5 12h7M8.5 16h5"/></svg></button>
     <button type="button" aria-label="복사" onclick="selCopy()"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8.5" y="8.5" width="12" height="12" rx="2"/><path d="M15.5 8.5V6A2 2 0 0 0 13.5 4H6A2 2 0 0 0 4 6v7.5A2 2 0 0 0 6 15.5h2.5"/></svg></button>
     <button type="button" aria-label="공유·다운로드" onclick="selShare()"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="3.6" cy="12" r="2"/><circle cx="9.3" cy="5.1" r="2"/><circle cx="9.3" cy="18.9" r="2"/><path d="m5.2 10 2.4-2.9M5.2 14l2.4 2.9"/><path d="M19.5 4.5v10M16.3 11.6l3.2 3.2 3.2-3.2"/><path d="M15.7 19.6h7.6" stroke-width="2"/></svg></button>
-    <button type="button" id="selImgBtn" aria-label="이미지 넣기" onclick="selImage()"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="4.5" width="17" height="15" rx="2"/><circle cx="9" cy="10" r="1.6"/><path d="m4 17 5-5 4 4 2.5-2.5L20 17"/></svg></button>
   </div>
   <div class="selmain selfmt">
-    <button type="button" id="selH1Btn" aria-label="대제목" onclick="selHeadLv(1)"><span class="gl2">H1</span></button>
-    <button type="button" id="selHeadBtn" aria-label="소제목" onclick="selHead()"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round"><path d="M4 4h16" stroke-width="4.4"/><g style="opacity:.55" stroke-width="1.3"><path d="M4 12.5h16M4 16.2h16M4 19.9h11"/></g></svg></button>
+    <button type="button" id="selH1Btn" aria-label="대제목" onclick="selHeadLv(1)"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round"><path d="M4 4.2h16" stroke-width="8"/><g style="opacity:.55" stroke-width="1.3"><path d="M4 13.5h16M4 17.2h16M4 20.9h11"/></g></svg></button>
+    <button type="button" id="selHeadBtn" aria-label="소제목" onclick="selHead()"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round"><path d="M4 4h16" stroke-width="3.6"/><g style="opacity:.55" stroke-width="1.3"><path d="M4 12.5h16M4 16.2h16M4 19.9h11"/></g></svg></button>
     <button type="button" aria-label="맞춤" onclick="selSubOpen('al')"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M7 11h10M4 16h16M7 21h10"/></svg></button>
     <button type="button" aria-label="글꼴" onclick="selSubOpen('ft')"><span class="gl2">Aa</span></button>
     <button type="button" aria-label="들여쓰기" onclick="selSubOpen('ind')"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16M12 10h8M12 15h8M4 20h16M4 9.5l3.5 2.5L4 14.5z"/></svg></button>
@@ -1156,6 +1161,12 @@ body.hasrecent #library{padding-bottom:250px;}
     <h3>새 소식</h3>
     <div class="updbanner" id="newsUpd" style="display:none;margin:0 0 12px;"><span>🔔 새 업데이트가 있어요</span><button type="button" onclick="askConfirm('업데이트할까요? 저장한 글과 사진은 그대로 유지됩니다.',applyUpdate)">업데이트 적용</button></div>
     <div class="noticebody guidebody">
+      <h4>2026.11.14 (1)</h4>
+      <p>· 서재 화면 위쪽(내 서재 제목과 책장 칩)이 스크롤해도 고정돼요. ‘내 서재 전체’ 같은 제목 줄은 없앴고, 공유 버튼은 책장 칩 줄 오른쪽으로 옮겼어요.<br>
+      · 책 화면: 책 제목이 한 줄에 보이도록 위쪽의 돋보기와 연필을 정리했어요. 돋보기는 아래 메뉴로, 연필은 표지 사진 줄 오른쪽으로 옮겼어요.<br>
+      · 저장할 때 곧은 따옴표(" ')가 둥근 따옴표로 바뀌어요(세부 설정의 ‘따옴표 둥글게’).<br>
+      · 본문을 고칠 때 화면이 튀지 않아요. 고치는 줄 아래에는 키보드와 닿지 않게 한 줄 정도 여유를 둬요.<br>
+      · 선택 막대: 이미지 버튼이 U 뒤로 옮겨졌고 ＋ 표시가 붙었어요. 대제목 아이콘은 윗선이 더 굵어요. 들여쓰기는 ‘이 문단’ ‘전체’ 체크 두 개로 단순해졌어요.</p>
       <h4>2026.11.13 (7)</h4>
       <p>· 발췌문의 글 사이에 이미지를 넣을 수 있어요. 글자를 길게 눌러 드래그하면 뜨는 막대의 🖼를 누르거나, 빈 곳·문단 사이를 길게 눌러 ‘이미지 넣기’를 고르세요. 사진 찍기·갤러리·원본 사진에서 고를 수 있고, 맨 앞·글 사이·맨 뒤에 넣어요.<br>
       · 이미지를 누르면 이미지 위에 ▲ ▼(이동)와 크게·작게 화살표가 나타나고, 아래 막대에서 맞춤·캡션·자르기·삭제를 고를 수 있어요. 캡션은 본문보다 1pt 작고 양쪽 맞춤이 기본이에요.<br>
@@ -1315,7 +1326,7 @@ body.hasrecent #library{padding-bottom:250px;}
 <div id="ieSelBar" onmousedown="event.preventDefault()">
   <div class="ier sws" id="ieSws"></div>
   <div class="ier">
-    <button type="button" class="ic" id="ieBtnH" onclick="ieHeadBtn()"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round"><path d="M4 4h16" stroke-width="4.4"/><g style="opacity:.55" stroke-width="1.3"><path d="M4 12.5h16M4 16.2h16M4 19.9h11"/></g></svg><span>소제목</span></button>
+    <button type="button" class="ic" id="ieBtnH" onclick="ieHeadBtn()"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round"><path d="M4 4h16" stroke-width="3.6"/><g style="opacity:.55" stroke-width="1.3"><path d="M4 12.5h16M4 16.2h16M4 19.9h11"/></g></svg><span>소제목</span></button>
     <button type="button" class="ic" id="ieBtnHl" onclick="ieSwToggle()"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9.6 14.4 7.6-7.6a1.7 1.7 0 0 1 2.4 2.4L12 16.8z"/><path d="m9.6 14.4-3 3 1.2 1.9 4.2-.5"/><path d="M3.5 21.2h9.5" stroke="#FFE066" stroke-width="3.2"/></svg><span>형광</span></button>
     <button type="button" class="ic" id="ieBtnB" onclick="ieApply('b')"><b class="gl">B</b><span>굵게</span></button>
     <button type="button" class="ic" id="ieBtnU" onclick="ieApply('u')"><u class="gl">U</u><span>밑줄</span></button>
@@ -1504,6 +1515,7 @@ body.hasrecent #library{padding-bottom:250px;}
   <button class="tab" data-tab="library" onclick="goMain()" aria-label="전체 책장"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 3.5h16v17H4z"/><path d="M4 12h16"/><path d="M8 5.5v4.5M11.5 6.5v3.5M15.5 5.5v4.5"/><path d="M8 14.5v4M12 15.5v3M16 14.5v4"/></svg></button>
   <button class="tab" id="tabFs" data-tab="fs" onclick="openFs()" aria-label="글자 크기" style="display:none;"><span class="fsico"><span class="s">가</span><span class="b">가</span></span></button>
   <button class="tab" data-tab="search" onclick="tabSearch()" aria-label="검색"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/></svg></button>
+  <button class="tab" id="tabMag" data-tab="searchb" onclick="tabSearch()" aria-label="검색" style="display:none;"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/></svg></button>
   <button class="tab" data-tab="marks" onclick="openMarks('all')" aria-label="메모와 하이라이트 모아보기"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3.5h12v17l-6-4-6 4z"/></svg></button>
   <button class="tab" data-tab="settings" onclick="tabGo('settings')" aria-label="설정"><i class="tabbdg" id="setBadge"></i><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button>
 </div></nav>
@@ -2101,7 +2113,7 @@ function cancelExcerptEdit(){
 let savingExcerpt = false;
 async function saveExcerpt(mode){
   if(savingExcerpt) return;
-  const body = document.getElementById('exBody').value.trim();
+  const body = _qr(document.getElementById('exBody').value.trim());
   if(!body && !photos.length){showToast('본문을 입력하거나 사진을 추가해 주세요.');return;}
   if(!body && typeof mode!=='string'){
     const pv0=editingExcerptId?DATA.excerpts.find(x=>x.id===editingExcerptId):null;
@@ -2701,6 +2713,7 @@ function loadTesseract(){
     document.head.appendChild(s);
   });
 }
+function _qr(t){ return DATA.settings.quoteRound===false?t:roundQuotes(t); }
 function roundQuotes(t){
   let out='';
   for(let i=0;i<t.length;i++){
@@ -2926,7 +2939,20 @@ function reflowText(t){
   return out.join('\n\n').replace(/[ \t]{2,}/g,' ');
 }
 function edFs(){ const v=+DATA.settings.edSize||17; return Math.max(13,Math.min(28,v)); }
-function growTa(ta){ if(!ta||!ta.offsetParent) return; ta.style.height='auto'; ta.style.height=(ta.scrollHeight+4)+'px'; }
+function growTa(ta){ if(!ta||!ta.offsetParent) return; const y=window.scrollY; ta.style.height='auto'; ta.style.height=(ta.scrollHeight+4)+'px'; if(Math.abs(window.scrollY-y)>1) window.scrollTo(0,y); }
+function caretBottom(ta){
+  const cs=getComputedStyle(ta), m=document.createElement('div'); const st=m.style;
+  ['fontFamily','fontSize','fontWeight','letterSpacing','lineHeight','paddingTop','paddingRight','paddingBottom','paddingLeft','borderTopWidth','borderRightWidth','borderBottomWidth','borderLeftWidth','textIndent','wordBreak','tabSize'].forEach(p=>{ st[p]=cs[p]; });
+  st.boxSizing='border-box'; st.width=ta.offsetWidth+'px'; st.whiteSpace='pre-wrap'; st.overflowWrap='break-word'; st.position='absolute'; st.visibility='hidden'; st.left='-9999px'; st.top='0';
+  m.textContent=ta.value.slice(0,ta.selectionEnd); const mk=document.createElement('span'); mk.textContent='\u200b'; m.appendChild(mk); document.body.appendChild(m);
+  let lh=parseFloat(cs.lineHeight); if(!lh||isNaN(lh)) lh=parseFloat(cs.fontSize)*1.5; const bottom=ta.getBoundingClientRect().top+mk.offsetTop+lh-ta.scrollTop; m.remove(); return {bottom:bottom,lh:lh};
+}
+function caretRoom(){
+  const ta=document.activeElement; if(!ta||ta.tagName!=='TEXTAREA'||ta.readOnly||!/^(exBody|ieBody|exMemo|ieMemo)$/.test(ta.id)) return;
+  try{ const c=caretBottom(ta); const vv=window.visualViewport; const lim=(vv?vv.offsetTop+vv.height:innerHeight)-c.lh*1.6; if(c.bottom>lim) window.scrollBy(0,Math.ceil(c.bottom-lim)); }catch(x){}
+}
+['input','keyup','click','focusin'].forEach(t=>document.addEventListener(t,ev=>{ const el=ev.target; if(el&&el.tagName==='TEXTAREA'&&/^(exBody|ieBody|exMemo|ieMemo)$/.test(el.id)){ setTimeout(caretRoom,40); setTimeout(caretRoom,260); } },true));
+if(window.visualViewport) window.visualViewport.addEventListener('resize',()=>{ setTimeout(caretRoom,60); });
 function growAll(){ growTa(document.getElementById('exBody')); growTa(document.getElementById('ieBody')); }
 function edApply(){ document.documentElement.style.setProperty('--edfs',edFs()+'px'); growAll(); }
 function edStep(d){ DATA.settings.edSize=Math.max(13,Math.min(28,edFs()+d)); save(); edApply(); showToast('글자 크기 '+edFs()); }
@@ -3228,7 +3254,8 @@ function selSubOpen(k){
     const ab=(v,lab,d)=>'<button type="button" class="'+(cur===v?'on':'')+'" aria-label="'+lab+'" onclick="selAlign(\''+v+'\')">'+ic(d)+'</button>';
     h=ab('l','왼쪽 맞춤','M4 6h16M4 11h10M4 16h16M4 21h10')+ab('c','가운데 맞춤','M4 6h16M7 11h10M4 16h16M7 21h10')+ab('r','오른쪽 맞춤','M4 6h16M10 11h10M4 16h16M10 21h10')+ab('j','양쪽 맞춤','M4 6h16M4 11h16M4 16h16M4 21h16')+'<button type="button" class="'+(cur===''?'on':'')+'" onclick="selAlign(\'\')">기본</button>'; }
   else if(k==='ft') h='<button type="button" onclick="selFont(\'\')">기본</button>'+Object.keys(FONTS).map(f=>'<button type="button" style="font-family:'+FONTS[f].f.replace(/"/g,"'")+'" onclick="selFont(\''+f+'\')">'+FONTS[f].n+'</button>').join('');
-  else if(k==='ind') h='<button type="button" onclick="selIndent(\'p\',true)">이 문단 들여쓰기</button><button type="button" onclick="selIndent(\'p\',false)">이 문단 끄기</button><button type="button" onclick="selIndent(\'all\',true)">전체 켜기</button><button type="button" onclick="selIndent(\'all\',false)">전체 끄기</button>';
+  else if(k==='ind'){ let pOn=true,aOn=true; try{ const c=selParasHit(); const e=curEx(); aOn=e.indent!==false; if(c){ const p0=c.ps[0]; const ov=(e.ix||[]).find(x=>x.s<p0.e&&x.e>p0.s); pOn=ov?ov.v!==0:aOn; } }catch(x){}
+    h='<div class="indband full"><span class="indt">들여쓰기</span><label class="ck" onclick="selIndent(\'p\','+(!pOn)+')"><i class="'+(pOn?'on':'')+'"></i>이 문단</label><label class="ck" onclick="selIndent(\'all\','+(!aOn)+')"><i class="'+(aOn?'on':'')+'"></i>전체</label></div>'; }
   else if(k==='clr') h='<button type="button" onclick="selClear(\'sel\')">선택 부분 서식 지우기</button><button type="button" onclick="selClear(\'all\')">이 발췌문 전체</button>';
   sub.innerHTML=h; sub.classList.add('on'); placeSelBar();
 }
@@ -3493,8 +3520,7 @@ async function selCopy(){ const e=curEx(); const t=selText(); if(!e||!t) return;
   let ok=false; try{ if(navigator.clipboard&&window.isSecureContext){ await navigator.clipboard.writeText(full); ok=true; } }catch(x){}
   if(!ok){ try{ ok=document.execCommand('copy'); }catch(x){} }
   showToast(ok?'출처와 함께 복사했습니다.':'복사하지 못했습니다.'); }
-function updateListHead(){ const l=document.getElementById('libScope'); if(!l) return; const c=DATA.categories.find(x=>x.id===currentCatFilter);
-  l.textContent=c?c.name+' 책장':'내 서재 전체'; document.getElementById('libShareBtn').setAttribute('aria-label',c?'책장 공유':'전체 공유'); }
+function updateListHead(){ const c=DATA.categories.find(x=>x.id===currentCatFilter); const b=document.getElementById('libShareBtn'); if(b) b.setAttribute('aria-label',c?'책장 공유':'전체 공유'); }
 
 function selText(){ const e=curEx(); const o=selR||rangeOffsets(); return (e&&o)?mkText(e,o.k).slice(o.s,o.e):''; }
 
@@ -3708,6 +3734,7 @@ function updateTabbar(id){
   }
   const show_=['library','bookDetail','trash','backup','settings','marks','log','shelves','search','setMore','setInfo'].indexOf(id)>=0;
   document.getElementById('tabbar').style.display=show_?'block':'none';
+  { const tg=document.getElementById('tabMag'); if(tg) tg.style.display=(id==='bookDetail')?'':'none'; }
   const lt=document.querySelector('.tab[data-tab=library]'); const tf=document.getElementById('tabFs'); if(lt) lt.style.display=(id==='library')?'none':''; if(tf) tf.style.display=(id==='library')?'':'none';
   document.body.classList.toggle('hastab',show_);
   document.querySelectorAll('.tab').forEach(t=>{
@@ -3925,7 +3952,7 @@ function startInlineEdit(){
 function endInlineEdit(){ document.getElementById('readEdit').style.display='none'; document.getElementById('ieSelBar').style.display='none'; document.getElementById('readPaper').style.display=''; document.getElementById('rMini').style.display=''; }
 function cancelInlineEdit(){ endInlineEdit(); renderReader(); }
 function saveInlineEdit(){
-  const e=curEx(); const body=document.getElementById('ieBody').value.trim();
+  const e=curEx(); const body=_qr(document.getElementById('ieBody').value.trim());
   if(!body){showToast('본문을 입력해 주세요.');return;}
   learnOcrFixes(e.ocrRaw,body);
   ieSync(); e.marks=remapMarks(_ieM.marks,_ieM.base,body); e.hd=remapMarks(_ieM.hd,_ieM.base,body); e.al=remapMarks(e.al,_ieM.base,body); e.ix=remapMarks(e.ix,_ieM.base,body); if(e.pm) e.pm=remapMarks(e.pm,_ieM.base,body); e.body=body; e.indent=document.getElementById('ieIndent').checked; DATA.settings.indentLast=e.indent; e.autoHead=document.getElementById('ieHead').checked; DATA.settings.headLast=e.autoHead;
@@ -4235,7 +4262,7 @@ function renderSearchScreen(){
 function tabSearch(){ tabGo('search'); setTimeout(()=>{const i=document.getElementById('searchInput'); if(i) i.focus();},80); }
 
 /* ---------- 버전 · 업데이트 확인 ---------- */
-const APP_VERSION='2026.11.13-7';
+const APP_VERSION='2026.11.14-1';
 let updateAvail=false;
 let latestVer='';
 function pendingState(){
