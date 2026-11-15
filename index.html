@@ -1678,6 +1678,7 @@ function updateNavButtons(){
   });
 }
 function show(screenId){
+  try{ imBarHide(); }catch(x){}
   if(window._pv&&screenId!=='reader') pvLeave();
   window._navAt=Date.now(); setTimeout(()=>{ try{ edApply(); }catch(x){} },60);
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
@@ -2821,11 +2822,13 @@ function imStart(pos){
   document.getElementById('imSrcBg').classList.add('show');
 }
 function selImage(){ const o=selR||rangeOffsets(); if(!o||o.k!=='body') return; const pos=o.e; hideSelBar(); window.getSelection().removeAllRanges(); imStart(pos); }
+let _imPtT=null;
 function imPtShow(x,y){
+  clearTimeout(_imPtT); _imPtT=setTimeout(()=>{ const b=document.getElementById('imPtBar'); if(b&&b.style.display==='block'&&!(window._imHold)) imBarHide(); },7000);
   const o=ptOff(x,y); if(o==null) return; _imPt=o; const b=document.getElementById('imPtBar'); b.style.display='block';
   const bw=b.offsetWidth, bh=b.offsetHeight; b.style.left=Math.max(8,Math.min(innerWidth-bw-8,x-bw/2))+'px'; let t=y+36; if(t+bh>innerHeight-8) t=y-bh-36; b.style.top=Math.max(8,t)+'px'; imShowLine(o);
 }
-function imPtGo(){ const o=_imPt; imBarHide(); if(o!=null) imStart(o); }
+function imPtGo(){ const o=_imPt; clearTimeout(_imPtT); imBarHide(); if(o!=null) imStart(o); }
 function imInsert(e,ph,d){
   if(_imCtx.at==null){ fmtPush(e); _imCtx.at=imPosAt(e,_imCtx.pos); }
   const m={id:uid(),t:'im',s:_imCtx.at,e:_imCtx.at,ph:ph,w:d.w,h:d.h,sz:'m',al:'c',cap:'',ca:'j'}; e.marks=(e.marks||[]).concat([m]); _imCtx.last=m.id;
@@ -2917,6 +2920,7 @@ function imCapOk(){
 (function(){
   const host=document.getElementById('readerBody'); let g=null;
   host.addEventListener('click',ev=>{ const f=ev.target.closest&&ev.target.closest('.imgblk'); if(!f) return; ev.stopPropagation(); const ob=ev.target.closest('.imov button'); if(ob){ imOv(ob.dataset.k); return; } if(Date.now()-(window._imDragT||0)<500) return; imMenuOpen(f.dataset.iid); });
+  document.addEventListener('pointerdown',ev=>{ const b=document.getElementById('imPtBar'); if(b&&b.style.display==='block'&&!(ev.target.closest&&ev.target.closest('#imPtBar'))&&Date.now()-(window._imLP||0)>700) imBarHide(); },true);
   const paper=document.getElementById('readPaper'); let h=null;
   const okT=t=>!(t.closest&&t.closest('.imgblk,.memoico,.selbar,#rTop,#rBot,.exnav,#pStage'));
   paper.addEventListener('pointerdown',ev=>{ if(window._pm||ev.button>0||!okT(ev.target)) return; h={x:ev.clientX,y:ev.clientY,fired:false};
@@ -3788,19 +3792,24 @@ function layoutPages(){
   if(!paper.clientWidth) return;
   const H=Math.max(300,window.innerHeight-64-(window._pv?52:0)); paper.style.height=H+'px';
   const cs=getComputedStyle(paper); const W=Math.floor(paper.clientWidth-parseFloat(cs.paddingLeft)-parseFloat(cs.paddingRight)); const bh=Math.floor(H-parseFloat(cs.paddingTop)-parseFloat(cs.paddingBottom)-2);
-  body.style.width=W+'px'; body.style.height=bh+'px'; body.style.setProperty('--imh',bh+'px'); body.scrollTop=0;
+  body.style.paddingBottom=''; body.style.width=W+'px'; body.style.height=bh+'px'; body.style.setProperty('--imh',bh+'px'); body.scrollTop=0;
   pgGeom={W:W,bh:bh};
   /* 단 없이 한 줄기로 두고, 줄이 잘리지 않는 위치를 쪽 시작점으로 삼는다 */
   const rr=document.createRange(); rr.selectNodeContents(body); const b0=body.getBoundingClientRect().top;
   const lines=textLineRects(body).filter(r=>r.height>1).map(r=>({t:r.top-b0,b:r.bottom-b0})).sort((a,b)=>a.t-b.t);
   const total=body.scrollHeight; pgStarts=[0]; let st=0, guard=0;
+  const hds=Array.from(body.querySelectorAll('.blk.hd1,.blk.hd2,.hd1,.hd2')).map(h=>{ const r=h.getBoundingClientRect(); return {t:r.top-b0,b:r.bottom-b0}; }).filter(r=>r.b-r.t>1);
   while(guard++<3000){
     const lim=st+bh; if(total<=lim+1) break;
     const nx=lines.find(l=>l.b>lim+0.5&&l.t>st+1);
-    if(nx&&nx.t>st+1){ pgStarts.push(nx.t); st=nx.t; }
-    else if(!nx){ if(total>lim+1){ const last=Math.max(st+1,total-bh); if(last>st+1) pgStarts.push(last); } break; }
+    if(nx&&nx.t>st+1){
+      let s2=nx.t, mv=true;
+      while(mv){ mv=false; for(const h of hds){ if(h.t>st+bh*0.25&&h.t<s2-1&&s2-h.b<=40&&h.b<=s2+1){ s2=h.t; mv=true; break; } } }
+      pgStarts.push(s2); st=s2; }
+    else if(!nx){ break; }
     else { pgStarts.push(lim); st=lim; }
   }
+  { const lastSt=pgStarts[pgStarts.length-1]||0; const need=Math.ceil(lastSt+bh-total); if(need>0) body.style.paddingBottom=need+'px'; }
   pgCount=Math.max(1,pgStarts.length);
   if(window._findNode){ const ft=window._findNode.offsetTop; let k=0; pgStarts.forEach((v,n)=>{ if(v<=ft+1) k=n; }); pg=k; window._findNode=null; }
   pg=Math.max(0,Math.min(pg,pgCount-1)); pageApply();
@@ -4281,7 +4290,7 @@ function renderSearchScreen(){
 function tabSearch(){ tabGo('search'); setTimeout(()=>{const i=document.getElementById('searchInput'); if(i) i.focus();},80); }
 
 /* ---------- 버전 · 업데이트 확인 ---------- */
-const APP_VERSION='2026.11.15-1';
+const APP_VERSION='2026.11.15-3';
 let updateAvail=false;
 let latestVer='';
 function pendingState(){
