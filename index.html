@@ -851,7 +851,9 @@ body.hasrecent #library{padding-bottom:250px;}
   <div class="addpick" id="addPick"><button class="btn primary" type="button" onclick="document.getElementById('addPick').classList.remove('show');document.getElementById('camInput').click()">촬영</button><button class="btn outline" type="button" onclick="document.getElementById('addPick').classList.remove('show');document.getElementById('galInput').click()">선택</button></div>
   <button class="btn primary" id="ocrBtn" style="display:none;width:100%;" onclick="runOcr()">글자 인식하기</button>
   <button class="btn outline" id="engBtn" style="display:none;width:100%;margin-top:6px;" onclick="runEng()">영어 보정</button>
+  <button class="btn ghost" id="ocrCancelBtn" type="button" style="display:none;width:100%;margin-top:6px;" onclick="ocrCancelDo()">인식 취소</button>
   <div class="ocrstatus" id="ocrStatus"></div>
+  <div style="text-align:right;"><button type="button" class="linkbtn" id="ocrClearBtn" style="display:none;" onclick="ocrClear()">인식 결과 지우기</button></div>
   <label>쪽</label>
   <div class="pgrow"><input type="text" id="exPage" inputmode="numeric" autocomplete="off" placeholder="예: 48 또는 48-49"><span class="pgseg" id="exPageMode"><button type="button" data-m="num" onclick="pgPick('exPage',true)">123</button><button type="button" data-m="txt" onclick="pgPick('exPage',false)">가</button></span></div>
   <label>발췌문 제목</label>
@@ -1161,6 +1163,9 @@ body.hasrecent #library{padding-bottom:250px;}
     <h3>새 소식</h3>
     <div class="updbanner" id="newsUpd" style="display:none;margin:0 0 12px;"><span>🔔 새 업데이트가 있어요</span><button type="button" onclick="askConfirm('업데이트할까요? 저장한 글과 사진은 그대로 유지됩니다.',applyUpdate)">업데이트 적용</button></div>
     <div class="noticebody guidebody">
+      <h4>2026.11.15 (1)</h4>
+      <p>· 사진 자르기 창의 ‘회전’이 아이콘(⟳)이 됐어요. 누를 때마다 90도씩 돌아요.<br>
+      · 글자 인식 중에 ‘인식 취소’로 멈출 수 있어요. 인식이 끝나면 ‘인식 결과 지우기’가 나타나, 방금 인식한 글만 한 번에 지우고 다시 인식할 수 있어요(되돌리기도 돼요). 인식한 글을 이미 고쳤다면 본문 전체를 지울지 물어봐요.</p>
       <h4>2026.11.14 (1)</h4>
       <p>· 서재 화면 위쪽(내 서재 제목과 책장 칩)이 스크롤해도 고정돼요. ‘내 서재 전체’ 같은 제목 줄은 없앴고, 공유 버튼은 책장 칩 줄 오른쪽으로 옮겼어요.<br>
       · 책 화면: 책 제목이 한 줄에 보이도록 위쪽의 돋보기와 연필을 정리했어요. 돋보기는 아래 메뉴로, 연필은 표지 사진 줄 오른쪽으로 옮겼어요.<br>
@@ -1471,7 +1476,7 @@ body.hasrecent #library{padding-bottom:250px;}
   <div class="cropnote" id="cropNote"></div>
   <div class="cropwrap" id="cropWrap"><div class="cropstage" id="cropStage"><canvas id="cropCv"></canvas><div class="cropbox" id="cropBox"><i class="h" data-d="nw" style="left:0;top:0"></i><i class="h" data-d="ne" style="left:100%;top:0"></i><i class="h" data-d="sw" style="left:0;top:100%"></i><i class="h" data-d="se" style="left:100%;top:100%"></i><i class="h e" data-d="n" style="left:50%;top:0"></i><i class="h e" data-d="s" style="left:50%;top:100%"></i><i class="h e" data-d="w" style="left:0;top:50%"></i><i class="h e" data-d="e" style="left:100%;top:50%"></i></div></div></div>
   <div class="cropskip" id="cropSkipRow" style="display:none;"><button type="button" id="cropSkip" onclick="cropSkip()">자르지 않고 쓰기</button><button type="button" id="cropSkipAll" onclick="cropSkipAll()" style="display:none;">나머지는 모두 자르지 않고 쓰기</button></div>
-  <div class="pvbot"><button type="button" onclick="cropCancel()">취소</button><button type="button" onclick="cropRotate()">회전</button><button type="button" onclick="cropReset()">다시</button><button type="button" id="cropOk" onclick="cropDone()">완료</button></div>
+  <div class="pvbot"><button type="button" onclick="cropCancel()">취소</button><button type="button" onclick="cropRotate()" aria-label="회전" style="display:flex;align-items:center;justify-content:center;"><svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12a8 8 0 1 1-2.6-5.9"/><path d="M20 4v5h-5"/></svg></button><button type="button" onclick="cropReset()">다시</button><button type="button" id="cropOk" onclick="cropDone()">완료</button></div>
 </div>
 <div class="modal-bg pvbg" id="pvBg">
   <div class="pvtop"><button type="button" onclick="closeModal('pvBg')" aria-label="닫기">✕</button><div class="pvt" id="pvTitle"></div><button type="button" id="pvZoomBtn" onclick="pvZoom()">확대</button></div>
@@ -2070,7 +2075,7 @@ function openExOpt(){ document.getElementById('exOptBg').classList.add('show'); 
 function openExcerptEditor(excerptId){
   document.getElementById('ocrEnhance').checked=(DATA.settings.ocrEnhance!==false); document.getElementById('autoCrop').checked=(DATA.settings.autoCrop!==false); document.getElementById('ocrJamo').checked=(DATA.settings.ocrJamo!==false); document.getElementById('ocrEngAuto').checked=!!DATA.settings.ocrEngAuto; document.getElementById('quoteRound').checked=(DATA.settings.quoteRound!==false);
   editingExcerptId = excerptId || null; appendCtx=null; document.getElementById('apPanel').classList.remove('show');
-  photos=[]; removedPhotoIds=[]; currentOcrRaw=''; exFmt={marks:[],hd:[],al:[],ix:[],base:''}; renderPhotos(); document.getElementById('ocrStatus').textContent='';
+  _ocrIns=null; try{ document.getElementById('ocrClearBtn').style.display='none'; }catch(x){} photos=[]; removedPhotoIds=[]; currentOcrRaw=''; exFmt={marks:[],hd:[],al:[],ix:[],base:''}; renderPhotos(); document.getElementById('ocrStatus').textContent='';
   document.getElementById('keepPhotos').checked=(DATA.settings.keepPhotos!==false);
   (function(){const bk=DATA.books.find(x=>x.id===currentBookId);document.getElementById('exBookLabel').textContent=bk?('📕 '+bk.title):'';})();
   document.querySelector('#excerptEditor h1').textContent = excerptId ? '발췌문 수정' : '새 발췌문';
@@ -2993,7 +2998,18 @@ function shrink(url){
     img.src=url;
   });
 }
-let ocrRunning=false;
+let ocrRunning=false, _ocrCancel=null, _ocrIns=null;
+function ocrCancelDo(){ if(_ocrCancel) _ocrCancel(); }
+function ocrClear(){
+  const I=_ocrIns, ta=document.getElementById('exBody'); if(!I){ showToast('지울 인식 결과가 없어요.'); return; }
+  const cur=ta.value; const intact=cur.slice(I.start,I.start+I.text.length)===I.text;
+  askConfirm(intact?'방금 인식한 글만 지울까요? 직접 쓰거나 고친 다른 글은 남아요.':'인식한 글이 고쳐져 있어서 본문 전체를 지워야 해요. 본문 전체를 지울까요?',()=>{
+    const was=ta.value; ta.value=intact?(cur.slice(0,I.start)+cur.slice(I.start+I.text.length)).replace(/\s+$/,''):''; growAll();
+    I.targets.forEach(p=>{ if(photos.indexOf(p)>=0){ p.done=false; p.ocr=true; } }); renderPhotos();
+    document.getElementById('ocrClearBtn').style.display='none'; _ocrIns=null; document.getElementById('ocrStatus').textContent='인식 결과를 지웠어요. 사진을 다시 인식할 수 있어요.';
+    showUndo('인식 결과를 지웠어요.',()=>{ ta.value=was; growAll(); I.targets.forEach(p=>{ if(photos.indexOf(p)>=0){ p.done=true; p.ocr=false; } }); renderPhotos(); _ocrIns=I; document.getElementById('ocrClearBtn').style.display=''; });
+  });
+}
 function withTimeout(pr,ms,msg){ return new Promise((res,rej)=>{ const t=setTimeout(()=>rej(new Error(msg||'시간 초과')),ms); pr.then(v=>{clearTimeout(t);res(v);},e=>{clearTimeout(t);rej(e);}); }); }
 function mkWorker(lang,logger,ms){
   const lp='https://cdn.jsdelivr.net/npm/@tesseract.js-data/'+lang+'/4.0.0_best_int'; let off;
@@ -3012,11 +3028,13 @@ async function runOcr(){
   const targets=photos.filter(p=>p.ocr);
   if(!targets.length){showToast('글자 인식할 사진을 체크해 주세요.');return;}
   ocrRunning=true; let okAll=false;
+  let cancelled=false, cancelRej; const cancelP=new Promise((_,rej)=>{ cancelRej=rej; }); cancelP.catch(()=>{});
+  _ocrCancel=()=>{ cancelled=true; cancelRej(new Error('__cancel__')); }; document.getElementById('ocrCancelBtn').style.display='';
   try{
     st.textContent='글자 인식 엔진을 불러오는 중… (처음 한 번은 오래 걸릴 수 있어요)';
-    await loadTesseract();
+    await Promise.race([loadTesseract(),cancelP]);
     const _lg=m=>{ if(m.status) st.textContent='인식 중: '+m.status+(m.progress?' '+Math.round(m.progress*100)+'%':''); };
-    const worker = await mkWorker('kor',_lg,150000);
+    const wk=mkWorker('kor',_lg,150000); wk.then(w=>{ if(cancelled){ try{ w.terminate(); }catch(x){} } },()=>{}); const worker = await Promise.race([wk,cancelP]);
     try{ await worker.setParameters({preserve_interword_spaces:'1'}); }catch(x){}
     const jam=(DATA.settings.ocrJamo!==false); let jamoN=0;
     if(jam){ try{ await worker.setParameters({tessedit_char_blacklist:JAMO_BL}); }catch(x){} }
@@ -3025,8 +3043,8 @@ async function runOcr(){
       for(let i=0;i<targets.length;i++){
         const lab='사진 '+(i+1)+'/'+targets.length;
         st.textContent=lab+' 인식 중…';
-        const cv = await prepCanvas(targets[i].url,st,lab);
-        const r = await withTimeout(worker.recognize(cv),240000,'인식 시간 초과');
+        const cv = await Promise.race([prepCanvas(targets[i].url,st,lab),cancelP]);
+        const r = await Promise.race([withTimeout(worker.recognize(cv),240000,'인식 시간 초과'),cancelP]);
         targets[i].kw=(r.data.words||[]).map(w=>({t:w.text,c:w.confidence,b:w.bbox}));
         let tx=r.data.text.trim(); if(jam){ const sj=stripJamo(tx); jamoN+=sj.count; tx=sj.text; }
         texts.push(roundQuotes(reflowText(tx)));
@@ -3036,14 +3054,15 @@ async function runOcr(){
     currentOcrRaw = result;
     const fx = applyOcrFixes(result);
     const ta = document.getElementById('exBody');
-    { const prevT=ta.value.trim(); let seam='\n\n'; if(appendCtx&&prevT){ seam=apSeam(prevT); appendCtx.head=fx.text.slice(0,12); appendCtx.prevLen=prevT.length; } ta.value = prevT ? prevT+seam+fx.text : fx.text; if(appendCtx) apUpd(); }
+    { const prevT=ta.value.trim(); let seam='\n\n'; if(appendCtx&&prevT){ seam=apSeam(prevT); appendCtx.head=fx.text.slice(0,12); appendCtx.prevLen=prevT.length; } ta.value = prevT ? prevT+seam+fx.text : fx.text; _ocrIns={start:prevT?prevT.length+seam.length:0,text:fx.text,targets:targets.slice()}; if(appendCtx) apUpd(); }
     targets.forEach(p=>{ p.ocr=false; p.done=true; }); renderPhotos(); growAll();
     st.textContent='인식 완료.'+(jamoN?' 낱자 '+jamoN+'개를 정리했어요.':'')+(fx.count?' 교정 사전으로 '+fx.count+'곳을 자동으로 고쳤어요.':'')+' 아래 본문에서 틀린 글자를 고친 뒤 저장하세요. 제목·맞춤·굵게 같은 서식은 위의 [미리보기]에서 바꿀 부분을 길게 눌러 고쳐요. 고친 글자는 다음 인식부터 자동으로 반영됩니다.';
-    okAll=true;
+    okAll=true; document.getElementById('ocrClearBtn').style.display='';
   }catch(e){
+    if(e&&e.message==='__cancel__'){ st.textContent='글자 인식을 취소했어요. 사진은 그대로 있어요.'; } else
     st.textContent='글자 인식에 실패했습니다. 사진은 그대로 있으니 본문을 직접 입력하거나 다시 시도하세요. ('+(e&&e.message?e.message:'오류')+')';
   }
-  ocrRunning=false;
+  ocrRunning=false; _ocrCancel=null; document.getElementById('ocrCancelBtn').style.display='none';
   if(okAll&&DATA.settings.ocrEngAuto) runEng();
 }
 /* ---- 영어 보정: 한글 결과를 먼저 낸 뒤, 영어 전용으로 한 번 더 읽어 영어 단어 자리를 바꾼다 ---- */
@@ -4262,7 +4281,7 @@ function renderSearchScreen(){
 function tabSearch(){ tabGo('search'); setTimeout(()=>{const i=document.getElementById('searchInput'); if(i) i.focus();},80); }
 
 /* ---------- 버전 · 업데이트 확인 ---------- */
-const APP_VERSION='2026.11.14-1';
+const APP_VERSION='2026.11.15-1';
 let updateAvail=false;
 let latestVer='';
 function pendingState(){
