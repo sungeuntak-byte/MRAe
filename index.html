@@ -763,6 +763,24 @@ html[data-mode=dark] #library .card,html[data-mode=eink] #library .card{box-shad
 .airow{gap:6px;margin-top:6px;}
 .airow .btn{flex:1;width:auto;padding:10px 6px;font-size:14px;}
 #aiSetSel{width:100%;box-sizing:border-box;padding:9px;border:1px solid var(--beige);border-radius:5px;background:var(--surface);color:var(--text);font-size:14px;margin-top:4px;}
+#excerptEditor label{font-size:13px;font-weight:500;margin:22px 0 2px;color:var(--rcq);}
+#excerptEditor .edhead label{margin:0;}
+#excerptEditor input[type=text],#excerptEditor textarea{border:none;border-bottom:1px solid var(--cdbd);border-radius:0;background:transparent;padding:11px 2px;font-size:16px;}
+#excerptEditor textarea#exBody{border-bottom:none;border-top:1px solid var(--cdbd);padding:14px 2px;}
+#excerptEditor textarea#exMemo{border-top:1px solid var(--cdbd);border-bottom:none;padding:12px 2px;}
+#excerptEditor .pgrow input{padding:11px 2px;}
+#excerptEditor .photobtns{margin-top:26px;margin-bottom:6px;}
+#excerptEditor .photobtns .btn{padding:14px 10px;font-size:16px;}
+#excerptEditor .thumbs{margin:12px 0;}
+.ocrrow{display:flex;gap:8px;margin-top:8px;}
+.ocrrow #ocrBtn{flex:1.4;width:auto;padding:14px 8px;font-size:16px;}
+.ocrrow #aiExBtn{flex:1;width:auto;padding:14px 6px;font-size:15px;}
+#excerptEditor #engBtn,#excerptEditor #ocrCancelBtn{padding:13px;}
+.edhead{display:flex;align-items:center;flex-wrap:wrap;gap:8px 12px;margin:26px 0 4px;}
+.edhead .pvtoggle{margin:0;}
+.edhead .pastelnk{margin-left:auto;color:var(--btn);font-size:13px;font-weight:600;}
+#pvHintLine{font-size:12px;color:var(--rcq);line-height:1.45;margin:4px 0 4px;word-break:keep-all;overflow-wrap:break-word;}
+.edtools{display:flex;justify-content:flex-end;gap:14px;margin:2px 0 4px;}
 .pkst::after{content:'★';color:#D9A227;font-size:.72em;margin-left:2px;vertical-align:.1em;}
 #readPaper[data-pg^="★"]::after{color:#B8860B;}
 #pkAllBtn.on{color:#D9A227;}
@@ -889,7 +907,10 @@ body.hasrecent #library{padding-bottom:250px;}
   </div></div>
   <div class="fixspacer"></div>
   <div class="cardsub" id="exBookLabel" style="margin-bottom:10px;"></div>
-  <div class="pvtoggle"><div class="seg2"><button type="button" class="on" aria-label="편집">편집</button><button type="button" onclick="openPreview()" aria-label="미리보기">미리보기</button></div><span class="pvhint">제목·맞춤·진하게 같은 서식은 <b>미리보기</b>에서 바꿀 부분을 길게 눌러 고쳐요.</span></div>
+  <label>쪽</label>
+  <div class="pgrow"><input type="text" id="exPage" inputmode="numeric" autocomplete="off" placeholder="예: 48 또는 48-49"><span class="pgseg" id="exPageMode"><button type="button" data-m="num" onclick="pgPick('exPage',true)">123</button><button type="button" data-m="txt" onclick="pgPick('exPage',false)">가</button></span></div>
+  <label>발췌문 제목</label>
+  <input type="text" id="exTitle" placeholder="원문 소제목이나 핵심 문구">
   <div class="notice" id="embedNotice" style="display:none;">지금 이 화면(앱 안의 미리보기)에서는 사진 창이 열리지 않을 수 있어요. 파일을 내려받아 크롬이나 삼성 인터넷에서 열어 주세요.</div>
   <div class="photobtns">
     <button class="btn primary withico" type="button" onclick="document.getElementById('camInput').click()"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l1.5-2.5h7L17 8h3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/><circle cx="12" cy="13.5" r="3.5"/></svg>사진 촬영</button>
@@ -903,18 +924,15 @@ body.hasrecent #library{padding-bottom:250px;}
     <label class="ocropt" style="margin-top:6px;"><input type="checkbox" id="apAuto" checked onchange="apUpd()"> 쪽수 자동 정리 (아래 ‘쪽’에 반영)</label></div>
   <div class="thumbs" id="thumbs"></div>
   <div class="addpick" id="addPick"><button class="btn primary" type="button" onclick="document.getElementById('addPick').classList.remove('show');document.getElementById('camInput').click()">촬영</button><button class="btn outline" type="button" onclick="document.getElementById('addPick').classList.remove('show');document.getElementById('galInput').click()">선택</button></div>
-  <button class="btn primary" id="ocrBtn" style="display:none;width:100%;" onclick="runOcr()">글자 인식하기</button>
-  <div class="airow" id="aiRow" style="display:none;"><button class="btn outline" type="button" id="aiExBtn" onclick="aiExtract()">AI로 추출 ✦</button><button class="btn outline" type="button" id="aiPasteBtn" onclick="aiPaste()">붙여넣기</button></div>
+  <div class="ocrrow"><button class="btn primary" id="ocrBtn" style="display:none;" onclick="runOcr()">글자 인식하기</button><button class="btn outline" type="button" id="aiExBtn" style="display:none;" onclick="aiExtract()">AI로 추출 ✦</button></div>
   <button class="btn outline" id="engBtn" style="display:none;width:100%;margin-top:6px;" onclick="runEng()">영어 보정</button>
   <button class="btn ghost" id="ocrCancelBtn" type="button" style="display:none;width:100%;margin-top:6px;" onclick="ocrCancelDo()">인식 취소</button>
   <div class="ocrstatus" id="ocrStatus"></div>
   <div style="text-align:right;"><button type="button" class="linkbtn" id="ocrClearBtn" style="display:none;" onclick="ocrClear()">인식 결과 지우기</button></div>
-  <label>쪽</label>
-  <div class="pgrow"><input type="text" id="exPage" inputmode="numeric" autocomplete="off" placeholder="예: 48 또는 48-49"><span class="pgseg" id="exPageMode"><button type="button" data-m="num" onclick="pgPick('exPage',true)">123</button><button type="button" data-m="txt" onclick="pgPick('exPage',false)">가</button></span></div>
-  <label>발췌문 제목</label>
-  <input type="text" id="exTitle" placeholder="원문 소제목이나 핵심 문구">
-  <div class="lblrow"><label>본문</label><div class="lblr"><button type="button" class="linkbtn" onclick="edStep(-1)" aria-label="글자 작게">가−</button><button type="button" class="linkbtn" onclick="edStep(1)" aria-label="글자 크게">가+</button><button type="button" class="linkbtn" onclick="reflowBody()">줄바꿈 정리</button></div></div>
+  <div class="edhead"><label>본문</label><div class="pvtoggle"><div class="seg2"><button type="button" class="on" aria-label="편집">편집</button><button type="button" onclick="openPreview()" aria-label="미리보기">미리보기</button></div></div><button type="button" class="linkbtn pastelnk" id="aiPasteBtn" onclick="aiPaste()">추출 결과 붙여넣기 ›</button></div>
+  <div id="pvHintLine">제목·맞춤·진하게 같은 서식은 <b>미리보기</b>에서 바꿀 부분을 길게 눌러 고쳐요.</div>
   <textarea id="exBody" placeholder="사진을 인식하거나 직접 입력하세요. 비워 두고 사진만 저장해도 돼요."></textarea>
+  <div class="edtools"><button type="button" class="linkbtn" onclick="edStep(-1)" aria-label="글자 작게">가−</button><button type="button" class="linkbtn" onclick="edStep(1)" aria-label="글자 크게">가+</button><button type="button" class="linkbtn" onclick="reflowBody()">줄바꿈 정리</button></div>
   <label>나의 메모 (선택)</label>
   <textarea id="exMemo" style="min-height:70px;" placeholder="생각이나 느낀 점"></textarea>
   <div class="btnrow">
@@ -1220,6 +1238,9 @@ body.hasrecent #library{padding-bottom:250px;}
     <h3>새 소식</h3>
     <div class="updbanner" id="newsUpd" style="display:none;margin:0 0 12px;"><span>🔔 새 업데이트가 있어요</span><button type="button" onclick="askConfirm('업데이트할까요? 저장한 글과 사진은 그대로 유지됩니다.',applyUpdate)">업데이트 적용</button></div>
     <div class="noticebody guidebody">
+      <h4>2026.11.16 (3)</h4>
+      <p>· 발췌문 저장 화면을 더 시원하게 바꿨어요. 순서가 ‘쪽 → 제목 → 사진 메뉴 → 본문’으로 이어지고, ‘편집/미리보기’는 본문 줄로 옮겼어요. 입력칸은 상자 대신 밑줄 칸이 됐고, 버튼과 글자도 조금 커졌어요.<br>
+      · ‘AI로 추출’ 옆 ‘붙여넣기’는 본문 줄 오른쪽 위의 ‘추출 결과 붙여넣기 ›’로 옮겼어요. AI 앱에서 복사한 뒤 돌아와 누르면 본문 칸을 따로 누르지 않아도 들어가요.</p>
       <h4>2026.11.16 (2)</h4>
       <p>· 사진 아래에 ‘AI로 추출 ✦’과 ‘붙여넣기’ 버튼이 생겼어요. 기본은 그대로 앱의 ‘글자 인식하기’이고, 이 버튼은 필요할 때만 써요. 누르면 사진과 안내 문구가 공유창으로 열려, 챗GPT·제미나이·클로드 앱에서 글자를 옮길 수 있어요. 결과를 복사한 뒤 돌아와 ‘붙여넣기’를 누르면 본문에 들어가고 사진은 ‘인식함’이 돼요(‘인식 결과 지우기’도 돼요). 보낼 AI는 저장 화면의 세부 설정에서 미리 정할 수 있어요.</p>
       <h4>2026.11.16 (1)</h4>
@@ -2790,7 +2811,7 @@ function renderPhotos(){
   if(photos.length){ const ad=document.createElement('div'); ad.className='thumb add'; ad.setAttribute('role','button'); ad.setAttribute('aria-label','사진 더 추가'); ad.textContent='+'; ad.onclick=()=>document.getElementById('addPick').classList.toggle('show'); wrap.appendChild(ad); }
   const nck=photos.filter(p=>p.ocr).length, ob=document.getElementById('ocrBtn');
   { const eb=document.getElementById('engBtn'); if(eb) eb.style.display=photos.some(p=>p.done||p.kw)?'block':'none'; }
-  { const ar=document.getElementById('aiRow'); if(ar) ar.style.display=photos.length?'flex':'none'; }
+  { const ar=document.getElementById('aiExBtn'); if(ar) ar.style.display=photos.length?'':'none'; }
   ob.style.display = photos.length ? 'block' : 'none'; ob.innerHTML='글자 인식하기<span class="ckn">'+CKSVG2+nck+'</span>'; ob.classList.toggle('dim',!nck);
 }
 function loadTesseract(){
@@ -4499,7 +4520,7 @@ function renderSearchScreen(){
 function tabSearch(){ tabGo('search'); setTimeout(()=>{const i=document.getElementById('searchInput'); if(i) i.focus();},80); }
 
 /* ---------- 버전 · 업데이트 확인 ---------- */
-const APP_VERSION='2026.11.16-2';
+const APP_VERSION='2026.11.16-3';
 let updateAvail=false;
 let latestVer='';
 function pendingState(){
