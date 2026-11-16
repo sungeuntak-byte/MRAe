@@ -760,6 +760,9 @@ html[data-mode=dark] #library .card,html[data-mode=eink] #library .card{box-shad
 .pkrow .pa{display:flex;gap:8px;margin-top:9px;align-items:center;}
 .pkrow .pa button{border:1px solid var(--beige);background:none;color:var(--btn);border-radius:5px;padding:6px 11px;font-size:13px;cursor:pointer;}
 .pkrow .pa .sp{flex:1;}
+.airow{gap:6px;margin-top:6px;}
+.airow .btn{flex:1;width:auto;padding:10px 6px;font-size:14px;}
+#aiSetSel{width:100%;box-sizing:border-box;padding:9px;border:1px solid var(--beige);border-radius:5px;background:var(--surface);color:var(--text);font-size:14px;margin-top:4px;}
 .pkst::after{content:'★';color:#D9A227;font-size:.72em;margin-left:2px;vertical-align:.1em;}
 #readPaper[data-pg^="★"]::after{color:#B8860B;}
 #pkAllBtn.on{color:#D9A227;}
@@ -901,6 +904,7 @@ body.hasrecent #library{padding-bottom:250px;}
   <div class="thumbs" id="thumbs"></div>
   <div class="addpick" id="addPick"><button class="btn primary" type="button" onclick="document.getElementById('addPick').classList.remove('show');document.getElementById('camInput').click()">촬영</button><button class="btn outline" type="button" onclick="document.getElementById('addPick').classList.remove('show');document.getElementById('galInput').click()">선택</button></div>
   <button class="btn primary" id="ocrBtn" style="display:none;width:100%;" onclick="runOcr()">글자 인식하기</button>
+  <div class="airow" id="aiRow" style="display:none;"><button class="btn outline" type="button" id="aiExBtn" onclick="aiExtract()">AI로 추출 ✦</button><button class="btn outline" type="button" id="aiPasteBtn" onclick="aiPaste()">붙여넣기</button></div>
   <button class="btn outline" id="engBtn" style="display:none;width:100%;margin-top:6px;" onclick="runEng()">영어 보정</button>
   <button class="btn ghost" id="ocrCancelBtn" type="button" style="display:none;width:100%;margin-top:6px;" onclick="ocrCancelDo()">인식 취소</button>
   <div class="ocrstatus" id="ocrStatus"></div>
@@ -1216,6 +1220,8 @@ body.hasrecent #library{padding-bottom:250px;}
     <h3>새 소식</h3>
     <div class="updbanner" id="newsUpd" style="display:none;margin:0 0 12px;"><span>🔔 새 업데이트가 있어요</span><button type="button" onclick="askConfirm('업데이트할까요? 저장한 글과 사진은 그대로 유지됩니다.',applyUpdate)">업데이트 적용</button></div>
     <div class="noticebody guidebody">
+      <h4>2026.11.16 (2)</h4>
+      <p>· 사진 아래에 ‘AI로 추출 ✦’과 ‘붙여넣기’ 버튼이 생겼어요. 기본은 그대로 앱의 ‘글자 인식하기’이고, 이 버튼은 필요할 때만 써요. 누르면 사진과 안내 문구가 공유창으로 열려, 챗GPT·제미나이·클로드 앱에서 글자를 옮길 수 있어요. 결과를 복사한 뒤 돌아와 ‘붙여넣기’를 누르면 본문에 들어가고 사진은 ‘인식함’이 돼요(‘인식 결과 지우기’도 돼요). 보낼 AI는 저장 화면의 세부 설정에서 미리 정할 수 있어요.</p>
       <h4>2026.11.16 (1)</h4>
       <p>· 첫 화면이 ‘Today’로 바뀌었어요. 전체 책장 대신 오늘의 한 문장 카드와 이어 읽기 띠가 보여요. 아래 점을 누르거나 카드를 좌우로 넘기면 앞뒤 문장도 볼 수 있어요. 제목(예: 오늘 그리고)을 누르면 바꿀 수 있어요.<br>
       · 문장을 드래그하고 ★를 누르면 핵심 문장으로 등록돼요. 한 발췌문에서 여러 문장을 따로 ★ 할 수 있고, 발췌문 전체도 ★ 할 수 있어요(보기 화면 아래쪽 ★ 또는 발췌문 ⋮ 메뉴). 카드의 ‘핵심 문장 ○개 ›’에서 랜덤·담은 순서·직접 순서로 모아 볼 수 있어요.<br>
@@ -1405,6 +1411,7 @@ body.hasrecent #library{padding-bottom:250px;}
     <label class="ocropt"><input type="checkbox" id="ocrEnhance" onchange="DATA.settings.ocrEnhance=this.checked;save();"> 사진 보정 (그림자·흐림 완화) 후 인식</label>
     <label class="ocropt"><input type="checkbox" id="ocrJamo" onchange="DATA.settings.ocrJamo=this.checked;save();"> 자음·모음만 찍힌 낱자 자동 제거</label>
     <label class="ocropt"><input type="checkbox" id="quoteRound" onchange="DATA.settings.quoteRound=this.checked;save();"> 따옴표 둥글게 (직접 입력한 " ' 를 “ ” ‘ ’ 로 바꿔요)</label>
+    <div class="ocropt" style="display:block;"><span style="font-size:14px;">AI로 추출 — 보낼 AI</span><select id="aiSetSel" onchange="DATA.settings.aiApp=this.value;save();"><option value="">매번 물어보기</option><option value="chatgpt">챗GPT</option><option value="gemini">제미나이</option><option value="claude">클로드</option></select></div>
     <label class="ocropt"><input type="checkbox" id="ocrEngAuto" onchange="DATA.settings.ocrEngAuto=this.checked;save();"> 글자 인식 뒤 영어 보정 자동 실행 (시간이 더 걸려요)</label>
     <label class="ocropt"><input type="checkbox" id="keepPhotos" onchange="DATA.settings.keepPhotos=this.checked;save();"> 원본 사진 보관 (나중에 글자와 대조해 볼 수 있어요)</label>
     <div class="hint" id="photoHint">글자 인식은 나중에 해도 괜찮아요. 본문을 비워 두고 저장하면 사진만 안전하게 보관돼요.</div>
@@ -2146,8 +2153,9 @@ function placeNewExcerpt(id){
     if(!found&&lastNum>=0) pos=lastNum+1; }
   list.splice(pos,0,e); list.forEach((x,i)=>{ x.ord=i; });
 }
-function openExOpt(){ document.getElementById('exOptBg').classList.add('show'); }
+function openExOpt(){ { const sl=document.getElementById('aiSetSel'); if(sl) sl.value=DATA.settings.aiApp||''; } document.getElementById('exOptBg').classList.add('show'); }
 function openExcerptEditor(excerptId){
+  { const sl=document.getElementById('aiSetSel'); if(sl) sl.value=DATA.settings.aiApp||''; }
   document.getElementById('ocrEnhance').checked=(DATA.settings.ocrEnhance!==false); document.getElementById('autoCrop').checked=(DATA.settings.autoCrop!==false); document.getElementById('ocrJamo').checked=(DATA.settings.ocrJamo!==false); document.getElementById('ocrEngAuto').checked=!!DATA.settings.ocrEngAuto; document.getElementById('quoteRound').checked=(DATA.settings.quoteRound!==false);
   editingExcerptId = excerptId || null; appendCtx=null; document.getElementById('apPanel').classList.remove('show');
   _ocrIns=null; try{ document.getElementById('ocrClearBtn').style.display='none'; }catch(x){} photos=[]; removedPhotoIds=[]; currentOcrRaw=''; exFmt={marks:[],hd:[],al:[],ix:[],base:''}; renderPhotos(); document.getElementById('ocrStatus').textContent='';
@@ -2782,6 +2790,7 @@ function renderPhotos(){
   if(photos.length){ const ad=document.createElement('div'); ad.className='thumb add'; ad.setAttribute('role','button'); ad.setAttribute('aria-label','사진 더 추가'); ad.textContent='+'; ad.onclick=()=>document.getElementById('addPick').classList.toggle('show'); wrap.appendChild(ad); }
   const nck=photos.filter(p=>p.ocr).length, ob=document.getElementById('ocrBtn');
   { const eb=document.getElementById('engBtn'); if(eb) eb.style.display=photos.some(p=>p.done||p.kw)?'block':'none'; }
+  { const ar=document.getElementById('aiRow'); if(ar) ar.style.display=photos.length?'flex':'none'; }
   ob.style.display = photos.length ? 'block' : 'none'; ob.innerHTML='글자 인식하기<span class="ckn">'+CKSVG2+nck+'</span>'; ob.classList.toggle('dim',!nck);
 }
 function loadTesseract(){
@@ -3142,6 +3151,43 @@ async function runOcr(){
   }
   ocrRunning=false; _ocrCancel=null; document.getElementById('ocrCancelBtn').style.display='none';
   if(okAll&&DATA.settings.ocrEngAuto) runEng();
+}
+/* ---- AI로 추출: 사진을 공유창으로 보내 AI 앱에서 글자를 옮기고, 복사한 결과를 붙여넣는다 ---- */
+const AI_APPS={chatgpt:{n:'챗GPT',url:'https://chatgpt.com/'},gemini:{n:'제미나이',url:'https://gemini.google.com/app'},claude:{n:'클로드',url:'https://claude.ai/new'}};
+function aiPrompt(n){ return '이 사진의 글자를 그대로 옮겨 줘. 설명이나 인사 없이 본문만 보여 줘. 줄바꿈과 문단은 사진 그대로 두고, 틀려 보이는 글자도 고치지 말고 보이는 대로 옮겨 줘. 쪽번호나 머리글은 빼 줘.'+(n>1?' 사진이 여러 장이면 순서대로 이어서 옮기고, 사진 사이는 빈 줄 한 줄로 나눠 줘.':''); }
+async function aiFile(p){ if(p.file) return p.file; const r=await fetch(p.url); const b=await r.blob(); return new File([b],'photo.jpg',{type:b.type||'image/jpeg'}); }
+function aiExtract(){
+  const targets=photos.filter(p=>p.ocr);
+  if(!targets.length){ showToast('AI로 추출할 사진을 먼저 체크해 주세요.'); return; }
+  const go1=k=>aiSend(k,targets);
+  const k0=DATA.settings.aiApp;
+  if(k0&&AI_APPS[k0]){ go1(k0); return; }
+  openActionSheet('어느 AI로 보낼까요?','사진을 공유창으로 열어요. 설정에서 미리 정해 둘 수도 있어요.',Object.keys(AI_APPS).map(k=>({label:AI_APPS[k].n,fn:()=>go1(k)})));
+}
+async function aiSend(k,targets){
+  const st=document.getElementById('ocrStatus'); const A=AI_APPS[k]; const pr=aiPrompt(targets.length);
+  try{ await navigator.clipboard.writeText(pr); }catch(x){}
+  let files=[]; try{ files=await Promise.all(targets.map(aiFile)); }catch(x){ showToast('사진을 읽지 못했어요.'); return; }
+  window._aiPending=targets.slice();
+  const done=()=>{ st.textContent=A.n+'에서 글자를 옮긴 뒤 그 글을 복사해서, 여기로 돌아와 [붙여넣기]를 눌러 주세요.'; };
+  try{
+    if(navigator.canShare&&navigator.canShare({files:files})&&navigator.share){ await navigator.share({files:files,text:pr,title:'글자 옮기기'}); done(); return; }
+  }catch(e){ if(e&&e.name==='AbortError'){ return; } }
+  try{ window.open(A.url,'_blank'); }catch(x){}
+  st.textContent='이 기기에서는 사진을 바로 보낼 수 없어요. '+A.n+'이 열리면 갤러리에서 사진을 직접 붙이고, 복사해 둔 문구를 붙여넣어 보내세요. 결과를 복사한 뒤 돌아와 [붙여넣기]를 눌러 주세요.';
+}
+async function aiPaste(){
+  const st=document.getElementById('ocrStatus'); let t='';
+  try{ t=await navigator.clipboard.readText(); }catch(x){ showToast('붙여넣기 권한이 없어요. 아래 본문 칸을 길게 눌러 붙여넣어 주세요.'); return; }
+  t=(t||'').replace(/\r/g,'').replace(/^```[a-z]*\n?|\n?```$/gm,'').replace(/[ \t]+\n/g,'\n').replace(/\n{3,}/g,'\n\n').trim();
+  if(!t){ showToast('복사된 글이 없어요. AI 앱에서 결과를 먼저 복사해 주세요.'); return; }
+  const targets=(window._aiPending||[]).filter(p=>photos.indexOf(p)>=0); const tg=targets.length?targets:photos.filter(p=>p.ocr);
+  const tx=_qr(t); currentOcrRaw=tx;
+  const ta=document.getElementById('exBody'); const prevT=ta.value.trim(); let seam='\n\n';
+  if(appendCtx&&prevT){ seam=apSeam(prevT); appendCtx.head=tx.slice(0,12); appendCtx.prevLen=prevT.length; }
+  ta.value=prevT?prevT+seam+tx:tx; _ocrIns={start:prevT?prevT.length+seam.length:0,text:tx,targets:tg.slice()}; if(appendCtx) apUpd();
+  tg.forEach(p=>{ p.ocr=false; p.done=true; }); window._aiPending=null; renderPhotos(); growAll();
+  st.textContent='붙여넣었어요. 아래 본문에서 틀린 글자를 고친 뒤 저장하세요.'; document.getElementById('ocrClearBtn').style.display='';
 }
 /* ---- 영어 보정: 한글 결과를 먼저 낸 뒤, 영어 전용으로 한 번 더 읽어 영어 단어 자리를 바꾼다 ---- */
 function engSubs(kw,ew){
@@ -4453,7 +4499,7 @@ function renderSearchScreen(){
 function tabSearch(){ tabGo('search'); setTimeout(()=>{const i=document.getElementById('searchInput'); if(i) i.focus();},80); }
 
 /* ---------- 버전 · 업데이트 확인 ---------- */
-const APP_VERSION='2026.11.16-1';
+const APP_VERSION='2026.11.16-2';
 let updateAvail=false;
 let latestVer='';
 function pendingState(){
