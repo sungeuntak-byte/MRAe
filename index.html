@@ -726,6 +726,49 @@ html[data-mode=eink]{--rcbg:#FFFFFF;--rcln:#000000;--rcln2:#999999;--rctx:#00000
 #library .card{border:1.5px solid var(--cdbd);box-shadow:0 2px 6px rgba(90,60,40,.10);}
 #library .card .cardtitle{font-size:16px;font-weight:700;color:var(--cdtx);}
 html[data-mode=dark] #library .card,html[data-mode=eink] #library .card{box-shadow:none;}
+.topbar h1#libTitle{display:flex;justify-content:center;align-items:baseline;gap:5px;}
+#libTitle .tt1{font-size:21px;font-weight:700;color:var(--brown);}
+#libTitle .tt2{font-size:12px;font-weight:500;color:#8A7A6B;}
+#libTitle .tt3{font-size:12px;color:#B5A898;letter-spacing:2px;}
+.catbar .todaychip{flex:0 0 auto;padding:8px 13px;border-radius:5px;border:1px solid var(--btn);background:var(--surface);color:var(--btn);font-weight:700;font-size:14px;cursor:pointer;}
+.catbar .todaychip.active{background:var(--btn);color:#fff;}
+.catbar .catsep{flex:0 0 1px;width:1px;height:24px;background:var(--cdbd,#D9C3AE);margin:0 4px;align-self:center;}
+#todayPane{margin-top:6px;}
+.tdcard{border:1.5px solid var(--cdbd);border-radius:5px;background:var(--surface);padding:16px 17px 12px;box-shadow:0 2px 6px rgba(90,60,40,.10);touch-action:pan-y;}
+.tdh{display:flex;justify-content:space-between;font-size:12px;color:#8A7A6B;margin-bottom:11px;}
+.tdq{font-family:var(--rfont);font-size:17px;line-height:1.75;color:var(--text);white-space:pre-wrap;word-break:keep-all;}
+.tdq.guide{font-size:16px;}
+.tdgd{font-size:13px;line-height:1.6;color:#8A7A6B;margin-top:12px;}
+.tda{text-align:right;font-size:13px;color:var(--rcq);margin-top:11px;}
+.tdf{display:flex;justify-content:space-between;align-items:center;margin-top:9px;font-size:12px;color:var(--btn);}
+.tdf a{cursor:pointer;font-weight:600;}
+.tddots{display:flex;justify-content:center;align-items:center;gap:9px;margin:13px 0 15px;min-height:14px;}
+.tddots i{display:block;border-radius:50%;background:var(--cdbd);cursor:pointer;}
+.tddots i.c{background:var(--btn);}
+.tdband{position:relative;border:1.5px solid var(--cdbd);border-radius:5px;background:var(--rcbg);padding:12px 38px 12px 18px;cursor:pointer;overflow:hidden;}
+.tdband:before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--btn);}
+.tdband .bh{display:flex;justify-content:space-between;font-size:11px;font-weight:600;color:var(--rctag);margin-bottom:3px;}
+.tdband .bt{font-size:15px;font-weight:700;color:var(--cdtx);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.tdband .bp{font-size:12.5px;line-height:1.55;color:var(--rcq);margin-top:4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.tdband .bc{position:absolute;right:13px;top:50%;transform:translateY(-50%);font-size:26px;color:var(--rcchev);}
+.pkseg{display:flex;gap:6px;margin:4px 0 12px;}
+.pkseg button{flex:1;padding:9px 4px;border-radius:5px;border:1px solid var(--beige);background:var(--surface);color:var(--text);font-size:14px;cursor:pointer;}
+.pkseg button.on{background:var(--btn);color:#fff;border-color:var(--btn);font-weight:700;}
+.pkrow{border:1.5px solid var(--cdbd);border-radius:5px;background:var(--surface);padding:13px 14px 10px;margin-bottom:11px;}
+.pkrow .pq{font-family:var(--rfont);font-size:15.5px;line-height:1.7;color:var(--text);white-space:pre-wrap;display:-webkit-box;-webkit-line-clamp:7;-webkit-box-orient:vertical;overflow:hidden;}
+.pkrow .ps{font-size:12.5px;color:var(--rcq);margin-top:7px;}
+.pkrow .pa{display:flex;gap:8px;margin-top:9px;align-items:center;}
+.pkrow .pa button{border:1px solid var(--beige);background:none;color:var(--btn);border-radius:5px;padding:6px 11px;font-size:13px;cursor:pointer;}
+.pkrow .pa .sp{flex:1;}
+.pkst::after{content:'★';color:#D9A227;font-size:.72em;margin-left:2px;vertical-align:.1em;}
+#readPaper[data-pg^="★"]::after{color:#B8860B;}
+#pkAllBtn.on{color:#D9A227;}
+#pkAllBtn.on svg{fill:#D9A227;}
+.cardtitle .pks{color:#D9A227;margin-right:3px;}
+#ttlPre{display:flex;flex-direction:column;gap:6px;margin:6px 0 10px;}
+#ttlPre button{padding:9px;border-radius:5px;border:1px solid var(--beige);background:var(--surface);color:var(--text);font-size:14px;}
+#ttlInput{width:100%;box-sizing:border-box;padding:10px;border:1px solid var(--beige);border-radius:5px;background:var(--surface);color:var(--text);font-size:15px;}
+
 body.hasrecent #library .fab{bottom:calc(76px + 88px + 16px);right:10px;}
 body.hasrecent #library{padding-bottom:250px;}
 .cardrow .txt .cardtitle{padding-right:8px;overflow-wrap:anywhere;}
@@ -756,15 +799,23 @@ body.hasrecent #library{padding-bottom:250px;}
 <div class="libhead">
   <div class="topbar">
     <button class="navbtn" id="helpBtn" onclick="openGuide()" aria-label="사용법" style="width:44px;padding:0;display:flex;align-items:center;justify-content:center;"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.6 9.4a2.5 2.5 0 1 1 3.6 2.2c-.8.5-1.2 1-1.2 1.9"/><circle cx="12" cy="17.2" r=".7" fill="currentColor"/></svg></button>
-    <h1>내 서재</h1>
+    <h1 id="libTitle" onclick="ttlOpen()">내 서재</h1>
     <button class="navbtn" onclick="go('shelves')" aria-label="책장 관리" style="width:44px;padding:0;display:flex;align-items:center;justify-content:center;"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9l-4-4L4 16v4z"/><path d="m13.5 6.5 4 4"/></svg></button>
   </div>
-  <div class="catrow"><div class="catbar" id="catbar"></div><button class="sharebtn icononly" id="libShareBtn" aria-label="전체 공유" onclick="openShare(currentCatFilter?'shelf':'all')"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="3.6" cy="12" r="2"/><circle cx="9.3" cy="5.1" r="2"/><circle cx="9.3" cy="18.9" r="2"/><path d="m5.2 10 2.4-2.9M5.2 14l2.4 2.9"/><path d="M19.5 4.5v10M16.3 11.6l3.2 3.2 3.2-3.2"/><path d="M15.7 19.6h7.6" stroke-width="2"/></svg></button></div>
+  <div class="catrow"><div class="catbar" id="catbar"></div><button class="sharebtn icononly" id="libShareBtn" aria-label="전체 공유" onclick="openShare(currentCatFilter&&currentCatFilter!=='__none'?'shelf':'all')"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="3.6" cy="12" r="2"/><circle cx="9.3" cy="5.1" r="2"/><circle cx="9.3" cy="18.9" r="2"/><path d="m5.2 10 2.4-2.9M5.2 14l2.4 2.9"/><path d="M19.5 4.5v10M16.3 11.6l3.2 3.2 3.2-3.2"/><path d="M15.7 19.6h7.6" stroke-width="2"/></svg></button></div>
 </div>
   <button type="button" class="recent" id="recentLine" style="display:none;" onclick="resumeReading()" aria-label="마지막으로 읽던 곳으로"><span class="rtag">최근 읽은 곳</span><span class="rtxt" id="recentTxt"></span><span class="rsub" id="recentSub"></span><span class="rchev" aria-hidden="true">›</span></button>
+  <div id="todayPane"></div>
   <input type="text" id="bookSearch" style="display:none;">
   <div id="bookList"></div>
   <button class="fab" onclick="openNewMenu()" aria-label="추가"><svg class="ico cplus" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5h3l1.5-2.4h5"/><path d="M3 9.5V19h16v-7.5"/><circle cx="11" cy="14.2" r="3.2"/><circle cx="18.2" cy="5.8" r="4.6" fill="currentColor" stroke="none"/><path class="pl" d="M18.2 3.5v4.6M15.9 5.8h4.6" stroke-width="1.8"/></svg></button>
+</div>
+
+<!-- 핵심 문장 -->
+<div class="screen" id="picks">
+  <div class="topbar"><button class="navbtn" onclick="goBack()" aria-label="뒤로">←</button><h1 id="picksTitle">핵심 문장</h1><span style="width:44px;display:inline-block;"></span></div>
+  <div class="pkseg" id="pkSeg"></div>
+  <div id="pkList"></div>
 </div>
 
 <!-- 책 상세 (발췌문 목록) -->
@@ -817,7 +868,7 @@ body.hasrecent #library{padding-bottom:250px;}
 
 <div class="screen" id="bookDetail">
   <div class="topbar"><h1 id="bookDetailTitle">책 이름</h1></div>
-  <div class="booktop"><div id="bookDetailCover"></div><div class="cardsub" id="bookDetailMeta" style="flex:1;min-width:0;"></div><button class="navbtn" onclick="openBookModal(currentBookId)" aria-label="책 수정" style="align-self:flex-start;margin-top:-4px;min-width:44px;padding:0;display:flex;align-items:center;justify-content:center;border:none;background:none;"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9l-4-4L4 16v4z"/><path d="m13.5 6.5 4 4"/></svg></button></div>
+  <div class="booktop"><div id="bookDetailCover"></div><div class="cardsub" id="bookDetailMeta" style="flex:1;min-width:0;"></div><button class="navbtn" onclick="openBookModal(currentBookId)" aria-label="책 수정" style="align-self:flex-start;margin-top:-4px;min-width:44px;padding:0;display:flex;align-items:center;justify-content:center;border:none;background:none;"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5.5"/><path d="M12 7.7v.1" stroke-width="2.6"/></svg></button></div>
   <div class="listhead" style="margin-top:6px;"><span class="lt" id="bdCount">발췌 목차</span><span style="display:flex;gap:6px;align-items:center;"><button type="button" class="sharebtn icononly" id="ordBtn" aria-label="순서 바꾸기" onclick="toggleExOrder()"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 20V5M8 5 4.5 8.5M8 5l3.5 3.5M16 4v15M16 19l-3.5-3.5M16 19l3.5-3.5"/></svg></button><button class="sharebtn icononly" aria-label="책 공유" onclick="openShare('book')"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="3.6" cy="12" r="2"/><circle cx="9.3" cy="5.1" r="2"/><circle cx="9.3" cy="18.9" r="2"/><path d="m5.2 10 2.4-2.9M5.2 14l2.4 2.9"/><path d="M19.5 4.5v10M16.3 11.6l3.2 3.2 3.2-3.2"/><path d="M15.7 19.6h7.6" stroke-width="2"/></svg></button></span></div>
   <div class="ordpanel" id="ordPanel" style="display:none;">
     <div class="hint" style="margin:0 0 8px;">각 발췌문 옆의 ▲ ▼로 한 칸씩 옮겨요. 끝나면 위쪽의 ✓ 를 누르세요.</div>
@@ -897,10 +948,11 @@ body.hasrecent #library{padding-bottom:250px;}
     <div class="pagenav" id="pageNav"><button class="stepbtn" onclick="pageGo(-1)" aria-label="이전 쪽">‹</button><span class="pgi" id="pgInd">1 / 1</span><button class="stepbtn" onclick="pageGo(1)" aria-label="다음 쪽">›</button></div>
     <div class="readactions">
       <button class="ractbtn" onclick="openMemoView()" aria-label="모든 메모 보기"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 3.5h12v14H4z"/><path d="M7 8h6M7 11.5h4"/><circle cx="17" cy="17" r="5" fill="var(--surface)" stroke="none"/><circle cx="16.2" cy="16.2" r="2.7"/><path d="m18.3 18.3 2.7 2.7"/></svg><i id="memoCount"></i></button>
-      <button class="ractbtn" onclick="addWholeMemo()" aria-label="발췌문 전체 메모 추가"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 3.5h12v14H4z"/><path d="M7 8h6M7 11.5h4"/><circle cx="17.8" cy="17.8" r="4.8" fill="currentColor" stroke="none"/><path class="pl" d="M17.8 15.5v4.6M15.5 17.8h4.6" stroke-width="1.8"/></svg></button>
-      <button class="ractbtn" onclick="startInlineEdit()" aria-label="본문 수정"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9l-4-4L4 16v4z"/><path d="m13.5 6.5 4 4"/></svg></button>
+      <button class="ractbtn" onclick="addWholeMemo()" aria-label="발췌문 전체 메모 추가"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5"/><path d="M18.4 2.6a1.9 1.9 0 0 1 2.7 2.7L12 14.4l-3.6.9.9-3.6z"/></svg></button>
+      <button class="ractbtn" onclick="startInlineEdit()" aria-label="본문 수정"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16.5 3.4a2.1 2.1 0 0 1 3 3L8.3 17.6 4 18.7l1.1-4.3z"/><path d="m14.6 5.3 3 3"/><path d="M4 22h16" stroke-width="2.6"/></svg></button>
       <button class="ractbtn" id="mergeBtn" onclick="openMergeMenu()" aria-label="합치기"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="2.5" width="7" height="5" rx="1"/><rect x="14" y="2.5" width="7" height="5" rx="1"/><path d="M6.5 7.5V9.5Q6.5 11.5 8.5 11.5H12M17.5 7.5V9.5Q17.5 11.5 15.5 11.5H12"/><path d="M12 11.5v4.5M10 14l2 2.3 2-2.3"/><rect x="6" y="17.8" width="12" height="4" rx="1"/></svg></button>
       <button class="ractbtn" onclick="shareExcerpt()" aria-label="공유·다운로드"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="3.6" cy="12" r="2"/><circle cx="9.3" cy="5.1" r="2"/><circle cx="9.3" cy="18.9" r="2"/><path d="m5.2 10 2.4-2.9M5.2 14l2.4 2.9"/><path d="M19.5 4.5v10M16.3 11.6l3.2 3.2 3.2-3.2"/><path d="M15.7 19.6h7.6" stroke-width="2"/></svg></button>
+      <button class="ractbtn" id="pkAllBtn" onclick="togglePkAll()" aria-label="발췌문 전체 핵심 문장 ★"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.2l2.6 5.5 6 .8-4.4 4.2 1.1 6-5.3-2.9-5.3 2.9 1.1-6-4.4-4.2 6-.8z"/></svg></button>
       <button class="ractbtn" onclick="openReadingSettings()" aria-label="읽기 설정"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 6.5h13M12 6.5V19"/></svg></button>
     </div>
   </div></div>
@@ -977,9 +1029,10 @@ body.hasrecent #library{padding-bottom:250px;}
     <button type="button" aria-label="굵게" onclick="selApply('b')"><b class="gl">B</b></button>
     <button type="button" aria-label="밑줄" onclick="selApply('u')"><u class="gl">U</u></button>
     <button type="button" id="selImgBtn" aria-label="이미지 넣기" onclick="selImage()"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5H6a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2v-6"/><circle cx="9" cy="11" r="1.5"/><path d="m4 18 4.5-4.5 3 3L14 14l5 5"/><path d="M18 2.5v6M15 5.5h6"/></svg></button>
-    <button type="button" id="selMemoBtn" aria-label="부분 메모" onclick="selMemo()"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3.5h10l4 4V20.5H5z"/><path d="M15 3.5v4h4M8.5 12h7M8.5 16h5"/></svg></button>
+    <button type="button" id="selMemoBtn" aria-label="부분 메모" onclick="selMemo()"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5"/><path d="M18.4 2.6a1.9 1.9 0 0 1 2.7 2.7L12 14.4l-3.6.9.9-3.6z"/></svg></button>
     <button type="button" aria-label="복사" onclick="selCopy()"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8.5" y="8.5" width="12" height="12" rx="2"/><path d="M15.5 8.5V6A2 2 0 0 0 13.5 4H6A2 2 0 0 0 4 6v7.5A2 2 0 0 0 6 15.5h2.5"/></svg></button>
     <button type="button" aria-label="공유·다운로드" onclick="selShare()"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="3.6" cy="12" r="2"/><circle cx="9.3" cy="5.1" r="2"/><circle cx="9.3" cy="18.9" r="2"/><path d="m5.2 10 2.4-2.9M5.2 14l2.4 2.9"/><path d="M19.5 4.5v10M16.3 11.6l3.2 3.2 3.2-3.2"/><path d="M15.7 19.6h7.6" stroke-width="2"/></svg></button>
+    <button type="button" id="selPkBtn" aria-label="핵심 문장 ★" onclick="selPick()"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.2l2.6 5.5 6 .8-4.4 4.2 1.1 6-5.3-2.9-5.3 2.9 1.1-6-4.4-4.2 6-.8z"/></svg></button>
   </div>
   <div class="selmain selfmt">
     <button type="button" id="selH1Btn" aria-label="대제목" onclick="selHeadLv(1)"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round"><path d="M4 4.2h16" stroke-width="8"/><g style="opacity:.55" stroke-width="1.3"><path d="M4 13.5h16M4 17.2h16M4 20.9h11"/></g></svg></button>
@@ -1163,6 +1216,12 @@ body.hasrecent #library{padding-bottom:250px;}
     <h3>새 소식</h3>
     <div class="updbanner" id="newsUpd" style="display:none;margin:0 0 12px;"><span>🔔 새 업데이트가 있어요</span><button type="button" onclick="askConfirm('업데이트할까요? 저장한 글과 사진은 그대로 유지됩니다.',applyUpdate)">업데이트 적용</button></div>
     <div class="noticebody guidebody">
+      <h4>2026.11.16 (1)</h4>
+      <p>· 첫 화면이 ‘Today’로 바뀌었어요. 전체 책장 대신 오늘의 한 문장 카드와 이어 읽기 띠가 보여요. 아래 점을 누르거나 카드를 좌우로 넘기면 앞뒤 문장도 볼 수 있어요. 제목(예: 오늘 그리고)을 누르면 바꿀 수 있어요.<br>
+      · 문장을 드래그하고 ★를 누르면 핵심 문장으로 등록돼요. 한 발췌문에서 여러 문장을 따로 ★ 할 수 있고, 발췌문 전체도 ★ 할 수 있어요(보기 화면 아래쪽 ★ 또는 발췌문 ⋮ 메뉴). 카드의 ‘핵심 문장 ○개 ›’에서 랜덤·담은 순서·직접 순서로 모아 볼 수 있어요.<br>
+      · 책 목록은 제목과 (발췌문 개수)만 보여서 더 많이 들어와요. 이어 읽기는 서재 맨 아래 띠에서 Today 카드 안으로 옮겨졌어요.<br>
+      · 아이콘 정리: 메모는 사각형 속 연필, 본문 수정은 연필+밑줄, 책 정보 수정은 ⓘ.<br>
+      · 쪽 넘김에서 마지막 쪽이 앞 내용으로 되돌아가던 문제와 제목이 쪽 맨 아래에 혼자 남던 문제를 고쳤어요. ‘이미지 넣기’ 막대가 화면을 옮겨도 남던 문제도 고쳤어요.</p>
       <h4>2026.11.15 (1)</h4>
       <p>· 사진 자르기 창의 ‘회전’이 아이콘(⟳)이 됐어요. 누를 때마다 90도씩 돌아요.<br>
       · 글자 인식 중에 ‘인식 취소’로 멈출 수 있어요. 인식이 끝나면 ‘인식 결과 지우기’가 나타나, 방금 인식한 글만 한 번에 지우고 다시 인식할 수 있어요(되돌리기도 돼요). 인식한 글을 이미 고쳤다면 본문 전체를 지울지 물어봐요.</p>
@@ -1402,6 +1461,14 @@ body.hasrecent #library{padding-bottom:250px;}
     </div>
   </div>
 </div>
+<div class="modal-bg" id="ttlBg" onclick="closeOnBg(event,'ttlBg')">
+  <div class="modal"><button class="xbtn ok" aria-label="완료" onclick="ttlOk()">✓</button>
+    <h3>첫 화면 제목</h3>
+    <div id="ttlPre"></div>
+    <input type="text" id="ttlInput" maxlength="24" placeholder="직접 쓰기 (마지막 단어가 작게 보여요)">
+    <div class="hint" style="margin-top:8px;">예) 오늘 그리고 · 과거 현재 미래 · 어제와 오늘 그리고</div>
+  </div>
+</div>
 <div class="modal-bg" id="imCapBg" onclick="closeOnBg(event,'imCapBg')">
   <div class="modal"><button class="xbtn ok" aria-label="완료" onclick="imCapOk()">✓</button>
     <h3>캡션</h3>
@@ -1571,7 +1638,7 @@ function resetTips(){ DATA.settings.tipsSeen={}; save(); showToast('처음 안�
 /* ---------- 처음 안내 (말풍선) ---------- */
 const TIPS={
   help:{sel:'#helpBtn',txt:'처음이세요? 이 ? 를 누르면 사용법을 볼 수 있어요.',pos:'below'},
-  recent:{sel:'#recentLine',txt:'마지막에 읽던 곳으로 바로 이어져요.',pos:'above'},
+  recent:{sel:'.tdband',txt:'마지막에 읽던 곳으로 바로 이어져요.',pos:'below'},
   crumbs:{sel:'#bookDetail .crumbs',txt:'이 경로를 눌러 책장이나 서재로 올라갈 수 있어요.',pos:'below'},
   photo:{sel:'#rPhotoBtn',txt:'원본 사진을 볼 수 있어요. 글자가 이상하면 사진과 대조해 보세요.',pos:'below'}
 };
@@ -1659,6 +1726,7 @@ function toggleIntroPhase(){ return;
 function renderForScreen(screenId){
   if(screenId==='intro'){startIntroSequence();}
   if(screenId==='library'){renderCatbar();renderBooks();updateBackupNotice();renderResume();}
+  if(screenId==='picks'){renderPicks();}
   if(screenId==='backup'){renderBackup();}
   if(screenId==='trash'){renderTrash();}
   if(screenId==='bookDetail'){renderBookDetail();}
@@ -1752,11 +1820,12 @@ function activeCats(){return DATA.categories.filter(c=>!c.deleted).sort((a,b)=>a
 function renderCatbar(){
   const bar = document.getElementById('catbar');
   bar.innerHTML = '';
-  const allChip = document.createElement('div');
-  allChip.className = 'catchip'+(currentCatFilter===null?' active':'');
-  allChip.textContent = '전체';
-  allChip.onclick = ()=>{currentCatFilter=null;renderCatbar();renderBooks();};
-  bar.appendChild(allChip);
+  const tc = document.createElement('div');
+  tc.className = 'todaychip'+(currentCatFilter===null?' active':'');
+  tc.textContent = 'Today';
+  tc.onclick = ()=>{currentCatFilter=null;renderCatbar();renderBooks();};
+  bar.appendChild(tc);
+  const sp=document.createElement('div'); sp.className='catsep'; bar.appendChild(sp);
   activeCats().forEach(c=>{
     const chip = document.createElement('div');
     chip.className = 'catchip'+(currentCatFilter===c.id?' active':'');
@@ -1764,6 +1833,7 @@ function renderCatbar(){
     chip.onclick = ()=>{currentCatFilter=c.id;renderCatbar();renderBooks();};
     bar.appendChild(chip);
   });
+  { const ids=new Set(activeCats().map(c=>c.id)); if(activeBooks().some(bk=>!ids.has(bk.categoryId))){ const chip=document.createElement('div'); chip.className='catchip'+(currentCatFilter==='__none'?' active':''); chip.textContent='미분류'; chip.onclick=()=>{currentCatFilter='__none';renderCatbar();renderBooks();}; bar.appendChild(chip); } }
 }
 
 function openCatModal(){
@@ -1826,8 +1896,12 @@ function renderBooks(){
   try{updateListHead();}catch(x){}
   const wrap = document.getElementById('bookList');
   const q = (document.getElementById('bookSearch').value||'').trim().toLowerCase();
+  const tp=document.getElementById('todayPane');
+  if(currentCatFilter===null && !q){ wrap.innerHTML=''; wrap.style.display='none'; if(tp){ tp.style.display=''; renderToday(); } return; }
+  wrap.style.display=''; if(tp) tp.style.display='none';
   let books = activeBooks();
-  if(currentCatFilter) books = books.filter(b=>b.categoryId===currentCatFilter);
+  if(currentCatFilter==='__none'){ const ids=new Set(activeCats().map(c=>c.id)); books=books.filter(b=>!ids.has(b.categoryId)); }
+  else if(currentCatFilter) books = books.filter(b=>b.categoryId===currentCatFilter);
   if(q) books = books.filter(b=>b.title.toLowerCase().includes(q));
   books = books.sort((a,b)=>(b.updatedAt||0)-(a.updatedAt||0));
   wrap.innerHTML = '';
@@ -1844,8 +1918,7 @@ function renderBooks(){
     const exCount = DATA.excerpts.filter(e=>e.bookId===b.id && !e.deleted).length;
     const card = document.createElement('div');
     card.className = 'card';
-    card.innerHTML = `<div class="cardrow"><div class="cvh"></div><div class="txt"><div class="cardtitle">${escapeHtml(b.title)} <span style="font-weight:400;color:#7A776E;font-size:14px;">(${exCount})</span></div>
-      <div class="cardsub">${escapeHtml(b.author||'저자 미상')} · ${escapeHtml(cat?cat.name:'책장 없음')} · 발췌문 ${exCount}개</div></div></div>`;
+    card.innerHTML = `<div class="cardrow"><div class="cvh"></div><div class="txt"><div class="cardtitle">${escapeHtml(b.title)} <span style="font-weight:400;color:#7A776E;font-size:14px;">(${exCount})</span></div></div></div>`;
     card.querySelector('.cvh').appendChild(coverEl(b.cover,b.title,48,64,20));
     const mb=document.createElement('button'); mb.type='button'; mb.className='morebtn'; mb.setAttribute('aria-label','더보기'); mb.textContent='⋮'; mb.onclick=ev=>{ev.stopPropagation();bookMenu(b.id);}; card.querySelector('.cardrow').appendChild(mb);
     attachLongPress(card,()=>bookMenu(b.id));
@@ -1963,6 +2036,7 @@ function deleteBookById(id){
 function excerptMenu(id){
   const e=DATA.excerpts.find(x=>x.id===id); if(!e) return; const b=DATA.books.find(x=>x.id===e.bookId);
   openActionSheet(e.title||'(제목 없음)','『'+(b?b.title:'')+'』 '+pgTxt(e.page),[
+    {label:e.pkAll?'★ 핵심 문장 해제 (발췌문 전체)':'★ 핵심 문장으로 (발췌문 전체)',fn:()=>{ e.pkAll=!e.pkAll; e.pkAt=e.pkAll?Date.now():0; e.updatedAt=Date.now(); save(); renderBookDetail(); showToast(e.pkAll?'핵심 문장으로 등록했어요.':'핵심 문장에서 뺐어요.'); }},
     {label:'다른 책으로 이동하기',fn:()=>moveExcerptDialog(id)},
     {label:'발췌문 공유',fn:()=>{currentExcerptId=id;currentBookId=e.bookId;openShare('ex');}},
     {label:'발췌문 삭제 (휴지통으로)',danger:true,fn:()=>askConfirm('이 발췌문을 삭제할까요? 휴지통에서 복원할 수 있습니다.',()=>{ e.deleted=true; e.deletedAt=Date.now(); save(); renderBookDetail(); showToast('휴지통으로 이동했습니다.'); })}
@@ -2011,7 +2085,7 @@ function renderBookDetail(){
     const card = document.createElement('div');
     card.className = 'card';
     const pend=!e.body&&(e.photoIds||[]).length, hasPh=(e.photoIds||[]).length, po=!!(pend&&e.photoOnly);
-    card.innerHTML = `<div class="cardtitle">${escapeHtml(e.title||(po?'사진 발췌문':pend?'사진만 저장됨':'(제목 없음)'))}</div>
+    card.innerHTML = `<div class="cardtitle">${e.pkAll?'<span class="pks">★</span>':''}${escapeHtml(e.title||(po?'사진 발췌문':pend?'사진만 저장됨':'(제목 없음)'))}</div>
       <div class="cardsub">${escapeHtml(pgTxt(e.page))} · ${fmtDay(e.createdAt)}${po?' · 🖼 사진 그대로':pend?' · 📷 글자 인식 전':(hasPh?' · 📷':'')}</div>`;
     card.style.cssText='display:flex;align-items:center;gap:8px;';
     const tx=document.createElement('div'); tx.style.cssText='flex:1;min-width:0;'; while(card.firstChild) tx.appendChild(card.firstChild);
@@ -3262,7 +3336,7 @@ function selIndent(scope,on){ const e=curEx(); if(!e) return; if(scope==='all'){
   const c=selParasHit(); if(!c) return; fmtPush(e); e.ix=(e.ix||[]).filter(x=>!c.ps.some(p=>x.s<p.e&&x.e>p.s)); c.ps.forEach(p=>e.ix.push({id:uid(),s:p.s,e:p.e,v:on?1:0})); fmtFin(e); showToast(on?'이 문단을 들여썼어요.':'이 문단 들여쓰기를 껐어요.'); }
 function selClear(scope){
   const e=curEx(); if(!e) return;
-  if(scope==='all'){ askConfirm('이 발췌문의 모든 서식(제목, 맞춤, 굵게, 밑줄, 형광펜, 글꼴, 문단 들여쓰기)을 지울까요? 메모는 그대로 남고, 방금 한 일은 되돌리기로 돌릴 수 있어요.',()=>{ fmtPush(e); e.marks=(e.marks||[]).filter(x=>x.t==='memo'||x.t==='im'); e.hd=[]; e.al=[]; e.ix=[]; (e.body?bodyParas(e.body):[]).forEach((p,i,a)=>{ if(e.autoHead!==false&&autoIsHead(e.body.slice(p.s,p.e),i,a.length)) e.hd.push({id:uid(),t:'n',s:p.s,e:p.e}); }); fmtFin(e); showToast('서식을 모두 지웠어요.'); }); return; }
+  if(scope==='all'){ askConfirm('이 발췌문의 모든 서식(제목, 맞춤, 굵게, 밑줄, 형광펜, 글꼴, 문단 들여쓰기)을 지울까요? 메모는 그대로 남고, 방금 한 일은 되돌리기로 돌릴 수 있어요.',()=>{ fmtPush(e); e.marks=(e.marks||[]).filter(x=>x.t==='memo'||x.t==='im'||x.t==='pk'); e.hd=[]; e.al=[]; e.ix=[]; (e.body?bodyParas(e.body):[]).forEach((p,i,a)=>{ if(e.autoHead!==false&&autoIsHead(e.body.slice(p.s,p.e),i,a.length)) e.hd.push({id:uid(),t:'n',s:p.s,e:p.e}); }); fmtFin(e); showToast('서식을 모두 지웠어요.'); }); return; }
   const c=selParasHit(); const o=selR||rangeOffsets(); if(!c||!o) return; fmtPush(e);
   let arr=(e.marks||[]).slice(); ['hl','b','u','f'].forEach(t=>{ arr=removeRangeArr(arr,t,o.s,o.e); }); e.marks=arr;
   headSet(e,o.s,o.e,0); e.al=(e.al||[]).filter(x=>!c.ps.some(p=>x.s<p.e&&x.e>p.s)); e.ix=(e.ix||[]).filter(x=>!c.ps.some(p=>x.s<p.e&&x.e>p.s));
@@ -3321,7 +3395,7 @@ function paintBody(e){
   try{ imBarHide(); }catch(x){}
   const host=document.getElementById('readerBody'); host.innerHTML=''; host.classList.add('markable'); host.dataset.k='body';
   const body=e.body||''; const marks=(e.marks||[]).filter(m=>m.s<m.e&&m.e<=body.length).slice();
-  { const pp=document.getElementById('readPaper'); host.dataset.title=body.length?(e.title||''):''; host.dataset.date=body.length?(fmtDay(e.createdAt)+' 발췌'):''; if(pp) pp.dataset.pg=body.length?pgLabel(e.page):''; }
+  { const pp=document.getElementById('readPaper'); host.dataset.title=body.length?(e.title||''):''; host.dataset.date=body.length?(fmtDay(e.createdAt)+' 발췌'):''; if(pp) pp.dataset.pg=body.length?((e.pkAll?'★ ':'')+pgLabel(e.page)):''; { const pb=document.getElementById('pkAllBtn'); if(pb) pb.classList.toggle('on',!!e.pkAll); } }
   const pmAt={}; (e.pm||[]).forEach(m=>{ if(m.s>0&&m.s<body.length&&m.p) pmAt[m.s]=m.p; });
   if(pendingFind){ marks.push({id:'find',t:'find',s:pendingFind.s,e:pendingFind.e}); }
   const pts=new Set([0,body.length]); marks.forEach(m=>{pts.add(m.s);pts.add(m.e);});
@@ -3337,6 +3411,7 @@ function paintBody(e){
   indAt.forEach(i=>pts.add(i)); Object.keys(pmAt).forEach(k=>pts.add(+k));
   const arr=Array.from(pts).sort((a,b)=>a-b);
   const memoEnds={}; marks.filter(m=>m.t==='memo').forEach(m=>{(memoEnds[m.e]=memoEnds[m.e]||[]).push(m);});
+  const pkEnds={}; marks.filter(m=>m.t==='pk').forEach(m=>{ pkEnds[m.e]=(pkEnds[m.e]||0)+1; });
   let findNode=null, cur=host, curBlk=null;
   for(let k=0;k<arr.length-1;k++){
     const s=arr[k],t=arr[k+1]; if(s===t) continue;
@@ -3354,6 +3429,7 @@ function paintBody(e){
       else if(m.t==='f'&&FONTS[m.f]) sp.style.fontFamily=FONTS[m.f].f;
     });
     sp.className=cls.join(' '); cur.appendChild(sp);
+    if(pkEnds[t]){ const st=document.createElement('span'); st.className='pkst'; st.setAttribute('aria-hidden','true'); cur.appendChild(st); }
     (memoEnds[t]||[]).forEach(m=>{ const ic=document.createElement('span'); ic.className='memoico'; ic.dataset.mid=m.id; ic.onclick=ev=>{ev.stopPropagation();openMemoView(m.id);}; cur.appendChild(ic); });
     if(curBlk&&t>=curBlk.e){ cur=host; curBlk=null; }
   }
@@ -3543,7 +3619,9 @@ async function selCopy(){ const e=curEx(); const t=selText(); if(!e||!t) return;
   let ok=false; try{ if(navigator.clipboard&&window.isSecureContext){ await navigator.clipboard.writeText(full); ok=true; } }catch(x){}
   if(!ok){ try{ ok=document.execCommand('copy'); }catch(x){} }
   showToast(ok?'출처와 함께 복사했습니다.':'복사하지 못했습니다.'); }
-function updateListHead(){ const c=DATA.categories.find(x=>x.id===currentCatFilter); const b=document.getElementById('libShareBtn'); if(b) b.setAttribute('aria-label',c?'책장 공유':'전체 공유'); }
+function ttlParts(){ const t=(DATA.settings.todayTitle||'오늘 그리고').trim()||'오늘 그리고'; const w=t.split(/\s+/); return w.length<2?[t,'']:[w.slice(0,-1).join(' '),w[w.length-1]]; }
+function updateListHead(){ const c=DATA.categories.find(x=>x.id===currentCatFilter); const b=document.getElementById('libShareBtn'); if(b) b.setAttribute('aria-label',c?'책장 공유':'전체 공유');
+  const h=document.getElementById('libTitle'); if(h){ if(currentCatFilter===null){ const p=ttlParts(); h.innerHTML=''; const a=document.createElement('span'); a.className='tt1'; a.textContent=p[0]; h.appendChild(a); if(p[1]){ const b2=document.createElement('span'); b2.className='tt2'; b2.textContent=p[1]; h.appendChild(b2); } const d=document.createElement('span'); d.className='tt3'; d.textContent='···'; h.appendChild(d); h.style.cursor='pointer'; } else { h.textContent='내 서재'; h.style.cursor=''; } } }
 
 function selText(){ const e=curEx(); const o=selR||rangeOffsets(); return (e&&o)?mkText(e,o.k).slice(o.s,o.e):''; }
 
@@ -3691,7 +3769,7 @@ function applyReading(){
 function rsSet(k,v){ const r=RS(); r[k]=v; if(k==='flow') pg=0; if(k==='font'&&document.fonts&&document.fonts.load){ document.fonts.load('16px '+FONTS[fontKey(v)].f.split(',')[0]).then(()=>{ if(document.getElementById('reader').classList.contains('active')) layoutPages(); }); } r.size=Math.max(14,Math.min(34,r.size)); r.line=Math.max(1.3,Math.min(2.4,Math.round(r.line*10)/10)); save(); applyReading(); renderRsControls(); if(document.getElementById('reader').classList.contains('active')) layoutPages(); flashSaved(); }
 function renderRsControls(){
   const r=RS();
-  const html=`<div class="themes">${Object.keys(THEMES).map(k=>`<div class="themechip ${r.theme===k?'on':''}" onclick="rsSet('theme','${k}')"><div class="swatch" style="background:${THEMES[k].bg}"></div>${THEMES[k].n}</div>`).join('')}</div>
+  const html=`<div class="sectitle" style="margin-top:0">배경색</div><div class="themes">${Object.keys(THEMES).map(k=>`<div class="themechip ${r.theme===k?'on':''}" onclick="rsSet('theme','${k}')"><div class="swatch" style="background:${THEMES[k].bg}"></div>${THEMES[k].n}</div>`).join('')}</div>
   <div class="ctlrow"><span class="lab">글자 크기</span><button class="stepbtn" onclick="rsSet('size',RS().size-1)">A−</button><span class="val">${r.size}</span><button class="stepbtn" onclick="rsSet('size',RS().size+1)">A+</button></div>
   <div class="ctlrow"><span class="lab">줄 간격</span><button class="stepbtn" onclick="rsSet('line',RS().line-0.1)">−</button><span class="val">${r.line.toFixed(1)}</span><button class="stepbtn" onclick="rsSet('line',RS().line+0.1)">＋</button></div>
   <div class="sectitle" style="margin-top:4px">글꼴</div>
@@ -3755,7 +3833,7 @@ function updateTabbar(id){
     else { ts.innerHTML=window._magSvg; ts.onclick=()=>tabSearch(); ts.setAttribute('aria-label','검색'); }
     tm.onclick=()=>openMarks(marksCtx()); tm.setAttribute('aria-label','메모와 하이라이트 모아보기');
   }
-  const show_=['library','bookDetail','trash','backup','settings','marks','log','shelves','search','setMore','setInfo'].indexOf(id)>=0;
+  const show_=['library','picks','bookDetail','trash','backup','settings','marks','log','shelves','search','setMore','setInfo'].indexOf(id)>=0;
   document.getElementById('tabbar').style.display=show_?'block':'none';
   { const tg=document.getElementById('tabMag'); if(tg) tg.style.display=(id==='bookDetail')?'':'none'; }
   const lt=document.querySelector('.tab[data-tab=library]'); const tf=document.getElementById('tabFs'); if(lt) lt.style.display=(id==='library')?'none':''; if(tf) tf.style.display=(id==='library')?'':'none';
@@ -3920,7 +3998,7 @@ function renderMarks(){
     if(e.deleted) return; const bk=DATA.books.find(x=>x.id===e.bookId); if(!bk||bk.deleted) return;
     if(st.kind==='book'&&e.bookId!==st.bookId) return;
     if(st.kind==='shelf'&&bk.categoryId!==st.catId) return;
-    (e.marks||[]).filter(m=>m.t!=='f'&&m.t!=='im').forEach(m=>items.push({e:e,bk:bk,m:m}));
+    (e.marks||[]).filter(m=>m.t!=='f'&&m.t!=='im'&&m.t!=='pk').forEach(m=>items.push({e:e,bk:bk,m:m}));
     if(e.memo) items.push({e:e,bk:bk,m:null});
   });
   const f=st.filter;
@@ -3952,7 +4030,8 @@ function renderLog(){
     if(ex) d.onclick=()=>{ currentBookId=ex.bookId; openReader(ex.id); }; host.appendChild(d); });
 }
 function renderResume(){
-  const el=document.getElementById('recentLine'); if(!el) return;
+  const el=document.getElementById('recentLine'); if(el){ el.style.display='none'; } document.body.classList.remove('hasrecent'); return;
+  if(!el) return;
   const lr=DATA.settings.lastRead; const qs=(document.getElementById('bookSearch').value||'').trim();
   const e=lr&&DATA.excerpts.find(x=>x.id===lr.id&&!x.deleted); const b=e&&DATA.books.find(x=>x.id===e.bookId&&!x.deleted);
   if(!e||!b||qs){ el.style.display='none'; document.body.classList.remove('hasrecent'); return; }
@@ -3962,6 +4041,90 @@ function renderResume(){
     const q1=document.createElement('span'); q1.className='q'; q1.textContent='"'; const qt=document.createElement('span'); qt.className='qt'; qt.textContent=txt+' '; const q2=document.createElement('span'); q2.className='q'; q2.textContent='…"'; sub.appendChild(q1); sub.appendChild(qt); sub.appendChild(q2); }
   el.style.display='block'; document.body.classList.add('hasrecent');
 }
+
+/* ===== 핵심 문장 (★) · 오늘의 한 문장 ===== */
+function pkHash(str){ let h=2166136261; for(let i=0;i<str.length;i++){ h^=str.charCodeAt(i); h=Math.imul(h,16777619); } return h>>>0; }
+function pickItems(){
+  const out=[]; const bks=new Set(DATA.books.filter(b=>!b.deleted).map(b=>b.id));
+  DATA.excerpts.forEach(e=>{ if(e.deleted||!bks.has(e.bookId)) return; const body=e.body||'';
+    if(e.pkAll&&body.trim()) out.push({key:'A:'+e.id,eid:e.id,bid:e.bookId,s:0,e:body.length,text:body.trim(),at:e.pkAt||0,whole:true});
+    (e.marks||[]).forEach(m=>{ if(m.t!=='pk') return; const tx=body.slice(m.s,m.e).trim(); if(!tx) return; out.push({key:m.id,eid:e.id,bid:e.bookId,s:m.s,e:m.e,text:tx,at:m.at||0,whole:false}); }); });
+  return out;
+}
+function pickOrdered(){
+  const items=pickItems(); const mode=DATA.settings.pickMode||'rand';
+  const byAt=(a,b)=>(a.at-b.at)||(a.key<b.key?-1:1);
+  if(mode==='added') return items.sort(byAt);
+  if(mode==='manual'){ const ord=DATA.settings.pickOrder||[]; const idx=k=>{ const i=ord.indexOf(k); return i<0?1e9:i; }; return items.sort((a,b)=>(idx(a.key)-idx(b.key))||byAt(a,b)); }
+  if(!DATA.settings.pickSeed){ DATA.settings.pickSeed=String(Math.floor(Math.random()*1e9)); save(); }
+  const sd=DATA.settings.pickSeed; return items.sort((a,b)=>(pkHash(sd+a.key)-pkHash(sd+b.key))||byAt(a,b));
+}
+function dayNum(d){ d=d||new Date(); return Math.floor(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate())/86400000); }
+function todayIdx(n){ if(DATA.settings.pickStart==null){ DATA.settings.pickStart=dayNum(); save(); } const v=(dayNum()-DATA.settings.pickStart)%n; return (v+n)%n; }
+function clampTxt(t,n){ t=t.replace(/\n{3,}/g,'\n\n'); return t.length>n?t.slice(0,n).replace(/\s+\S*$/,'')+'…':t; }
+let _tdOff=0;
+function tdLabel(o){ return o===0?'오늘의 한 문장':o===-1?'어제의 한 문장':o===1?'내일의 한 문장':(o<0?(-o)+'일 전의 한 문장':o+'일 뒤의 한 문장'); }
+function renderToday(){
+  const pane=document.getElementById('todayPane'); if(!pane) return; pane.innerHTML='';
+  const items=pickOrdered(), n=items.length;
+  const card=document.createElement('div'); card.className='tdcard'; pane.appendChild(card);
+  const d=new Date(); d.setDate(d.getDate()+_tdOff); const ds=d.getFullYear()+'.'+pad2(d.getMonth()+1)+'.'+pad2(d.getDate());
+  if(!n){
+    card.innerHTML='<div class="tdh"><span>오늘의 한 문장</span><span>'+ds+'</span></div><div class="tdq guide">어제 읽은 내가 오늘의 나에게,<br>오늘 읽은 내가 미래의 나에게.</div><div class="tdgd">마음에 남는 문장에 ★ 표시를 해 보세요. 매일 한 문장씩 만나게 돼요.</div>';
+  } else {
+    const it=items[(((todayIdx(n)+_tdOff)%n)+n)%n]; const b=DATA.books.find(x=>x.id===it.bid), e=DATA.excerpts.find(x=>x.id===it.eid);
+    const h=document.createElement('div'); h.className='tdh'; h.innerHTML='<span></span><span></span>'; h.children[0].textContent=tdLabel(_tdOff); h.children[1].textContent=ds; card.appendChild(h);
+    const q=document.createElement('div'); q.className='tdq'; q.textContent='“'+clampTxt(it.text,300)+'”'; card.appendChild(q);
+    const a=document.createElement('div'); a.className='tda'; a.textContent='- '+(b?b.title:'')+(b&&b.author?' · '+b.author:'')+(e&&e.page&&pgLabel(e.page)?' · '+pgLabel(e.page):''); card.appendChild(a);
+    const f=document.createElement('div'); f.className='tdf'; const l=document.createElement('a'); l.textContent='핵심 문장 '+n+'개 ›'; l.onclick=()=>go('picks'); f.appendChild(l); const o2=document.createElement('a'); o2.textContent='원문 보기'; o2.onclick=()=>pkOpen(it); f.appendChild(o2); card.appendChild(f);
+    let x0=null,y0=null; card.addEventListener('touchstart',ev=>{ x0=ev.touches[0].clientX; y0=ev.touches[0].clientY; },{passive:true});
+    card.addEventListener('touchend',ev=>{ if(x0===null) return; const dx=ev.changedTouches[0].clientX-x0, dy=ev.changedTouches[0].clientY-y0; x0=null; if(n>1&&Math.abs(dx)>45&&Math.abs(dx)>Math.abs(dy)*1.5){ _tdOff+=(dx<0?1:-1); renderToday(); } },{passive:true});
+    if(n>1){ const dots=document.createElement('div'); dots.className='tddots'; const sz=[5,7,11,7,5]; for(let k=-2;k<=2;k++){ const i=document.createElement('i'); i.style.width=i.style.height=sz[k+2]+'px'; if(k===0) i.className='c'; if(k!==0) i.onclick=()=>{ _tdOff+=k; renderToday(); }; dots.appendChild(i); } pane.appendChild(dots); }
+  }
+  if(n<=1){ const sp=document.createElement('div'); sp.style.height='14px'; pane.appendChild(sp); }
+  const lr=DATA.settings.lastRead; const e2=lr&&DATA.excerpts.find(x=>x.id===lr.id&&!x.deleted); const b2=e2&&DATA.books.find(x=>x.id===e2.bookId&&!x.deleted);
+  if(e2&&b2){ const bd=document.createElement('div'); bd.className='tdband'; bd.onclick=resumeReading;
+    const bh=document.createElement('div'); bh.className='bh'; bh.innerHTML='<span>이어 읽기</span><span></span>'; bh.children[1].textContent=pgLabel(e2.page); bd.appendChild(bh);
+    const bt=document.createElement('div'); bt.className='bt'; bt.textContent=b2.title; bd.appendChild(bt);
+    const bp=document.createElement('div'); bp.className='bp'; bp.textContent=(e2.body||'').replace(/\s+/g,' ').trim()||(e2.title||'사진 발췌문'); bd.appendChild(bp);
+    const bc=document.createElement('span'); bc.className='bc'; bc.textContent='›'; bd.appendChild(bc); pane.appendChild(bd); }
+  if(!activeCats().length){ const em=document.createElement('div'); em.className='empty'; em.innerHTML='책장이 아직 없습니다.<br>오른쪽 위 연필 아이콘으로 책장을 먼저 만든 뒤,<br>카메라 버튼으로 책을 등록해 보세요.'; pane.appendChild(em); }
+}
+function pkOpen(it){ currentBookId=it.bid; if(!it.whole) pendingFind={s:it.s,e:it.e}; openReader(it.eid); }
+function selPick(){
+  const e=curEx(); const o=selR||rangeOffsets(); if(!e||!o||o.k!=='body') return;
+  const body=e.body||''; let s0=o.s,t0=o.e; while(s0<t0&&/\s/.test(body[s0])) s0++; while(t0>s0&&/\s/.test(body[t0-1])) t0--;
+  if(t0<=s0){ showToast('★로 표시할 문장을 먼저 드래그해 주세요.'); return; }
+  fmtPush(e); const hit=(e.marks||[]).filter(m=>m.t==='pk'&&m.s<t0&&m.e>s0);
+  if(hit.length){ e.marks=(e.marks||[]).filter(m=>hit.indexOf(m)<0); fmtFin(e); showToast('★ 표시를 해제했어요.'); }
+  else { e.marks=(e.marks||[]).concat([{id:uid(),t:'pk',s:s0,e:t0,at:Date.now()}]); fmtFin(e); showToast('★ 핵심 문장으로 등록했어요.'); }
+}
+function togglePkAll(){ const e=curEx(); if(!e||!(e.body||'').trim()){ showToast('글이 있는 발췌문에서 쓸 수 있어요.'); return; } e.pkAll=!e.pkAll; e.pkAt=e.pkAll?Date.now():0; if(!window._pv){ e.updatedAt=Date.now(); save(); } paintBody(e); layoutPages(); showToast(e.pkAll?'발췌문 전체를 핵심 문장으로 등록했어요.':'핵심 문장에서 뺐어요.'); }
+function renderPicks(){
+  const mode=DATA.settings.pickMode||'rand'; const items=pickOrdered();
+  document.getElementById('picksTitle').textContent='핵심 문장 ('+items.length+')';
+  const seg=document.getElementById('pkSeg'); seg.innerHTML='';
+  [['rand','랜덤'],['added','담은 순서'],['manual','직접 순서']].forEach(x=>{ const b=document.createElement('button'); b.type='button'; b.textContent=x[1]; if(mode===x[0]) b.className='on'; b.onclick=()=>pkMode(x[0]); seg.appendChild(b); });
+  const wrap=document.getElementById('pkList'); wrap.innerHTML='';
+  if(!items.length){ wrap.innerHTML='<div class="empty">아직 ★ 표시한 문장이 없어요.<br>발췌문에서 문장을 드래그한 뒤 ★를 눌러 보세요.</div>'; return; }
+  items.forEach((it,i)=>{
+    const b=DATA.books.find(x=>x.id===it.bid), e=DATA.excerpts.find(x=>x.id===it.eid);
+    const r=document.createElement('div'); r.className='pkrow';
+    const q=document.createElement('div'); q.className='pq'; q.textContent='“'+it.text+'”'; r.appendChild(q);
+    const ps=document.createElement('div'); ps.className='ps'; ps.textContent='- '+(b?b.title:'')+(b&&b.author?' · '+b.author:'')+(e&&e.page&&pgLabel(e.page)?' · '+pgLabel(e.page):''); r.appendChild(ps);
+    const pa=document.createElement('div'); pa.className='pa';
+    const o=document.createElement('button'); o.type='button'; o.textContent='원문 보기'; o.onclick=()=>pkOpen(it); pa.appendChild(o);
+    const u=document.createElement('button'); u.type='button'; u.textContent='★ 해제'; u.onclick=()=>pkRemove(it); pa.appendChild(u);
+    const sp=document.createElement('span'); sp.className='sp'; pa.appendChild(sp);
+    if(mode==='manual'){ const up=document.createElement('button'); up.type='button'; up.textContent='▲'; up.setAttribute('aria-label','위로'); up.disabled=(i===0); up.onclick=()=>pkMove(items,i,-1); const dn=document.createElement('button'); dn.type='button'; dn.textContent='▼'; dn.setAttribute('aria-label','아래로'); dn.disabled=(i===items.length-1); dn.onclick=()=>pkMove(items,i,1); pa.appendChild(up); pa.appendChild(dn); }
+    r.appendChild(pa); wrap.appendChild(r); });
+}
+function pkMode(m){ const cur=DATA.settings.pickMode||'rand'; if(m==='manual'&&cur!=='manual'){ DATA.settings.pickOrder=pickOrdered().map(x=>x.key); } DATA.settings.pickMode=m; _tdOff=0; save(); renderPicks(); }
+function pkMove(items,i,d){ const ord=items.map(x=>x.key); const j=i+d; if(j<0||j>=ord.length) return; const t=ord[i]; ord[i]=ord[j]; ord[j]=t; DATA.settings.pickOrder=ord; save(); renderPicks(); }
+function pkRemove(it){ const e=DATA.excerpts.find(x=>x.id===it.eid); if(!e) return; if(it.whole) { e.pkAll=false; e.pkAt=0; } else e.marks=(e.marks||[]).filter(m=>m.id!==it.key); e.updatedAt=Date.now(); save(); renderPicks(); showToast('핵심 문장에서 뺐어요.'); }
+const TTL_PRE=['오늘 그리고','과거 현재 미래','어제와 오늘 그리고'];
+function ttlOpen(){ if(currentCatFilter!==null) return; const pre=document.getElementById('ttlPre'); pre.innerHTML=''; TTL_PRE.forEach(t=>{ const b=document.createElement('button'); b.type='button'; b.textContent=t; b.onclick=()=>{ document.getElementById('ttlInput').value=t; ttlOk(); }; pre.appendChild(b); }); document.getElementById('ttlInput').value=DATA.settings.todayTitle||'오늘 그리고'; document.getElementById('ttlBg').classList.add('show'); }
+function ttlOk(){ const v=document.getElementById('ttlInput').value.trim(); DATA.settings.todayTitle=v||'오늘 그리고'; save(); closeModal('ttlBg'); updateListHead(); }
 function resumeReading(){ const lr=DATA.settings.lastRead; const e=lr&&DATA.excerpts.find(x=>x.id===lr.id&&!x.deleted); if(!e) return; currentBookId=e.bookId; window._startPg=lr.pg||0; openReader(e.id); }
 
 if(document.fonts&&document.fonts.ready){ document.fonts.ready.then(()=>{ if(document.getElementById('reader').classList.contains('active')) layoutPages(); }); }
@@ -4290,7 +4453,7 @@ function renderSearchScreen(){
 function tabSearch(){ tabGo('search'); setTimeout(()=>{const i=document.getElementById('searchInput'); if(i) i.focus();},80); }
 
 /* ---------- 버전 · 업데이트 확인 ---------- */
-const APP_VERSION='2026.11.15-3';
+const APP_VERSION='2026.11.16-1';
 let updateAvail=false;
 let latestVer='';
 function pendingState(){
