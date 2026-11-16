@@ -727,7 +727,8 @@ html[data-mode=eink]{--rcbg:#FFFFFF;--rcln:#000000;--rcln2:#999999;--rctx:#00000
 #library .card .cardtitle{font-size:16px;font-weight:700;color:var(--cdtx);}
 html[data-mode=dark] #library .card,html[data-mode=eink] #library .card{box-shadow:none;}
 .topbar h1#libTitle{display:flex;justify-content:center;align-items:baseline;gap:5px;}
-#libTitle .tt1{font-size:21px;font-weight:700;color:var(--brown);}
+#libTitle .tt1{font-size:21px;font-weight:700;color:#6E6257;}
+html[data-mode=dark] #libTitle .tt1{color:#B8B3A6;}
 #libTitle .tt2{font-size:12px;font-weight:500;color:#8A7A6B;}
 #libTitle .tt3{font-size:12px;color:#B5A898;letter-spacing:2px;}
 .catbar .todaychip{flex:0 0 auto;padding:8px 13px;border-radius:5px;border:1px solid var(--btn);background:var(--surface);color:var(--btn);font-weight:700;font-size:14px;cursor:pointer;}
@@ -1238,6 +1239,8 @@ body.hasrecent #library{padding-bottom:250px;}
     <h3>새 소식</h3>
     <div class="updbanner" id="newsUpd" style="display:none;margin:0 0 12px;"><span>🔔 새 업데이트가 있어요</span><button type="button" onclick="askConfirm('업데이트할까요? 저장한 글과 사진은 그대로 유지됩니다.',applyUpdate)">업데이트 적용</button></div>
     <div class="noticebody guidebody">
+      <h4>2026.11.16 (4)</h4>
+      <p>· 서재 맨 위 ‘오늘’ 글씨 색을 조금 차분하게 바꿨어요.</p>
       <h4>2026.11.16 (3)</h4>
       <p>· 발췌문 저장 화면을 더 시원하게 바꿨어요. 순서가 ‘쪽 → 제목 → 사진 메뉴 → 본문’으로 이어지고, ‘편집/미리보기’는 본문 줄로 옮겼어요. 입력칸은 상자 대신 밑줄 칸이 됐고, 버튼과 글자도 조금 커졌어요.<br>
       · ‘AI로 추출’ 옆 ‘붙여넣기’는 본문 줄 오른쪽 위의 ‘추출 결과 붙여넣기 ›’로 옮겼어요. AI 앱에서 복사한 뒤 돌아와 누르면 본문 칸을 따로 누르지 않아도 들어가요.</p>
@@ -4520,7 +4523,7 @@ function renderSearchScreen(){
 function tabSearch(){ tabGo('search'); setTimeout(()=>{const i=document.getElementById('searchInput'); if(i) i.focus();},80); }
 
 /* ---------- 버전 · 업데이트 확인 ---------- */
-const APP_VERSION='2026.11.16-3';
+const APP_VERSION='2026.11.16-4';
 let updateAvail=false;
 let latestVer='';
 function pendingState(){
