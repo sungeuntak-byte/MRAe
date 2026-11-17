@@ -592,10 +592,11 @@ html[data-mode=eink]{--tx2:#000;--ic2:#000;--ar2:#777;}
 html[data-mode=dark] .segbtn.on,html[data-mode=dark] #ordBtn.on{background:#4A4238;color:#F1E6D6;border-color:#B98A6E;}
 html[data-mode=eink] .segbtn.on,html[data-mode=eink] #ordBtn.on{background:#D0D0D0;color:#000;border-color:#000;}
 .selbar .selmain button.on{background:rgba(255,255,255,.24);box-shadow:inset 0 3px 7px rgba(0,0,0,.45);}
-.selbar .selfmt{border-top:1px solid rgba(255,255,255,.14);}
-.selbar .selfmt button{min-width:44px !important;padding:0 6px !important;}
-.selbar .selfmt button.dis{opacity:.35;}
-.selbar .selfmt .gl2{font-size:15px;font-weight:800;font-family:Georgia,serif;}
+.selbar .selmain+.selmain{border-top:1px solid rgba(255,255,255,.14);}
+#selBar .selmain button{flex:1 1 0;}
+
+.selbar .selmain button.dis{opacity:.35;}
+.selbar .selmain .gl2{font-size:15px;font-weight:800;font-family:Georgia,serif;}
 #reader .readbody .imgblk{display:block;margin:calc(var(--lh1) * .7) 0 var(--lh1);padding:0;clear:both;position:relative;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;touch-action:none;text-indent:0;white-space:normal;}
 #reader .readbody .imgblk.hascap{margin-bottom:calc(var(--lh1) * .7);}
 #reader .readbody .imgblk img{display:block;max-width:100%;max-height:calc(var(--imh,70vh) - 3em);height:auto;object-fit:contain;-webkit-user-drag:none;pointer-events:auto;}
@@ -1073,23 +1074,25 @@ body.hasrecent #library{padding-bottom:250px;}
 
 <!-- 선택 메뉴 -->
 <div class="selbar" id="selBar" onpointerdown="selBarTouch()" onmousedown="event.preventDefault()">
-  <div class="selmain">
+  <div class="selmain selrow1">
     <button type="button" aria-label="하이라이트" onclick="selToggleHl()"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9.6 14.4 7.6-7.6a1.7 1.7 0 0 1 2.4 2.4L12 16.8z"/><path d="m9.6 14.4-3 3 1.2 1.9 4.2-.5"/><path d="M3.5 21.2h9.5" stroke="#FFE066" stroke-width="3.2"/></svg></button>
     <button type="button" aria-label="굵게" onclick="selApply('b')"><b class="gl">B</b></button>
     <button type="button" aria-label="밑줄" onclick="selApply('u')"><u class="gl">U</u></button>
-    <button type="button" id="selImgBtn" aria-label="이미지 넣기" onclick="selImage()"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5H6a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2v-6"/><circle cx="9" cy="11" r="1.5"/><path d="m4 18 4.5-4.5 3 3L14 14l5 5"/><path d="M18 2.5v6M15 5.5h6"/></svg></button>
-    <button type="button" id="selMemoBtn" aria-label="부분 메모" onclick="selMemo()"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6"/><path d="M12 12.5v5M9.5 15h5"/></svg></button>
-    <button type="button" aria-label="복사" onclick="selCopy()"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8.5" y="8.5" width="12" height="12" rx="2"/><path d="M15.5 8.5V6A2 2 0 0 0 13.5 4H6A2 2 0 0 0 4 6v7.5A2 2 0 0 0 6 15.5h2.5"/></svg></button>
-    <button type="button" aria-label="공유·다운로드" onclick="selShare()"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="3.6" cy="12" r="2"/><circle cx="9.3" cy="5.1" r="2"/><circle cx="9.3" cy="18.9" r="2"/><path d="m5.2 10 2.4-2.9M5.2 14l2.4 2.9"/><path d="M19.5 4.5v10M16.3 11.6l3.2 3.2 3.2-3.2"/><path d="M15.7 19.6h7.6" stroke-width="2"/></svg></button>
     <button type="button" id="selPkBtn" aria-label="핵심 문장 ★" onclick="selPick()"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.2l2.6 5.5 6 .8-4.4 4.2 1.1 6-5.3-2.9-5.3 2.9 1.1-6-4.4-4.2 6-.8z"/></svg></button>
+    <button type="button" aria-label="서식 지우기" onclick="selSubOpen('clr')"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m8 20-4.5-4.5a2 2 0 0 1 0-2.8L13 3.2a2 2 0 0 1 2.8 0l4.9 4.9a2 2 0 0 1 0 2.8L12 19.6a2 2 0 0 1-1.4.4H8zM9 9l6 6M12 20h8"/></svg></button>
   </div>
-  <div class="selmain selfmt">
+  <div class="selmain selrow2">
     <button type="button" id="selH1Btn" aria-label="대제목" onclick="selHeadLv(1)"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round"><path d="M4 4.2h16" stroke-width="8"/><g style="opacity:.55" stroke-width="1.3"><path d="M4 13.5h16M4 17.2h16M4 20.9h11"/></g></svg></button>
     <button type="button" id="selHeadBtn" aria-label="소제목" onclick="selHead()"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round"><path d="M4 4h16" stroke-width="3.6"/><g style="opacity:.55" stroke-width="1.3"><path d="M4 12.5h16M4 16.2h16M4 19.9h11"/></g></svg></button>
     <button type="button" aria-label="맞춤" onclick="selSubOpen('al')"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M7 11h10M4 16h16M7 21h10"/></svg></button>
     <button type="button" aria-label="글꼴" onclick="selSubOpen('ft')"><span class="gl2">Aa</span></button>
     <button type="button" aria-label="들여쓰기" onclick="selSubOpen('ind')"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16M12 10h8M12 15h8M4 20h16M4 9.5l3.5 2.5L4 14.5z"/></svg></button>
-    <button type="button" aria-label="서식 지우기" onclick="selSubOpen('clr')"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m8 20-4.5-4.5a2 2 0 0 1 0-2.8L13 3.2a2 2 0 0 1 2.8 0l4.9 4.9a2 2 0 0 1 0 2.8L12 19.6a2 2 0 0 1-1.4.4H8zM9 9l6 6M12 20h8"/></svg></button>
+  </div>
+  <div class="selmain selrow3">
+    <button type="button" id="selMemoBtn" aria-label="부분 메모" onclick="selMemo()"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6"/><path d="M12 12.5v5M9.5 15h5"/></svg></button>
+    <button type="button" id="selImgBtn" aria-label="이미지 넣기" onclick="selImage()"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5H6a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2v-6"/><circle cx="9" cy="11" r="1.5"/><path d="m4 18 4.5-4.5 3 3L14 14l5 5"/><path d="M18 2.5v6M15 5.5h6"/></svg></button>
+    <button type="button" aria-label="복사" onclick="selCopy()"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8.5" y="8.5" width="12" height="12" rx="2"/><path d="M15.5 8.5V6A2 2 0 0 0 13.5 4H6A2 2 0 0 0 4 6v7.5A2 2 0 0 0 6 15.5h2.5"/></svg></button>
+    <button type="button" aria-label="공유·다운로드" onclick="selShare()"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="3.6" cy="12" r="2"/><circle cx="9.3" cy="5.1" r="2"/><circle cx="9.3" cy="18.9" r="2"/><path d="m5.2 10 2.4-2.9M5.2 14l2.4 2.9"/><path d="M19.5 4.5v10M16.3 11.6l3.2 3.2 3.2-3.2"/><path d="M15.7 19.6h7.6" stroke-width="2"/></svg></button>
     <button type="button" id="selUndoBtn" aria-label="되돌리기" onclick="fmtUndo()"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/></svg></button>
     <button type="button" id="selRedoBtn" aria-label="다시 하기" onclick="fmtRedo()"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 14 5-5-5-5"/><path d="M20 9H9.5a5.5 5.5 0 0 0 0 11H13"/></svg></button>
   </div>
@@ -1264,6 +1267,9 @@ body.hasrecent #library{padding-bottom:250px;}
     <h3>새 소식</h3>
     <div class="updbanner" id="newsUpd" style="display:none;margin:0 0 12px;"><span>🔔 새 업데이트가 있어요</span><button type="button" onclick="askConfirm('업데이트할까요? 저장한 글과 사진은 그대로 유지됩니다.',applyUpdate)">업데이트 적용</button></div>
     <div class="noticebody guidebody">
+      <h4>2026.11.17 (6)</h4>
+      <p>· 글자를 드래그하면 뜨는 메뉴가 세 줄로 정리됐어요. 윗줄 ‘표시’(하이라이트·굵게·밑줄·★·서식 지우기), 가운뎃줄 ‘서식’(대제목·소제목·맞춤·글꼴·들여쓰기), 아랫줄 ‘활용’(메모·이미지·복사·공유/다운로드·되돌리기·다시 하기).<br>
+      · 메뉴는 드래그한 글을 가리지 않도록 글 아래나 위, 자리가 모자라면 화면 맨 위/아래로 떠요.</p>
       <h4>2026.11.17 (5)</h4>
       <p>· 책 화면에서 스크롤하면 위의 제목 줄과 ‘발췌 목차’ 줄이 확실히 고정되도록 방식을 바꿨어요.<br>
       · ‘화면 글자 크기’ 창을 아래 메뉴 위에 작게 띄우고, 제목을 가운데로 두었어요.<br>
@@ -3618,7 +3624,8 @@ function placeSelBar(){
   const rects=sel.getRangeAt(0).getClientRects(); if(!rects.length) return; const first=rects[0], last=rects[rects.length-1];
   const bw=b.offsetWidth, bh=b.offsetHeight, vw=window.innerWidth, vh=window.innerHeight;
   const cx=(first.left+last.right)/2; let left=Math.max(8,Math.min(vw-bw-8,cx-bw/2));
-  let top=last.bottom+44; if(top+bh>vh-8) top=Math.max(8,first.top-bh-72);
+  const gapB=44, gapA=72; let top=last.bottom+gapB;
+  if(top+bh>vh-8){ const up=first.top-bh-gapA; if(up>=8) top=up; else { const mid=(first.top+last.bottom)/2; top=(mid>vh/2)?8:Math.max(8,vh-bh-8); } }
   b.style.left=left+'px'; b.style.top=top+'px';
 }
 window.addEventListener('scroll',()=>{ try{placeSelBar();}catch(x){} },{passive:true,capture:true});
@@ -4679,7 +4686,7 @@ function renderSearchScreen(){
 function tabSearch(){ tabGo('search'); setTimeout(()=>{const i=document.getElementById('searchInput'); if(i) i.focus();},80); }
 
 /* ---------- 버전 · 업데이트 확인 ---------- */
-const APP_VERSION='2026.11.17-5';
+const APP_VERSION='2026.11.17-6';
 let updateAvail=false;
 let latestVer='';
 function pendingState(){
