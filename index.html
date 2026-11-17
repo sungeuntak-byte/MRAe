@@ -825,6 +825,14 @@ body.hasrecent #library{padding-bottom:250px;}
 .cardrow .morebtn{margin-left:4px;}
 #readerBody:focus,#readerMemo:focus{outline:none;}
 
+
+/* D52 sticky modal header + unified selected style */
+.mhead{position:sticky;top:-20px;z-index:6;background:var(--surface);margin:-20px -18px 6px;padding:8px 18px 0;min-height:52px;border-radius:18px 18px 0 0;flex:none;}
+.mhead .xbtn{position:absolute;top:8px;}
+.mhead h3,.mhead h3.ctr{margin:0;line-height:44px;padding:0 48px;}
+.btn.txt{background:none;border:none;box-shadow:none;color:#8C7D6E;text-decoration:underline;font-weight:500;}
+.segbtn.on,#ordBtn.on,.gtab.on,.sharebtn.on,.pgseg button.on,.pkseg button.on,.pvtoggle .seg2 button.on,#imCapAl .btn.on,#ieSelBar .ier button.ic.on,.themechip.on,.fontchip.on{background:#FBF1E8;color:#7A4A33;font-weight:700;box-shadow:inset 0 0 0 2px #C98B6E;}
+html[data-mode=dark] .segbtn.on,html[data-mode=dark] #ordBtn.on,html[data-mode=dark] .gtab.on,html[data-mode=dark] .sharebtn.on,html[data-mode=dark] .pgseg button.on,html[data-mode=dark] .pkseg button.on,html[data-mode=dark] .themechip.on,html[data-mode=dark] .fontchip.on{background:#4A4238;color:#F1E6D6;box-shadow:inset 0 0 0 2px #B98A6E;}
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang&family=Gowun+Dodum&family=Nanum+Gothic&family=Nanum+Myeongjo&family=Noto+Sans+KR:wght@400;700&family=Noto+Serif+KR:wght@400;700&display=swap" rel="stylesheet">
@@ -1155,25 +1163,20 @@ body.hasrecent #library{padding-bottom:250px;}
 
 <!-- 모달: 책장 관리 -->
 <div class="modal-bg" id="shelfEditBg" onclick="closeOnBg(event,'shelfEditBg')">
-  <div class="modal"><button class="xbtn" aria-label="닫기" onclick="closeModal('shelfEditBg')">✕</button>
+  <div class="modal"><button class="xbtn xl" aria-label="닫기" onclick="closeModal('shelfEditBg')">✕</button><button class="xbtn ok" aria-label="저장" onclick="saveShelf()">✓</button>
     <h3 id="shelfEditTitle">책장 수정</h3>
     <label>책장 이름</label>
     <input type="text" id="shelfName" placeholder="예: 신앙서적">
     <label>표지</label>
     <div class="coverpick" id="shelfCoverPick"></div>
-    <div class="btnrow"><button class="btn primary" onclick="saveShelf()">저장</button></div>
   </div>
 </div>
 <div class="modal-bg" id="catModalBg" onclick="closeOnBg(event,'catModalBg')">
-  <div class="modal"><button class="xbtn" aria-label="닫기" onclick="closeModal('catModalBg')">✕</button>
+  <div class="modal"><button class="xbtn xl" aria-label="닫기" onclick="closeModal('catModalBg')">✕</button><button class="xbtn ok" aria-label="추가" onclick="addCategory()">✓</button>
     <h3>책장 관리</h3>
     <div id="catManageList"></div>
     <label>새 책장 이름</label>
     <input type="text" id="newCatName" placeholder="예: 신앙서적">
-    <div class="btnrow">
-      <button class="btn ghost" onclick="closeModal('catModalBg')">닫기</button>
-      <button class="btn primary" onclick="addCategory()">추가</button>
-    </div>
   </div>
 </div>
 
@@ -1250,7 +1253,6 @@ body.hasrecent #library{padding-bottom:250px;}
       <h4>만든 사람</h4>
       <p>Developed by TSE with Claude<br><span id="aboutVer" style="color:#858279;"></span></p>
     </div>
-    <button class="btn primary" style="width:100%;margin-top:16px;" onclick="closeModal('aboutBg')">닫기</button>
   </div>
 </div>
 <div class="modal-bg" id="guideBg" onclick="closeOnBg(event,'guideBg')">
@@ -1267,6 +1269,10 @@ body.hasrecent #library{padding-bottom:250px;}
     <h3>새 소식</h3>
     <div class="updbanner" id="newsUpd" style="display:none;margin:0 0 12px;"><span>🔔 새 업데이트가 있어요</span><button type="button" onclick="askConfirm('업데이트할까요? 저장한 글과 사진은 그대로 유지됩니다.',applyUpdate)">업데이트 적용</button></div>
     <div class="noticebody guidebody">
+      <h4>2026.11.17 (7)</h4>
+      <p>· 창 위쪽의 ✕ ✓ 줄(제목 포함)이 스크롤해도 사라지지 않고 위에 고정돼요.<br>
+      · 선택된 항목 표시를 테두리 방식으로 통일했어요(굵은 연갈색 테두리 + 연한 바탕). ‘기본값으로 되돌리기’는 밑줄 글자로 바꿔 눌린 버튼처럼 보이지 않게 했어요.<br>
+      · 위에 ✕ ✓가 있는 창은 아래 취소·저장·닫기 버튼을 없앴어요(책장 수정·메모 수정·분야 관리·앱 소개·새 소식·유의사항). 삭제 버튼은 남겨뒀어요.</p>
       <h4>2026.11.17 (6)</h4>
       <p>· 글자를 드래그하면 뜨는 메뉴가 세 줄로 정리됐어요. 윗줄 ‘표시’(하이라이트·굵게·밑줄·★·서식 지우기), 가운뎃줄 ‘서식’(대제목·소제목·맞춤·글꼴·들여쓰기), 아랫줄 ‘활용’(메모·이미지·복사·공유/다운로드·되돌리기·다시 하기).<br>
       · 메뉴는 드래그한 글을 가리지 않도록 글 아래나 위, 자리가 모자라면 화면 맨 위/아래로 떠요.</p>
@@ -1437,14 +1443,12 @@ body.hasrecent #library{padding-bottom:250px;}
       · 공유와 다운로드(Word·텍스트)를 한 아이콘으로 합쳤어요.<br>
       · 책·발췌문을 다른 책장·책으로 옮길 수 있어요.</p>
     </div>
-    <button class="btn primary" style="width:100%;margin-top:16px;" onclick="closeModal('newsBg')">닫기</button>
   </div>
 </div>
 <div class="modal-bg" id="noticeBg" onclick="closeOnBg(event,'noticeBg')">
   <div class="modal"><button class="xbtn ok" aria-label="완료" onclick="closeModal('noticeBg')">✓</button>
     <h3>이용 시 유의사항</h3>
     <div class="noticebody">MRAe에 저장하고 관리하는 글은 개인적·비상업적 용도(사적 이용)로만 사용해 주세요.<br>저장한 문장을 다른 사람과 나누거나 블로그·SNS 등 외부에 게시할 때는 반드시 저자와 도서명을 출처로 밝혀 주세요.</div>
-    <button class="btn primary" style="width:100%;margin-top:16px;" onclick="closeModal('noticeBg')">확인했습니다</button>
   </div>
 </div>
 
@@ -1588,13 +1592,12 @@ body.hasrecent #library{padding-bottom:250px;}
   </div>
 </div>
 <div class="modal-bg" id="memoEditBg" onclick="closeOnBg(event,'memoEditBg')">
-  <div class="modal"><button class="xbtn" aria-label="닫기" onclick="closeModal('memoEditBg')">✕</button>
+  <div class="modal"><button class="xbtn xl" aria-label="닫기" onclick="closeModal('memoEditBg')">✕</button><button class="xbtn ok" aria-label="저장" onclick="memoSave()">✓</button>
     <h3 id="memoEditTitle">메모</h3>
     <div class="quote" id="memoQuote"></div>
     <textarea id="memoText" style="min-height:110px;" placeholder="이 문장에 대한 생각을 적어 두세요"></textarea>
     <div class="btnrow">
       <button class="btn danger" id="memoDelBtn" style="display:none;" onclick="memoDelete()">삭제</button>
-      <button class="btn primary" onclick="memoSave()">저장</button>
     </div>
   </div>
 </div>
@@ -2154,6 +2157,7 @@ function openBookDetail(bookId){
   renderBookDetail();
   go('bookDetail');
 }
+(function(){ document.querySelectorAll('.modal').forEach(m=>{ if(m.closest('#fsBg')) return; const ch=[...m.children]; const xs=ch.filter(c=>c.classList&&c.classList.contains('xbtn')); if(!xs.length) return; const h=document.createElement('div'); h.className='mhead'; const first=ch.find(c=>!(c.classList&&c.classList.contains('xbtn'))); m.insertBefore(h,m.firstChild); xs.forEach(x=>h.appendChild(x)); if(first&&first.tagName==='H3') h.appendChild(first); }); })();
 (function(){
   let fx=null;
   function bdFixUpdate(){
@@ -3946,7 +3950,7 @@ function renderRsControls(){
   <label class="ocropt"><input type="checkbox" ${r.just!==false?'checked':''} onchange="rsSet('just',this.checked)"> 양쪽 맞춤</label>
   <label class="ocropt"><input type="checkbox" ${r.cut!==false?'checked':''} onchange="rsSet('cut',this.checked)"> 한글 잘림 허용 (끄면 단어를 끊지 않아요)</label>
   <div class="readprev">미래는 오늘 읽는 한 줄에서 시작됩니다.</div>
-  <button class="btn ghost" style="width:100%;margin-top:12px;" onclick="resetReading()">기본값으로 되돌리기</button>`;
+  <button class="btn txt" style="width:100%;margin-top:12px;" onclick="resetReading()">기본값으로 되돌리기</button>`;
   ['rsControls','rsControlsM'].forEach(id=>{const el=document.getElementById(id); if(el) el.innerHTML=html;});
 }
 function flashSaved(){ ['savedTag','savedTag2'].forEach(id=>{ const t=document.getElementById(id); if(!t) return; t.textContent='✓ 자동 저장됨'; t.classList.add('on'); clearTimeout(t._h); t._h=setTimeout(()=>t.classList.remove('on'),1600); }); }
@@ -4686,7 +4690,7 @@ function renderSearchScreen(){
 function tabSearch(){ tabGo('search'); setTimeout(()=>{const i=document.getElementById('searchInput'); if(i) i.focus();},80); }
 
 /* ---------- 버전 · 업데이트 확인 ---------- */
-const APP_VERSION='2026.11.17-6';
+const APP_VERSION='2026.11.17-7';
 let updateAvail=false;
 let latestVer='';
 function pendingState(){
