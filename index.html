@@ -846,6 +846,24 @@ html[data-mode=dark] .segbtn.on,html[data-mode=dark] #ordBtn.on,html[data-mode=d
 .mwitem .dtx{font-size:12px;color:var(--ic2,#8C7D6E);margin-top:6px;}
 .rcitem .mkq{font-size:15.5px;line-height:1.65;color:var(--text);}
 #bookDetail{padding-bottom:170px;}
+
+/* D55 smooth transitions */
+html{background:var(--ivory);}
+@keyframes appIn{from{opacity:0}to{opacity:1}}
+@keyframes scrIn{from{opacity:0}to{opacity:1}}
+@keyframes bgIn{from{opacity:0}to{opacity:1}}
+@keyframes bgOut{from{opacity:1}to{opacity:0}}
+@keyframes mdIn{from{transform:translateY(22px);opacity:.6}to{transform:none;opacity:1}}
+@keyframes mdOut{from{transform:none;opacity:1}to{transform:translateY(18px);opacity:0}}
+body{animation:appIn .5s ease-out both;}
+.screen.active{animation:scrIn .22s ease-out both;}
+.modal-bg.show{animation:bgIn .18s ease-out both;}
+.modal-bg.show .modal{animation:mdIn .24s cubic-bezier(.2,.8,.2,1) both;}
+.modal-bg.closing{animation:bgOut .14s ease-in both;}
+.modal-bg.closing .modal{animation:mdOut .14s ease-in both;}
+.tab,.navbtn,.fab,.card,.btn{transition:background-color .15s,border-color .15s,color .15s,box-shadow .15s,opacity .15s;}
+@media (prefers-reduced-motion:reduce){body,.screen.active,.modal-bg.show,.modal-bg.show .modal,.modal-bg.closing,.modal-bg.closing .modal{animation:none !important;}}
+html[data-mode=eink] body,html[data-mode=eink] .screen.active,html[data-mode=eink] .modal-bg.show,html[data-mode=eink] .modal-bg.show .modal,html[data-mode=colorink] .screen.active{animation:none !important;}
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang&family=Gowun+Dodum&family=Nanum+Gothic&family=Nanum+Myeongjo&family=Noto+Sans+KR:wght@400;700&family=Noto+Serif+KR:wght@400;700&display=swap" rel="stylesheet">
@@ -1294,6 +1312,9 @@ html[data-mode=dark] .segbtn.on,html[data-mode=dark] #ordBtn.on,html[data-mode=d
     <h3>새 소식</h3>
     <div class="updbanner" id="newsUpd" style="display:none;margin:0 0 12px;"><span>🔔 새 업데이트가 있어요</span><button type="button" onclick="askConfirm('업데이트할까요? 저장한 글과 사진은 그대로 유지됩니다.',applyUpdate)">업데이트 적용</button></div>
     <div class="noticebody guidebody">
+      <h4>2026.11.17 (10)</h4>
+      <p>· 화면이 바뀔 때 휙 바뀌지 않고 부드럽게 나타나요(아래 메뉴, 책 열기, 읽기 화면, 뒤로 가기 모두). 창이 열리고 닫힐 때도 부드럽게 올라오고 내려가요.<br>
+      · 앱 아이콘을 눌러 시작 화면이 뜰 때도 갑자기 나타나지 않고 서서히 나타나요. 배터리 절약·e-ink 모드, 폰의 ‘애니메이션 줄이기’ 설정에서는 꺼져요.</p>
       <h4>2026.11.17 (9)</h4>
       <p>· 아래 메뉴가 바뀌었어요. 설정은 ‘책 모양 속 톱니’ 아이콘이 됐고, 사용법(?)은 설정 맨 위로 옮겨 창 이름도 ‘사용법 및 설정’이에요.<br>
       · 물음표 자리에 ‘메모창’(겹친 메모지 ›)이 생겼어요. 메모만 전체·책장별·책별로 모아 보고, 순서대로·작성일 순으로 바꿀 수 있어요. 책 화면에서는 카메라 자리가 메모창(책 전체·발췌문별)이고, 카메라는 오른쪽 아래 둥근 버튼으로 옮겼어요.<br>
@@ -2710,7 +2731,7 @@ function undoRestore(){
 try{ if(navigator.storage&&navigator.storage.persist) navigator.storage.persist(); }catch(e){}
 
 /* ---------- 유틸 ---------- */
-function closeModal(id){document.getElementById(id).classList.remove('show');}
+function closeModal(id){ const el=document.getElementById(id); if(!el||!el.classList.contains('show')) return; const m=document.documentElement.getAttribute('data-mode'); if(m==='eink'||m==='colorink'||(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)){ el.classList.remove('show'); return; } el.classList.add('closing'); setTimeout(()=>{ el.classList.remove('show','closing'); },140); }
 function closeOnBg(ev,id){ if(ev.target.id===id) closeModal(id); }
 function askConfirm(msg,onYes){
   document.getElementById('confirmMsg').textContent = msg;
@@ -4767,7 +4788,7 @@ function renderSearchScreen(){
 function tabSearch(){ tabGo('search'); setTimeout(()=>{const i=document.getElementById('searchInput'); if(i) i.focus();},80); }
 
 /* ---------- 버전 · 업데이트 확인 ---------- */
-const APP_VERSION='2026.11.17-9';
+const APP_VERSION='2026.11.17-10';
 let updateAvail=false;
 let latestVer='';
 function pendingState(){
