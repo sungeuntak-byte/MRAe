@@ -831,8 +831,8 @@ body.hasrecent #library{padding-bottom:250px;}
 .mhead .xbtn{position:absolute;top:8px;}
 .mhead h3,.mhead h3.ctr{margin:0;line-height:44px;padding:0 48px;}
 .btn.txt{background:none;border:none;box-shadow:none;color:#8C7D6E;text-decoration:underline;font-weight:500;}
-.segbtn.on,#ordBtn.on,.gtab.on,.sharebtn.on,.pgseg button.on,.pkseg button.on,.pvtoggle .seg2 button.on,#imCapAl .btn.on,#ieSelBar .ier button.ic.on,.themechip.on,.fontchip.on{background:#FBF1E8;color:#7A4A33;font-weight:700;box-shadow:inset 0 0 0 2px #C98B6E;}
-html[data-mode=dark] .segbtn.on,html[data-mode=dark] #ordBtn.on,html[data-mode=dark] .gtab.on,html[data-mode=dark] .sharebtn.on,html[data-mode=dark] .pgseg button.on,html[data-mode=dark] .pkseg button.on,html[data-mode=dark] .themechip.on,html[data-mode=dark] .fontchip.on{background:#4A4238;color:#F1E6D6;box-shadow:inset 0 0 0 2px #B98A6E;}
+.segbtn.on,#ordBtn.on,.gtab.on,.sharebtn.on,.pgseg button.on,.pkseg button.on,.pvtoggle .seg2 button.on,#imCapAl .btn.on,#ieSelBar .ier button.ic.on,.themechip.on,.fontchip.on{background:#EFE5D3;color:#5A4636;font-weight:700;box-shadow:inset 0 0 0 2px #A88F74;}
+html[data-mode=dark] .segbtn.on,html[data-mode=dark] #ordBtn.on,html[data-mode=dark] .gtab.on,html[data-mode=dark] .sharebtn.on,html[data-mode=dark] .pgseg button.on,html[data-mode=dark] .pkseg button.on,html[data-mode=dark] .themechip.on,html[data-mode=dark] .fontchip.on{background:#453F36;color:#EEE5D6;box-shadow:inset 0 0 0 2px #9A8670;}
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang&family=Gowun+Dodum&family=Nanum+Gothic&family=Nanum+Myeongjo&family=Noto+Sans+KR:wght@400;700&family=Noto+Serif+KR:wght@400;700&display=swap" rel="stylesheet">
@@ -1269,6 +1269,8 @@ html[data-mode=dark] .segbtn.on,html[data-mode=dark] #ordBtn.on,html[data-mode=d
     <h3>새 소식</h3>
     <div class="updbanner" id="newsUpd" style="display:none;margin:0 0 12px;"><span>🔔 새 업데이트가 있어요</span><button type="button" onclick="askConfirm('업데이트할까요? 저장한 글과 사진은 그대로 유지됩니다.',applyUpdate)">업데이트 적용</button></div>
     <div class="noticebody guidebody">
+      <h4>2026.11.17 (8)</h4>
+      <p>· 선택된 항목 표시 색을 분홍기 없는 차분한 황갈색 테두리와 연베이지 바탕으로 바꿨어요.</p>
       <h4>2026.11.17 (7)</h4>
       <p>· 창 위쪽의 ✕ ✓ 줄(제목 포함)이 스크롤해도 사라지지 않고 위에 고정돼요.<br>
       · 선택된 항목 표시를 테두리 방식으로 통일했어요(굵은 연갈색 테두리 + 연한 바탕). ‘기본값으로 되돌리기’는 밑줄 글자로 바꿔 눌린 버튼처럼 보이지 않게 했어요.<br>
@@ -4690,7 +4692,7 @@ function renderSearchScreen(){
 function tabSearch(){ tabGo('search'); setTimeout(()=>{const i=document.getElementById('searchInput'); if(i) i.focus();},80); }
 
 /* ---------- 버전 · 업데이트 확인 ---------- */
-const APP_VERSION='2026.11.17-7';
+const APP_VERSION='2026.11.17-8';
 let updateAvail=false;
 let latestVer='';
 function pendingState(){
