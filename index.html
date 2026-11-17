@@ -526,6 +526,7 @@ body.hastab .toast{bottom:90px;}
 .shelfrow .ib{width:44px;height:44px;border:none;background:none;color:var(--brown);display:flex;align-items:center;justify-content:center;border-radius:10px;cursor:pointer;}
 .shelfrow .ib:active{background:var(--beige);}
 .shelfrow .mv{display:flex;flex-direction:column;gap:2px;}
+.shelfrow.libr{background:var(--ivory);border-style:dashed;}
 .shelfrow .mv button{width:40px;height:26px;border:none;background:none;color:var(--brown);display:flex;align-items:center;justify-content:center;border-radius:8px;cursor:pointer;padding:0;}
 .shelfrow .mv button:active{background:var(--beige);}
 .shelfrow .mv button:disabled{opacity:.25;cursor:default;}
@@ -804,11 +805,11 @@ html[data-mode=dark] #libTitle .tt1{color:#B8B3A6;}
 .ocrrow #aiExBtn{flex:1;width:auto;padding:14px 6px;font-size:15px;}
 .ocrrow #aiExBtn.dim{opacity:.45;}
 #excerptEditor #engBtn,#excerptEditor #ocrCancelBtn{padding:13px;}
-.edhead{display:flex;align-items:center;flex-wrap:wrap;gap:8px 12px;margin:26px 0 4px;position:sticky;top:calc(57px + env(safe-area-inset-top,0px));z-index:6;background:var(--ivory);padding:8px 0 6px;}
+.edhead{display:flex;align-items:center;flex-wrap:wrap;gap:8px 12px;margin:26px 0 4px;position:sticky;top:calc(57px + env(safe-area-inset-top,0px));z-index:6;background:var(--ivory);padding:8px 18px 6px;margin-left:-18px;margin-right:-18px;}
 html:has(#excerptEditor.active){scroll-padding-top:130px;}
 .edhead .pvtoggle{margin:0;}
 .edhead .pastelnk{margin-left:auto;color:var(--btn);font-size:13px;font-weight:600;}
-#pvHintLine{font-size:12px;color:var(--rcq);line-height:1.45;margin:4px 0 4px;word-break:keep-all;overflow-wrap:break-word;}
+#pvHintLine{font-size:15px;color:var(--rcq);line-height:1.45;margin:4px 0 4px;word-break:keep-all;overflow-wrap:break-word;}
 .edtools{display:flex;justify-content:flex-end;gap:14px;margin:2px 0 4px;}
 .pkst::after{content:'★';color:#D9A227;font-size:.72em;margin-left:2px;vertical-align:.1em;}
 #readPaper[data-pg^="★"]::after{color:#B8860B;}
@@ -829,7 +830,10 @@ body.hasrecent #library{padding-bottom:250px;}
 /* D52 sticky modal header + unified selected style */
 .mhead{position:sticky;top:-20px;z-index:6;background:var(--surface);margin:-20px -18px 6px;padding:8px 18px 0;min-height:52px;border-radius:18px 18px 0 0;flex:none;}
 .mhead .xbtn{position:absolute;top:8px;}
-.mhead h3,.mhead h3.ctr{margin:0;line-height:44px;padding:0 48px;}
+.mhead h3,.mhead h3.ctr{margin:0;line-height:1.45;padding:11px 48px;min-height:44px;display:flex;align-items:center;justify-content:center;text-align:center;}
+.mhead.nohd{min-height:44px;margin-bottom:0;}
+#confirmBg .mhead h3{font-size:16px;}
+input:focus,textarea:focus,select:focus{outline:2px solid #CDBFAA;outline-offset:1px;}
 .btn.txt{background:none;border:none;box-shadow:none;color:#8C7D6E;text-decoration:underline;font-weight:500;}
 .segbtn.on,#ordBtn.on,.gtab.on,.sharebtn.on,.pgseg button.on,.pkseg button.on,.pvtoggle .seg2 button.on,#imCapAl .btn.on,#ieSelBar .ier button.ic.on,.themechip.on,.fontchip.on{background:#EFE5D3;color:#5A4636;font-weight:700;box-shadow:inset 0 0 0 2px #A88F74;}
 html[data-mode=dark] .segbtn.on,html[data-mode=dark] #ordBtn.on,html[data-mode=dark] .gtab.on,html[data-mode=dark] .sharebtn.on,html[data-mode=dark] .pgseg button.on,html[data-mode=dark] .pkseg button.on,html[data-mode=dark] .themechip.on,html[data-mode=dark] .fontchip.on{background:#453F36;color:#EEE5D6;box-shadow:inset 0 0 0 2px #9A8670;}
@@ -909,7 +913,7 @@ html[data-mode=eink] body,html[data-mode=eink] .screen.active,html[data-mode=ein
 
 <!-- 책 상세 (발췌문 목록) -->
 <div class="screen" id="shelves">
-  <div class="topbar"><button class="navbtn" onclick="goBack()" aria-label="뒤로">←</button><h1>책장 관리</h1><button class="navbtn" onclick="openShelfEdit()" aria-label="책장 추가" style="min-width:44px;width:44px;padding:0;display:flex;align-items:center;justify-content:center;border:none;background:none;color:var(--btn);"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8v12.5h14"/><path d="M3 14.2h14"/><path d="M6.5 16.2v2.5M9.5 16.8v1.9M12.5 16.2v2.5"/><path d="M6.5 9.8v2.5M9.5 10.4v1.9"/><path d="M18.5 2.5v7M15 6h7" stroke-width="2.2"/></svg></button></div>
+  <div class="topbar"><button class="navbtn" onclick="goBack()" aria-label="뒤로">←</button><h1>서재·책장 관리</h1><button class="navbtn" onclick="openShelfEdit()" aria-label="책장 추가" style="min-width:44px;width:44px;padding:0;display:flex;align-items:center;justify-content:center;border:none;background:none;color:var(--btn);"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8v12.5h14"/><path d="M3 14.2h14"/><path d="M6.5 16.2v2.5M9.5 16.8v1.9M12.5 16.2v2.5"/><path d="M6.5 9.8v2.5M9.5 10.4v1.9"/><path d="M18.5 2.5v7M15 6h7" stroke-width="2.2"/></svg></button></div>
   <div id="shelfList" style="margin-top:6px;"></div>
 </div>
 
@@ -1012,10 +1016,6 @@ html[data-mode=eink] body,html[data-mode=eink] .screen.active,html[data-mode=ein
   <div class="edtools"><button type="button" class="linkbtn" onclick="edStep(-1)" aria-label="글자 작게">가−</button><button type="button" class="linkbtn" onclick="edStep(1)" aria-label="글자 크게">가+</button><button type="button" class="linkbtn" onclick="reflowBody()">줄바꿈 정리</button></div>
   <label>나의 메모 (선택)</label>
   <textarea id="exMemo" style="min-height:70px;" placeholder="생각이나 느낀 점"></textarea>
-  <div class="btnrow">
-    <button class="btn ghost" onclick="tryCancelExcerpt()">취소</button>
-    <button class="btn primary" onclick="saveExcerpt()">저장</button>
-  </div>
 </div>
 
 <!-- 읽기 화면 -->
@@ -1312,6 +1312,11 @@ html[data-mode=eink] body,html[data-mode=eink] .screen.active,html[data-mode=ein
     <h3>새 소식</h3>
     <div class="updbanner" id="newsUpd" style="display:none;margin:0 0 12px;"><span>🔔 새 업데이트가 있어요</span><button type="button" onclick="askConfirm('업데이트할까요? 저장한 글과 사진은 그대로 유지됩니다.',applyUpdate)">업데이트 적용</button></div>
     <div class="noticebody guidebody">
+      <h4>2026.11.17 (11)</h4>
+      <p>· 내 서재 오른쪽 ⋯가 ‘서재·책장 관리’ 화면으로 바로 열려요. 맨 위 ‘내 서재’ 줄에서 이름 바꾸기·공유/다운로드를, 아래 책장 줄에서 순서·이름 수정·공유/다운로드·삭제를 해요.<br>
+      · 모든 창에서 ✕가 왼쪽, 제목이 가운데예요. ‘무엇을 추가할까요?’ 제목은 없앴어요. 확인창 제목의 왼쪽 빈 공간도 없앴어요.<br>
+      · 새 발췌문 화면의 아래 취소·저장 버튼을 없앴어요(위 ✕ ✓ 사용). 안내 문구 글씨를 키우고, 스크롤할 때 ‘본문’ 줄 옆으로 선이 비치던 것과 본문 칸의 진한 검정 테두리를 고쳤어요.<br>
+      · 책 화면 발췌문 ⋮ 메뉴에서 ‘★ 핵심 문장으로(발췌문 전체)’를 뺐어요. 일부 문장은 드래그 메뉴의 ★로 달아요.</p>
       <h4>2026.11.17 (10)</h4>
       <p>· 화면이 바뀔 때 휙 바뀌지 않고 부드럽게 나타나요(아래 메뉴, 책 열기, 읽기 화면, 뒤로 가기 모두). 창이 열리고 닫힐 때도 부드럽게 올라오고 내려가요.<br>
       · 앱 아이콘을 눌러 시작 화면이 뜰 때도 갑자기 나타나지 않고 서서히 나타나요. 배터리 절약·e-ink 모드, 폰의 ‘애니메이션 줄이기’ 설정에서는 꺼져요.</p>
@@ -1506,7 +1511,6 @@ html[data-mode=eink] body,html[data-mode=eink] .screen.active,html[data-mode=ein
 
 <div class="modal-bg" id="newMenuBg" onclick="closeOnBg(event,'newMenuBg')">
   <div class="modal"><button class="xbtn" aria-label="닫기" onclick="closeModal('newMenuBg')">✕</button>
-    <h3>무엇을 추가할까요?</h3>
     <button class="btn primary" style="margin-bottom:10px;" onclick="closeModal('newMenuBg');openBookModal();">+ 새 책 등록</button>
     <button class="btn ghost" onclick="closeModal('newMenuBg');openBookPicker();">기존 책에 발췌문 추가</button>
   </div>
@@ -2187,7 +2191,6 @@ function deleteBookById(id){
 function excerptMenu(id){
   const e=DATA.excerpts.find(x=>x.id===id); if(!e) return; const b=DATA.books.find(x=>x.id===e.bookId);
   openActionSheet(e.title||'(제목 없음)','『'+(b?b.title:'')+'』 '+pgTxt(e.page),[
-    {label:e.pkAll?'★ 핵심 문장 해제 (발췌문 전체)':'★ 핵심 문장으로 (발췌문 전체)',fn:()=>{ e.pkAll=!e.pkAll; e.pkAt=e.pkAll?Date.now():0; e.updatedAt=Date.now(); save(); renderBookDetail(); showToast(e.pkAll?'핵심 문장으로 등록했어요.':'핵심 문장에서 뺐어요.'); }},
     {label:'다른 책으로 이동하기',fn:()=>moveExcerptDialog(id)},
     {label:'발췌문 공유',fn:()=>{currentExcerptId=id;currentBookId=e.bookId;openShare('ex');}},
     {label:'발췌문 삭제 (휴지통으로)',danger:true,fn:()=>askConfirm('이 발췌문을 삭제할까요? 휴지통에서 복원할 수 있습니다.',()=>{ e.deleted=true; e.deletedAt=Date.now(); save(); renderBookDetail(); showToast('휴지통으로 이동했습니다.'); })}
@@ -2210,7 +2213,7 @@ function openBookDetail(bookId){
   renderBookDetail();
   go('bookDetail');
 }
-(function(){ document.querySelectorAll('.modal').forEach(m=>{ if(m.closest('#fsBg')) return; const ch=[...m.children]; const xs=ch.filter(c=>c.classList&&c.classList.contains('xbtn')); if(!xs.length) return; const h=document.createElement('div'); h.className='mhead'; const first=ch.find(c=>!(c.classList&&c.classList.contains('xbtn'))); m.insertBefore(h,m.firstChild); xs.forEach(x=>h.appendChild(x)); if(first&&first.tagName==='H3') h.appendChild(first); }); })();
+(function(){ document.querySelectorAll('.modal').forEach(m=>{ if(m.closest('#fsBg')) return; const ch=[...m.children]; const xs=ch.filter(c=>c.classList&&c.classList.contains('xbtn')); xs.forEach(x=>{ if(!x.classList.contains('ok')&&!x.classList.contains('xl')) x.classList.add('xl'); }); if(!xs.length) return; const h=document.createElement('div'); h.className='mhead'; const first=ch.find(c=>!(c.classList&&c.classList.contains('xbtn'))); m.insertBefore(h,m.firstChild); xs.forEach(x=>h.appendChild(x)); if(first&&first.tagName==='H3') h.appendChild(first); else h.classList.add('nohd'); }); })();
 (function(){
   let fx=null;
   function bdFixUpdate(){
@@ -3746,7 +3749,7 @@ function openShare(kind,extra){
   const ctx=Object.assign({kind:kind},extra||{});
   if(kind==='ex'){ ctx.exId=currentExcerptId; }
   if(kind==='book'){ ctx.bookId=currentBookId; }
-  if(kind==='shelf'){ ctx.catId=currentCatFilter; }
+  if(kind==='shelf'){ ctx.catId=(extra&&extra.catId)||currentCatFilter; }
   shareCtx=ctx;
   const nm={sel:'선택한 문장',ex:'이 발췌문',book:'이 책 전체',shelf:'이 책장 전체',all:'내 서재 전체'};
   document.getElementById('shareTitle').textContent=nm[kind]; shTab(1); setFmt('docx');
@@ -3840,12 +3843,9 @@ function updateListHead(){ const m=document.getElementById('libMoreBtn'); if(m) 
 function openAct(title,items){ window._actFns=items.map(x=>x.fn); document.getElementById('actTitle').textContent=title; const l=document.getElementById('actList'); l.innerHTML='';
   items.forEach((x,i)=>{ const b=document.createElement('button'); b.type='button'; b.className='btn ghost'; b.style.cssText='width:100%;margin-bottom:10px;'+(x.danger?'color:var(--danger);':''); b.textContent=x.t; b.onclick=()=>{ closeModal('actBg'); setTimeout(()=>window._actFns[i](),60); }; l.appendChild(b); });
   document.getElementById('actBg').classList.add('show'); }
-function openLibMore(){ if(currentCatFilter===null) return; const c=DATA.categories.find(x=>x.id===currentCatFilter&&!x.deleted); const it=[];
-  it.push({t:libName()+' 전체 공유/다운로드',fn:()=>openShare('all')}); if(c) it.push({t:'‘'+c.name+'’ 책장 공유/다운로드',fn:()=>openShare('shelf')});
-  it.push({t:'책장 관리 (순서·이름·삭제)',fn:()=>go('shelves')}); if(c) it.push({t:'‘'+c.name+'’ 책장 이름 수정·삭제',fn:()=>openShelfEdit(c.id)});
-  it.push({t:'“'+libName()+'” 이름 바꾸기',fn:libNameOpen}); openAct('더 보기',it); }
+function openLibMore(){ if(currentCatFilter===null) return; go('shelves'); }
 function libNameOpen(){ document.getElementById('libNameInput').value=libName(); document.getElementById('libNameBg').classList.add('show'); }
-function libNameOk(){ const v=document.getElementById('libNameInput').value.trim(); DATA.settings.libName=v||'내 서재'; save(); closeModal('libNameBg'); updateListHead(); }
+function libNameOk(){ const v=document.getElementById('libNameInput').value.trim(); DATA.settings.libName=v||'내 서재'; save(); closeModal('libNameBg'); updateListHead(); try{ renderShelves(); }catch(x){} }
 function openBookMore(){ const id=currentBookId; if(!id) return; openAct('더 보기',[{t:'이 책 공유/다운로드',fn:()=>openShare('book')},{t:'이 책 삭제',danger:true,fn:()=>deleteBookById(id)}]); }
 
 function selText(){ const e=curEx(); const o=selR||rangeOffsets(); return (e&&o)?mkText(e,o.k).slice(o.s,o.e):''; }
@@ -4744,14 +4744,18 @@ function addOcrFix(){ const a=document.getElementById('ofWrong').value.trim(), b
 let shelfDraft=null;
 function renderShelves(){
   const host=document.getElementById('shelfList'); if(!host) return; host.innerHTML='';
-  const cats=activeCats(); if(!cats.length){ host.innerHTML='<div class="empty">책장이 없습니다. 위 버튼으로 추가하세요.</div>'; return; }
+  { const tot=DATA.books.filter(b=>!b.deleted).length; const r0=document.createElement('div'); r0.className='shelfrow libr';
+    r0.innerHTML='<span class="mv" style="width:40px;"></span><span class="nm"></span><span class="cnt"></span><button class="ib" aria-label="이름 바꾸기">'+'<svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9l-4-4L4 16v4z"/><path d="m13.5 6.5 4 4"/></svg>'+'</button><button class="ib" aria-label="공유·다운로드">'+'<svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V4M8 8l4-4 4 4M5 13v6h14v-6"/></svg>'+'</button><span style="width:44px;flex:none;"></span>';
+    r0.querySelector('.nm').textContent=libName(); r0.querySelector('.cnt').textContent='('+tot+')';
+    const [bp,bsh]=r0.querySelectorAll('.ib'); bp.onclick=()=>libNameOpen(); bsh.onclick=()=>openShare('all'); host.appendChild(r0); }
+  const cats=activeCats(); if(!cats.length){ const em=document.createElement('div'); em.className='empty'; em.textContent='책장이 없습니다. 위 버튼으로 추가하세요.'; host.appendChild(em); return; }
   cats.forEach((cat,i)=>{
     const n=DATA.books.filter(b=>b.categoryId===cat.id&&!b.deleted).length;
     const r=document.createElement('div'); r.className='shelfrow';
-    r.innerHTML='<span class="mv"><button type="button" class="up" aria-label="위로"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8 18.5 16h-13z" fill="currentColor" stroke-width="1.2"/></svg></button><button type="button" class="dn" aria-label="아래로"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16 5.5 8h13z" fill="currentColor" stroke-width="1.2"/></svg></button></span><span class="nm"></span><span class="cnt"></span><button class="ib" aria-label="이름·표지 수정">'+'<svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9l-4-4L4 16v4z"/><path d="m13.5 6.5 4 4"/></svg>'+'</button><button class="ib" aria-label="삭제">'+'<svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg>'+'</button>';
+    r.innerHTML='<span class="mv"><button type="button" class="up" aria-label="위로"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8 18.5 16h-13z" fill="currentColor" stroke-width="1.2"/></svg></button><button type="button" class="dn" aria-label="아래로"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16 5.5 8h13z" fill="currentColor" stroke-width="1.2"/></svg></button></span><span class="nm"></span><span class="cnt"></span><button class="ib" aria-label="이름·표지 수정">'+'<svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9l-4-4L4 16v4z"/><path d="m13.5 6.5 4 4"/></svg>'+'</button><button class="ib" aria-label="공유·다운로드">'+'<svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V4M8 8l4-4 4 4M5 13v6h14v-6"/></svg>'+'</button><button class="ib" aria-label="삭제">'+'<svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg>'+'</button>';
     r.querySelector('.nm').textContent=cat.name; r.querySelector('.cnt').textContent='('+n+')';
     const up=r.querySelector('.up'), dn=r.querySelector('.dn'); up.disabled=(i===0); dn.disabled=(i===cats.length-1); up.onclick=()=>moveShelf(cat.id,-1); dn.onclick=()=>moveShelf(cat.id,1);
-    const [be,bd]=r.querySelectorAll('.ib'); be.onclick=()=>openShelfEdit(cat.id); bd.onclick=()=>requestDeleteCategory(cat.id);
+    const [be,bs,bd]=r.querySelectorAll('.ib'); be.onclick=()=>openShelfEdit(cat.id); bs.onclick=()=>openShare('shelf',{catId:cat.id}); bd.onclick=()=>requestDeleteCategory(cat.id);
     r.querySelector('.nm').onclick=()=>{ currentCatFilter=cat.id; goMain(); currentCatFilter=cat.id; renderCatbar(); renderBooks(); };
     host.appendChild(r);
   });
@@ -4788,7 +4792,7 @@ function renderSearchScreen(){
 function tabSearch(){ tabGo('search'); setTimeout(()=>{const i=document.getElementById('searchInput'); if(i) i.focus();},80); }
 
 /* ---------- 버전 · 업데이트 확인 ---------- */
-const APP_VERSION='2026.11.17-10';
+const APP_VERSION='2026.11.17-11';
 let updateAvail=false;
 let latestVer='';
 function pendingState(){
