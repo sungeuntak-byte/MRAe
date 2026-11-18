@@ -1222,7 +1222,6 @@ html[data-theme=mocha][data-mode=dark]{--ivory:#2B2622;--surface:#353029;--text:
     <button type="button" id="selMemoBtn" aria-label="부분 메모" onclick="selMemo()"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6"/><path d="M12 12.5v5M9.5 15h5"/></svg></button>
     <button type="button" id="selImgBtn" aria-label="이미지 넣기" onclick="selImage()"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5H6a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2v-6"/><circle cx="9" cy="11" r="1.5"/><path d="m4 18 4.5-4.5 3 3L14 14l5 5"/><path d="M18 2.5v6M15 5.5h6"/></svg></button>
     <button type="button" aria-label="복사" onclick="selCopy()"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8.5" y="8.5" width="12" height="12" rx="2"/><path d="M15.5 8.5V6A2 2 0 0 0 13.5 4H6A2 2 0 0 0 4 6v7.5A2 2 0 0 0 6 15.5h2.5"/></svg></button>
-    <button type="button" aria-label="공유·다운로드" onclick="selShare()"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="3.6" cy="12" r="2"/><circle cx="9.3" cy="5.1" r="2"/><circle cx="9.3" cy="18.9" r="2"/><path d="m5.2 10 2.4-2.9M5.2 14l2.4 2.9"/><path d="M19.5 4.5v10M16.3 11.6l3.2 3.2 3.2-3.2"/><path d="M15.7 19.6h7.6" stroke-width="2"/></svg></button>
     <button type="button" id="selUndoBtn" aria-label="되돌리기" onclick="fmtUndo()"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/></svg></button>
     <button type="button" id="selRedoBtn" aria-label="다시 하기" onclick="fmtRedo()"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 14 5-5-5-5"/><path d="M20 9H9.5a5.5 5.5 0 0 0 0 11H13"/></svg></button>
   </div>
@@ -1391,6 +1390,8 @@ html[data-theme=mocha][data-mode=dark]{--ivory:#2B2622;--surface:#353029;--text:
     <h3>새 소식</h3>
     <div class="updbanner" id="newsUpd" style="display:none;margin:0 0 12px;"><span>🔔 새 업데이트가 있어요</span><button type="button" onclick="askConfirm('업데이트할까요? 저장한 글과 사진은 그대로 유지됩니다.',applyUpdate)">업데이트 적용</button></div>
     <div class="noticebody guidebody">
+      <h4>2026.11.18 (22)</h4>
+      <p>· 글을 길게 눌러 선택할 때 나오는 메뉴에서 ‘공유·다운로드’ 버튼을 없앴어요. 세 줄 모두 5칸으로 가지런해졌어요.</p>
       <h4>2026.11.18 (21)</h4>
       <p>· 색 테마 목록 위에 미리 보기 견본이 생기고, 이 창에서는 뒤 화면이 옅게 보여서 바뀐 색을 바로 알 수 있어요. 컬러 e-ink 모드에서도 테마 바탕색이 적용돼요.</p>
       <h4>2026.11.18 (20)</h4>
@@ -4973,7 +4974,7 @@ function renderSearchScreen(){
 function tabSearch(){ tabGo('search'); setTimeout(()=>{const i=document.getElementById('searchInput'); if(i) i.focus();},80); }
 
 /* ---------- 버전 · 업데이트 확인 ---------- */
-const APP_VERSION='2026.11.18-21';
+const APP_VERSION='2026.11.18-22';
 let updateAvail=false;
 let latestVer='';
 function pendingState(){
