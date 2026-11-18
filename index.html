@@ -926,16 +926,24 @@ html[data-mode=eink] body,html[data-mode=eink] .screen.active,html[data-mode=ein
 #bookDetail .topbar h1,#bdFix .topbar h1{white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-size:16px;line-height:1.3;}
 /* ===== 색 테마 ===== */
 html[data-theme=moss][data-mode=light],html[data-theme=moss][data-mode=dark],html[data-theme=moss][data-mode=colorink]{--btn:#7A9A6C;--accent:#7A9A6C;--terracotta:#7A9A6C;--ico:#6E8F5C;--ico2:#8CA67E;--txa:#52713F;--pf:#7A9A6C;--pb:#BFD0B3;--pu:#52713F;}
-html[data-theme=moss][data-mode=light]{--ivory:#F3F3EA;--text:#2C3A26;--beige:#E3E6D6;--brown:#3F4A38;--surface:#FFFEF8;--tx2:#3A4733;--ic2:#7C8A70;--ar2:#B7BFA9;}
+html[data-theme=moss][data-mode=light],html[data-theme=moss][data-mode=colorink]{--ivory:#F3F3EA;--text:#2C3A26;--beige:#E3E6D6;--brown:#3F4A38;--surface:#FFFEF8;--tx2:#3A4733;--ic2:#7C8A70;--ar2:#B7BFA9;}
 html[data-theme=moss][data-mode=dark]{--ico:#9DBB8E;--txa:#A9C79A;--pb:#4F6644;--pu:#A9C79A;--pf:#6B8A5C;}
 html[data-theme=moss][data-mode=light] :is(.segbtn.on,#ordBtn.on,.gtab.on,.sharebtn.on,.pgseg button.on,.pkseg button.on,.pvtoggle .seg2 button.on,#imCapAl .btn.on,#ieSelBar .ier button.ic.on,.themechip.on,.fontchip.on),html[data-theme=moss][data-mode=colorink] :is(.segbtn.on,#ordBtn.on,.gtab.on,.sharebtn.on,.pgseg button.on,.pkseg button.on,.pvtoggle .seg2 button.on,#imCapAl .btn.on,#ieSelBar .ier button.ic.on,.themechip.on,.fontchip.on){background:#E8EEDD;color:#3F4A38;box-shadow:inset 0 0 0 2px #8FA67E;}
 html[data-theme=moss][data-mode=dark] :is(.segbtn.on,#ordBtn.on,.gtab.on,.sharebtn.on,.pgseg button.on,.pkseg button.on,.pvtoggle .seg2 button.on,#imCapAl .btn.on,#ieSelBar .ier button.ic.on,.themechip.on,.fontchip.on){background:#3A4434;color:#DDE8D2;box-shadow:inset 0 0 0 2px #7A9A6C;}
 html[data-theme=sky][data-mode=light],html[data-theme=sky][data-mode=dark],html[data-theme=sky][data-mode=colorink]{--btn:#5C8AB0;--accent:#5C8AB0;--terracotta:#5C8AB0;--ico:#4F7FA6;--ico2:#7FA3C2;--txa:#336492;--pf:#5C8AB0;--pb:#BCD0E3;--pu:#336492;}
-html[data-theme=sky][data-mode=light]{--ivory:#F4F6F9;--text:#243447;--beige:#E1E7EE;--brown:#34465A;--surface:#FFFFFF;--tx2:#2F4256;--ic2:#6E8196;--ar2:#B5C2D0;}
+html[data-theme=sky][data-mode=light],html[data-theme=sky][data-mode=colorink]{--ivory:#F4F6F9;--text:#243447;--beige:#E1E7EE;--brown:#34465A;--surface:#FFFFFF;--tx2:#2F4256;--ic2:#6E8196;--ar2:#B5C2D0;}
 html[data-theme=sky][data-mode=dark]{--ico:#8FB4D6;--txa:#9CC0E0;--pb:#3F5A75;--pu:#9CC0E0;--pf:#4F7BA3;}
 html[data-theme=sky][data-mode=light] :is(.segbtn.on,#ordBtn.on,.gtab.on,.sharebtn.on,.pgseg button.on,.pkseg button.on,.pvtoggle .seg2 button.on,#imCapAl .btn.on,#ieSelBar .ier button.ic.on,.themechip.on,.fontchip.on),html[data-theme=sky][data-mode=colorink] :is(.segbtn.on,#ordBtn.on,.gtab.on,.sharebtn.on,.pgseg button.on,.pkseg button.on,.pvtoggle .seg2 button.on,#imCapAl .btn.on,#ieSelBar .ier button.ic.on,.themechip.on,.fontchip.on){background:#E4ECF4;color:#2F4256;box-shadow:inset 0 0 0 2px #86A5C2;}
 html[data-theme=sky][data-mode=dark] :is(.segbtn.on,#ordBtn.on,.gtab.on,.sharebtn.on,.pgseg button.on,.pkseg button.on,.pvtoggle .seg2 button.on,#imCapAl .btn.on,#ieSelBar .ier button.ic.on,.themechip.on,.fontchip.on){background:#34424F;color:#DCE8F3;box-shadow:inset 0 0 0 2px #6F96BA;}
 html[data-theme=mocha][data-mode=dark]{--ivory:#2B2622;--surface:#353029;--text:#EFE6D8;--beige:#4A4238;--brown:#E3D6C3;--btn:#A98A7C;--accent:#A98A7C;--terracotta:#A98A7C;--ico:#C9A08E;--ico2:#A98A7C;--txa:#D4B3A2;--pf:#A98A7C;--pb:#6F5A50;--pu:#D9B8A6;--tx2:#E3D6C3;--ic2:#A39684;--ar2:#6F655A;}
+.thprev{border-radius:12px;padding:10px;margin:6px 0 4px;transition:background-color .2s,border-color .2s;}
+.thprev .tpr{display:flex;gap:6px;align-items:center;margin-bottom:8px}
+.thprev .tpc{width:46px;height:22px;border-radius:12px;display:inline-block}
+.thprev .tpo{width:46px;height:22px;border-radius:12px;display:inline-block}
+.thprev .tpb{margin-left:auto;font-size:12px;color:#fff;padding:5px 14px;border-radius:10px}
+.thprev .tpk{display:flex;gap:8px;align-items:center;border-radius:10px;padding:6px 8px;font-size:13px}
+.thprev .tpk i{width:22px;height:30px;border-radius:3px;display:inline-block}
+#modeBg.modal-bg{background:rgba(30,25,20,.10);}
 .thlab{margin:14px 0 2px;padding-top:14px;border-top:1px solid var(--beige);font-size:13px;font-weight:700;color:var(--brown);}
 .thdot{width:24px;height:24px;border-radius:50%;flex:0 0 auto;margin-left:auto;}
 .thhint{font-size:12px;color:var(--ic2,#8C7D6E);margin:2px 0 4px;}
@@ -1383,6 +1391,8 @@ html[data-theme=mocha][data-mode=dark]{--ivory:#2B2622;--surface:#353029;--text:
     <h3>새 소식</h3>
     <div class="updbanner" id="newsUpd" style="display:none;margin:0 0 12px;"><span>🔔 새 업데이트가 있어요</span><button type="button" onclick="askConfirm('업데이트할까요? 저장한 글과 사진은 그대로 유지됩니다.',applyUpdate)">업데이트 적용</button></div>
     <div class="noticebody guidebody">
+      <h4>2026.11.18 (21)</h4>
+      <p>· 색 테마 목록 위에 미리 보기 견본이 생기고, 이 창에서는 뒤 화면이 옅게 보여서 바뀐 색을 바로 알 수 있어요. 컬러 e-ink 모드에서도 테마 바탕색이 적용돼요.</p>
       <h4>2026.11.18 (20)</h4>
       <p>· ‘화면 스타일’에서 색 테마를 고를 수 있어요. 아이보리(기존), 모스 그린, 스카이 블루, 모카(어두운 화면) 4가지이고, 고르면 읽기 색도 어울리는 색으로 함께 바뀌어요. 흑백 e-ink 모드에서는 적용되지 않아요.</p>
       <h4>2026.11.18 (19)</h4>
@@ -4194,9 +4204,10 @@ function updateTabbar(id){
   });
 }
 const MODES=[['light','라이트 모드'],['dark','다크 모드'],['eink','e-ink 모드'],['colorink','컬러 e-ink 모드'],['system','시스템 설정']];
-const APP_THEMES=[['ivory','아이보리','#C65D3B','beige'],['moss','모스 그린','#7A9A6C','moss'],['sky','스카이 블루','#5C8AB0','sky'],['mocha','모카','#A98A7C','dark']];
+const APP_THEMES=[['ivory','아이보리','#C65D3B','beige',{bg:'#F5F4EE',sf:'#FFFFFF',bn:'#C25E3A',tx:'#3A352F',bd:'#E8E6DC'}],['moss','모스 그린','#7A9A6C','moss',{bg:'#F3F3EA',sf:'#FFFEF8',bn:'#7A9A6C',tx:'#2C3A26',bd:'#E3E6D6'}],['sky','스카이 블루','#5C8AB0','sky',{bg:'#F4F6F9',sf:'#FFFFFF',bn:'#5C8AB0',tx:'#243447',bd:'#E1E7EE'}],['mocha','모카','#A98A7C','dark',{bg:'#2B2622',sf:'#353029',bn:'#A98A7C',tx:'#EFE6D8',bd:'#4A4238'}]];
 function modeName(){ const m=(DATA.settings.mode||'light'); const t=APP_THEMES.find(x=>x[0]===(DATA.settings.theme||'ivory')); return (MODES.find(x=>x[0]===m)||MODES[0])[1]+((t&&t[0]!=='ivory')?' · '+t[1]:''); }
 function renderThemeList(){ const host=document.getElementById('themeList'); if(!host) return; host.innerHTML='<div class="thlab">색 테마</div>'; const cur=DATA.settings.theme||'ivory'; const eink=(DATA.settings.mode||'light')==='eink';
+  { const pt=(APP_THEMES.find(x=>x[0]===cur)||APP_THEMES[0])[4]; const pv=document.createElement('div'); pv.className='thprev'; pv.style.cssText='background:'+pt.bg+';border:1px solid '+pt.bd+';color:'+pt.tx; pv.innerHTML='<div class="tpr"><span class="tpc"></span><span class="tpo"></span><span class="tpb">저장</span></div><div class="tpk"><i></i><span>책 제목 (3)</span></div>'; pv.querySelector('.tpc').style.background=pt.bn; pv.querySelector('.tpo').style.cssText='border:1px solid '+pt.bd+';background:'+pt.sf; pv.querySelector('.tpb').style.background=pt.bn; const k=pv.querySelector('.tpk'); k.style.cssText='background:'+pt.sf+';border:1px solid '+pt.bd; k.querySelector('i').style.background=pt.bn; host.appendChild(pv); }
   APP_THEMES.forEach(t=>{ const d=document.createElement('div'); d.className='radrow'+(cur===t[0]?' on':''); d.innerHTML='<span class="radio"></span><span></span><span class="thdot"></span>'; d.children[1].textContent=t[1]; d.children[2].style.background=t[2];
     d.onclick=()=>{ DATA.settings.theme=t[0]; RS().theme=t[3]; save(); applyMode(); renderThemeList(); try{ renderBooks(); }catch(e){} flashSaved(); }; host.appendChild(d); });
   const h=document.createElement('div'); h.className='thhint'; h.textContent=eink?'e-ink 모드에서는 색 테마가 적용되지 않아요.':(cur==='mocha'?'모카는 어두운 화면으로 보여요.':''); if(h.textContent) host.appendChild(h); }
@@ -4962,7 +4973,7 @@ function renderSearchScreen(){
 function tabSearch(){ tabGo('search'); setTimeout(()=>{const i=document.getElementById('searchInput'); if(i) i.focus();},80); }
 
 /* ---------- 버전 · 업데이트 확인 ---------- */
-const APP_VERSION='2026.11.18-20';
+const APP_VERSION='2026.11.18-21';
 let updateAvail=false;
 let latestVer='';
 function pendingState(){
