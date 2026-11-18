@@ -260,7 +260,13 @@ html[data-mode=dark] .shwarn{background:#3A3936;color:#E8E6DC;}
 html[data-mode=dark] .topbar h1#libTitle.plain{color:#B8B3A6;}
 .listhead{display:flex;align-items:center;justify-content:space-between;margin:2px 0 10px;}
 .listhead .lt{font-size:13px;font-weight:700;color:var(--brown);}
-#memos .listhead{margin-top:16px;}
+#memos .listhead{margin-top:14px;position:relative;}
+#memos #mwSort{max-width:62%;}
+#memos #mwSort .sbt{display:inline-block;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;vertical-align:bottom;}
+.mwpop{position:absolute;right:0;top:calc(100% + 2px);z-index:25;background:var(--surface);border:1px solid var(--beige);border-radius:12px;box-shadow:0 6px 18px rgba(60,40,28,.16);width:max-content;min-width:150px;max-width:78%;padding:4px 0;}
+.mwpop .pi{display:flex;justify-content:space-between;gap:12px;padding:11px 14px;font-size:14px;color:var(--text);cursor:pointer;text-align:left;}
+.mwpop .pi .t{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.mwpop .pi .ck{flex:0 0 auto;color:var(--btn);font-weight:700;}
 .indsp{display:inline-block;width:1em;}
 .hd{font-weight:700;font-size:calc(1em + 1pt);}
 .hd1{font-size:calc(1em + 3pt);}
@@ -407,10 +413,13 @@ mark{background:#FFE58A;color:inherit;border-radius:3px;padding:0 1px;}
 .booktop{display:flex;gap:14px;align-items:center;margin-bottom:14px;}
 #bookDetail .booktop{margin-top:8px;}
 html,body{overscroll-behavior-y:none;overflow-anchor:none;}
-#bdFix{position:fixed;left:0;right:0;top:var(--vvt,0px);transform:translateZ(0);will-change:transform;z-index:30;display:none;zoom:var(--uz,1);}
+#bdFix{position:fixed;left:0;right:0;top:0;transform:translateZ(0);will-change:transform;z-index:30;display:none;zoom:var(--uz,1);}
 #bdFix .bdin{max-width:480px;margin:0 auto;padding:20px 18px 0;background:var(--ivory);}
 #bdFix .topbar{margin:0 0 8px;}
 #bdFix .bdin{padding-bottom:4px;}
+#bdFix .booktop .cardsub{margin:0;font-size:14px;line-height:1.6;}
+#bdFix .booktop{margin-top:8px;}
+#bdFix .listhead .lt{font-size:13px;font-weight:700;color:var(--brown);}
 #bdFix .listhead{margin:0;padding:6px 0 8px;background:var(--ivory);}
 #bookDetailMeta{margin:0;font-size:14px;line-height:1.6;}
 .topbar h1{letter-spacing:-.2px;}
@@ -982,10 +991,10 @@ html[data-mode=eink] body,html[data-mode=eink] .screen.active,html[data-mode=ein
 </div>
 
 <div class="screen" id="memos">
-  <div class="topbar"><button class="navbtn" onclick="goBack()" aria-label="뒤로">←</button><h1 id="memosTitle" style="font-size:17px;">메모창</h1><span class="spacer44"></span></div>
+  <div class="topbar"><button class="navbtn" onclick="goBack()" aria-label="뒤로">←</button><h1 id="memosTitle" style="font-size:17px;">메모</h1><span class="spacer44"></span></div>
   <div class="mwseg" id="mwSeg"></div>
-  <div class="catbar" id="mwChips" style="margin-top:10px;"></div>
-  <div class="listhead"><span class="lt" id="mwCount"></span><button type="button" class="sharebtn" id="mwSort" onclick="mwToggleSort()"></button></div>
+  <div class="listhead" id="mwLine"><span class="lt" id="mwCount"></span><button type="button" class="sharebtn" id="mwSort" onclick="mwToggleSort()"></button></div>
+  <div class="catbar" id="mwChips" style="margin-top:0;"></div>
   <div id="mwList"></div>
 </div>
 
@@ -1347,6 +1356,10 @@ html[data-mode=eink] body,html[data-mode=eink] .screen.active,html[data-mode=ein
     <h3>새 소식</h3>
     <div class="updbanner" id="newsUpd" style="display:none;margin:0 0 12px;"><span>🔔 새 업데이트가 있어요</span><button type="button" onclick="askConfirm('업데이트할까요? 저장한 글과 사진은 그대로 유지됩니다.',applyUpdate)">업데이트 적용</button></div>
     <div class="noticebody guidebody">
+      <h4>2026.11.18 (18)</h4>
+      <p>· ‘메모창’이 ‘메모’로 바뀌고, 탭은 ‘전체’와 ‘책장’ 두 개예요. 오른쪽 버튼을 누르면 그 자리에서 보기 방식(작성일 순·책장 순, 또는 책 이름)을 고를 수 있어요. 책장 이름은 ‘메모 ○개’ 줄 아래로 옮겨서 줄 위치가 바뀌지 않아요.</p>
+      <p>· 되새김·설정 등 다른 화면에도 메모 아이콘이 생겨서 돋보기가 항상 가운데에 있어요.</p>
+      <p>· 책 화면 스크롤 때 위에 고정되는 표지·책 정보의 글자 크기가 달라 보이던 것을 바로잡았어요.</p>
       <h4>2026.11.18 (17)</h4>
       <p>· 책 화면에서 발췌문이 많아 스크롤할 때, 맨 위 제목 줄부터 표지·책 정보, ‘발췌 목록’ 줄까지 고정되고 발췌문만 스크롤돼요.</p>
       <h4>2026.11.18 (16)</h4>
@@ -4125,18 +4138,18 @@ function updateTabbar(id){
   const ts=document.querySelector('.tab[data-tab=search]'), tm=document.querySelector('.tab[data-tab=marks]');
   if(ts&&tm){
     if(!window._magSvg){ window._magSvg=ts.innerHTML; window._camSvg=document.querySelector('#library .fab').innerHTML; window._memoSvg=document.getElementById('helpBtn').innerHTML; }
-    if(id==='bookDetail'){ ts.innerHTML=window._memoSvg; ts.onclick=()=>openMemoWin(); ts.setAttribute('aria-label','메모창'); }
+    if(id!=='library'){ ts.innerHTML=window._memoSvg; ts.onclick=()=>openMemoWin(); ts.setAttribute('aria-label','메모'); }
     else { ts.innerHTML=window._magSvg; ts.onclick=()=>tabSearch(); ts.setAttribute('aria-label','검색'); }
     tm.onclick=()=>openMarks(marksCtx()); tm.setAttribute('aria-label','되새김');
   }
   const show_=['library','picks','bookDetail','trash','backup','settings','marks','memos','log','shelves','search','setMore','setInfo'].indexOf(id)>=0;
   document.getElementById('tabbar').style.display=show_?'block':'none';
-  { const tg=document.getElementById('tabMag'); if(tg) tg.style.display=(id==='bookDetail')?'':'none'; }
+  { const tg=document.getElementById('tabMag'); if(tg) tg.style.display=(id!=='library')?'':'none'; }
   { const th=document.getElementById('helpBtn'); if(th) th.style.display=(id==='library')?'':'none'; }
   const lt=document.querySelector('.tab[data-tab=library]'); const tf=document.getElementById('tabFs'); if(lt) lt.style.display=(id==='library')?'none':''; if(tf) tf.style.display=(id==='library')?'':'none';
   document.body.classList.toggle('hastab',show_);
   document.querySelectorAll('.tab').forEach(t=>{
-    const k=t.dataset.tab; t.classList.toggle('on',(k==='library'&&(id==='library'||id==='bookDetail'||id==='shelves'))||(k==='search'&&id==='search')||(k==='marks'&&id==='marks')||(k==='memos'&&id==='memos')||(k==='settings'&&(id==='settings'||id==='backup'||id==='trash'||id==='log')));
+    const k=t.dataset.tab; t.classList.toggle('on',(k==='library'&&(id==='library'||id==='bookDetail'||id==='shelves'))||(k==='searchb'&&id==='search')||(k==='search'&&id==='memos')||(k==='marks'&&id==='marks')||(k==='memos'&&id==='memos')||(k==='settings'&&(id==='settings'||id==='backup'||id==='trash'||id==='log')));
   });
 }
 const MODES=[['light','라이트 모드'],['dark','다크 모드'],['eink','e-ink 모드'],['colorink','컬러 e-ink 모드'],['system','시스템 설정']];
@@ -4314,47 +4327,65 @@ function renderMarks(){
   });
 }
 /* 메모창 */
-let memoWin={scope:'all',catId:null,bookId:null,exId:null,sort:'order',inBook:false};
+let memoWin={scope:'all',catId:null,bookId:null,exId:null,sort:'date',inBook:false};
 function openMemoWin(){
   const cur=tabOrigin(); const inBook=(cur==='bookDetail');
-  memoWin={scope:inBook?'bookall':'all',catId:null,bookId:inBook?currentBookId:null,exId:null,sort:(memoWin&&memoWin.sort)||'order',inBook:inBook};
+  memoWin={scope:inBook?'bookall':'all',catId:null,bookId:inBook?currentBookId:null,exId:null,sort:(memoWin&&memoWin.sort)||'date',inBook:inBook};
   tabGo('memos');
 }
-function mwToggleSort(){ const cur=memoWin.sort; openAct('정렬',[{t:(cur==='order'?'✓ ':'')+'순서대로',fn:()=>{ memoWin.sort='order'; renderMemoWin(); }},{t:(cur==='order'?'':'✓ ')+'작성일 순',fn:()=>{ memoWin.sort='date'; renderMemoWin(); }}]); }
+function mwClosePop(){ const p=document.querySelector('#mwLine .mwpop'); if(p) p.remove(); if(window._mwOff){ document.removeEventListener('pointerdown',window._mwOff,true); window._mwOff=null; } }
+function mwPop(items){ mwClosePop(); const lh=document.getElementById('mwLine'); const p=document.createElement('div'); p.className='mwpop';
+  items.forEach(x=>{ const d=document.createElement('div'); d.className='pi'+(x.on?' on':''); const t=document.createElement('span'); t.className='t'; t.textContent=x.t; const c=document.createElement('span'); c.className='ck'; c.textContent=x.on?'✓':''; d.appendChild(t); d.appendChild(c); d.onclick=ev=>{ ev.stopPropagation(); mwClosePop(); x.fn(); }; p.appendChild(d); });
+  lh.appendChild(p); window._mwOff=ev=>{ if(p.contains(ev.target)||(ev.target.closest&&ev.target.closest('#mwSort'))) return; mwClosePop(); };
+  setTimeout(()=>{ if(window._mwOff) document.addEventListener('pointerdown',window._mwOff,true); },0); }
+function mwToggleSort(){
+  if(document.querySelector('#mwLine .mwpop')){ mwClosePop(); return; }
+  const w=memoWin;
+  if(!w.inBook&&w.scope==='shelf'){
+    const bks=activeBooks().filter(b=>b.categoryId===w.catId);
+    mwPop([{t:'전체 책',on:!w.bookId,fn:()=>{ w.bookId=null; renderMemoWin(); }}].concat(bks.map(b=>({t:b.title,on:w.bookId===b.id,fn:()=>{ w.bookId=b.id; renderMemoWin(); }}))));
+    return;
+  }
+  mwPop([{t:'작성일 순',on:w.sort==='date',fn:()=>{ w.sort='date'; renderMemoWin(); }},{t:(w.inBook?'발췌 순':'책장 순'),on:w.sort!=='date',fn:()=>{ w.sort='order'; renderMemoWin(); }}]);
+}
 function renderMemoWin(){
+  mwClosePop();
   const w=memoWin; const seg=document.getElementById('mwSeg'), chips=document.getElementById('mwChips'), host=document.getElementById('mwList');
+  if(!w.inBook&&w.scope!=='shelf') w.scope='all';
   const bk0=DATA.books.find(x=>x.id===w.bookId);
-  document.getElementById('memosTitle').textContent=w.inBook&&bk0?bk0.title+' · 메모창':'메모창';
+  document.getElementById('memosTitle').textContent=w.inBook&&bk0?bk0.title+' · 메모':'메모';
   seg.innerHTML=''; chips.innerHTML='';
-  const segs=w.inBook?[['bookall','책 전체'],['ex','발췌문별']]:[['all','전체'],['shelf','책장별'],['book','책별']];
+  const segs=w.inBook?[['bookall','책 전체'],['ex','발췌문별']]:[['all','전체'],['shelf','책장']];
   segs.forEach(([k,l])=>{ const b=document.createElement('button'); b.type='button'; b.className='segbtn'+(w.scope===k?' on':''); b.textContent=l; b.onclick=()=>{ w.scope=k; w.catId=null; if(!w.inBook) w.bookId=null; w.exId=null; renderMemoWin(); }; seg.appendChild(b); });
   const chip=(label,on,fn)=>{ const d=document.createElement('div'); d.className='fchip'+(on?' active':''); d.textContent=label; d.onclick=fn; chips.appendChild(d); };
   chips.style.display='none';
-  if(w.scope==='shelf'){ chips.style.display=''; chip('전체',!w.catId,()=>{w.catId=null;renderMemoWin();}); DATA.categories.filter(c=>!c.deleted).forEach(c=>chip(c.name,w.catId===c.id,()=>{w.catId=c.id;renderMemoWin();})); }
-  if(w.scope==='book'){ chips.style.display=''; chip('전체',!w.bookId,()=>{w.bookId=null;renderMemoWin();}); DATA.books.filter(b=>!b.deleted).forEach(b=>chip(b.title,w.bookId===b.id,()=>{w.bookId=b.id;renderMemoWin();})); }
+  const shelfMode=(!w.inBook&&w.scope==='shelf');
+  if(shelfMode){ const cats=DATA.categories.filter(c=>!c.deleted); if(!w.catId||!cats.some(c=>c.id===w.catId)) w.catId=cats[0]?cats[0].id:null; if(cats.length){ chips.style.display=''; cats.forEach(c=>chip(c.name,w.catId===c.id,()=>{ w.catId=c.id; w.bookId=null; renderMemoWin(); })); } }
   if(w.scope==='ex'){ chips.style.display=''; chip('전체',!w.exId,()=>{w.exId=null;renderMemoWin();}); bookExcerpts(w.bookId).forEach(e=>chip((e.title||'(제목 없음)'),w.exId===e.id,()=>{w.exId=e.id;renderMemoWin();})); }
-  const items=[]; let n=0;
+  const items=[]; let n=0; const bmap=new Map();
   orderedExcerpts().forEach(x=>{
     const e=x.e,bk=x.bk;
     if(w.inBook&&e.bookId!==w.bookId) return;
-    if(w.scope==='shelf'&&w.catId&&bk.categoryId!==w.catId) return;
-    if(w.scope==='book'&&w.bookId&&e.bookId!==w.bookId) return;
+    if(shelfMode&&(bk.categoryId!==w.catId||(w.bookId&&e.bookId!==w.bookId))) return;
     if(w.scope==='ex'&&w.exId&&e.id!==w.exId) return;
-    const ord=n++;
-    (e.marks||[]).filter(m=>m.t==='memo'&&(m.memo||'').trim()).forEach(m=>items.push({e:e,bk:bk,m:m,ord:ord,at:m.at||e.updatedAt||e.createdAt||0,q:(e.body||'').slice(m.s,m.e),memo:m.memo}));
-    if((e.memo||'').trim()) items.push({e:e,bk:bk,m:null,ord:ord,at:e.memoAt||e.updatedAt||e.createdAt||0,q:'(발췌문 전체 메모)',memo:e.memo});
+    const ord=n++; if(!bmap.has(bk.id)) bmap.set(bk.id,bmap.size); const bi=bmap.get(bk.id);
+    (e.marks||[]).filter(m=>m.t==='memo'&&(m.memo||'').trim()).forEach(m=>items.push({e:e,bk:bk,m:m,ord:ord,bi:bi,at:m.at||e.updatedAt||e.createdAt||0,q:(e.body||'').slice(m.s,m.e),memo:m.memo}));
+    if((e.memo||'').trim()) items.push({e:e,bk:bk,m:null,ord:ord,bi:bi,at:e.memoAt||e.updatedAt||e.createdAt||0,q:'(발췌문 전체 메모)',memo:e.memo});
   });
-  if(w.sort==='date') items.sort((a,b)=>b.at-a.at); else items.sort((a,b)=>(a.ord-b.ord)||((a.m?a.m.s:-1)-(b.m?b.m.s:-1)));
-  const sb=document.getElementById('mwSort'); sb.textContent=(w.sort==='order'?'순서대로':'작성일 순')+' ▾'; sb.setAttribute('aria-label','정렬 바꾸기');
+  const grp=!w.inBook&&(shelfMode||w.sort==='order');
+  if(shelfMode) items.sort((a,b)=>(a.bi-b.bi)||(b.at-a.at));
+  else if(w.sort==='date') items.sort((a,b)=>b.at-a.at); else items.sort((a,b)=>(a.ord-b.ord)||((a.m?a.m.s:-1)-(b.m?b.m.s:-1)));
+  const sb=document.getElementById('mwSort'); sb.innerHTML=''; const sp=document.createElement('span'); sp.className='sbt';
+  sp.textContent=shelfMode?(bk0?bk0.title:'전체 책'):(w.sort==='date'?'작성일 순':(w.inBook?'발췌 순':'책장 순')); sb.appendChild(sp); sb.appendChild(document.createTextNode(' ▾')); sb.setAttribute('aria-label','보기 바꾸기');
   document.getElementById('mwCount').textContent='메모 '+items.length+'개';
   host.innerHTML='';
   if(!items.length){ host.innerHTML='<div class="empty">아직 메모가 없습니다.<br>읽기 화면에서 글을 길게 눌러 선택한 뒤<br>메모 아이콘을 눌러 남겨 보세요.</div>'; return; }
   let lastKey=null;
   items.forEach(x=>{
-    if(w.sort==='order'&&!w.inBook){ const key=x.bk.id; if(key!==lastKey){ const g=document.createElement('div'); g.className='mwgrp'; g.textContent=x.bk.title; host.appendChild(g); lastKey=key; } }
+    if(grp&&!(shelfMode&&w.bookId)){ const key=x.bk.id; if(key!==lastKey){ const g=document.createElement('div'); g.className='mwgrp'; g.textContent=x.bk.title; host.appendChild(g); lastKey=key; } }
     const d=document.createElement('div'); d.className='card mwitem'; d.style.borderLeftColor='var(--beige)';
     d.innerHTML='<div class="cardsub"></div><div class="mwq"></div><div class="mwm"></div><div class="dtx"></div>';
-    d.children[0].textContent=((w.sort==='date'&&!w.inBook)?x.bk.title+' · ':'')+(x.e.title||'(제목 없음)')+' · '+pgTxt(x.e.page);
+    d.children[0].textContent=((!w.inBook&&!grp)?x.bk.title+' · ':'')+(x.e.title||'(제목 없음)')+' · '+pgTxt(x.e.page);
     d.children[1].textContent=x.q.length>100?x.q.slice(0,100)+'…':x.q; d.children[2].textContent=x.memo; d.children[3].textContent=fmtDay(x.at);
     d.onclick=()=>{ currentBookId=x.e.bookId; if(x.m) pendingFind={s:x.m.s,e:x.m.e}; openReader(x.e.id); };
     host.appendChild(d);
@@ -4884,7 +4915,7 @@ function renderSearchScreen(){
 function tabSearch(){ tabGo('search'); setTimeout(()=>{const i=document.getElementById('searchInput'); if(i) i.focus();},80); }
 
 /* ---------- 버전 · 업데이트 확인 ---------- */
-const APP_VERSION='2026.11.18-17';
+const APP_VERSION='2026.11.18-18';
 let updateAvail=false;
 let latestVer='';
 function pendingState(){
