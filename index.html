@@ -885,6 +885,15 @@ html[data-mode=dark] .segbtn.on,html[data-mode=dark] #ordBtn.on,html[data-mode=d
 html{background:var(--ivory);}
 @keyframes appIn{from{opacity:0}to{opacity:1}}
 @keyframes scrIn{from{opacity:0}to{opacity:1}}
+@keyframes swIn{from{opacity:.3}to{opacity:1}}
+@keyframes scrOut{from{opacity:1}to{opacity:0}}
+@keyframes popOut{from{opacity:1;transform:none}to{opacity:0;transform:translateY(-4px)}}
+@keyframes popIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+.sft{animation:swIn .18s ease-out both;}
+.screen.leaving{display:block;position:fixed;left:0;right:0;margin:0 auto;pointer-events:none;z-index:5;min-height:0;animation:scrOut .12s ease-in both;}
+.mwpop{animation:popIn .12s ease-out both;}
+.mwpop.out{animation:popOut .1s ease-in both;pointer-events:none;}
+.tab.sft svg,.tab.sft .fsico{animation:swIn .15s ease-out both;}
 @keyframes bgIn{from{opacity:0}to{opacity:1}}
 @keyframes bgOut{from{opacity:1}to{opacity:0}}
 @keyframes mdIn{from{transform:translateY(22px);opacity:.6}to{transform:none;opacity:1}}
@@ -896,7 +905,10 @@ body{animation:appIn .5s ease-out both;}
 .modal-bg.closing{animation:bgOut .14s ease-in both;}
 .modal-bg.closing .modal{animation:mdOut .14s ease-in both;}
 .tab,.navbtn,.fab,.card,.btn{transition:background-color .15s,border-color .15s,color .15s,box-shadow .15s,opacity .15s;}
+@media (prefers-reduced-motion:reduce){.sft,.screen.leaving,.mwpop,.mwpop.out,.tab.sft svg{animation:none !important;}}
 @media (prefers-reduced-motion:reduce){body,.screen.active,.modal-bg.show,.modal-bg.show .modal,.modal-bg.closing,.modal-bg.closing .modal{animation:none !important;}}
+html[data-mode=eink] .sft,html[data-mode=eink] .screen.leaving,html[data-mode=eink] .mwpop,html[data-mode=eink] .tab.sft svg,html[data-mode=colorink] .sft,html[data-mode=colorink] .screen.leaving{animation:none !important;}
+html[data-mode=eink] .screen.leaving,html[data-mode=colorink] .screen.leaving{display:none !important;}
 html[data-mode=eink] body,html[data-mode=eink] .screen.active,html[data-mode=eink] .modal-bg.show,html[data-mode=eink] .modal-bg.show .modal,html[data-mode=colorink] .screen.active{animation:none !important;}
 
 /* D58 menu-type modals, one-row menu, inline edit, long titles */
@@ -1356,6 +1368,8 @@ html[data-mode=eink] body,html[data-mode=eink] .screen.active,html[data-mode=ein
     <h3>새 소식</h3>
     <div class="updbanner" id="newsUpd" style="display:none;margin:0 0 12px;"><span>🔔 새 업데이트가 있어요</span><button type="button" onclick="askConfirm('업데이트할까요? 저장한 글과 사진은 그대로 유지됩니다.',applyUpdate)">업데이트 적용</button></div>
     <div class="noticebody guidebody">
+      <h4>2026.11.18 (19)</h4>
+      <p>· 화면을 오갈 때 이전 화면이 옅어지며 새 화면과 겹쳐 바뀌어요. 메모의 탭·정렬·책장 선택, 책 목록의 책장 바꾸기·보기 방식 전환도 목록 부분이 부드럽게 바뀌고, 정렬 메뉴도 부드럽게 열리고 닫혀요.</p>
       <h4>2026.11.18 (18)</h4>
       <p>· ‘메모창’이 ‘메모’로 바뀌고, 탭은 ‘전체’와 ‘책장’ 두 개예요. 오른쪽 버튼을 누르면 그 자리에서 보기 방식(작성일 순·책장 순, 또는 책 이름)을 고를 수 있어요. 책장 이름은 ‘메모 ○개’ 줄 아래로 옮겨서 줄 위치가 바뀌지 않아요.</p>
       <p>· 되새김·설정 등 다른 화면에도 메모 아이콘이 생겨서 돋보기가 항상 가운데에 있어요.</p>
@@ -1973,8 +1987,11 @@ function show(screenId){
   try{ imBarHide(); }catch(x){}
   if(window._pv&&screenId!=='reader') pvLeave();
   window._navAt=Date.now(); setTimeout(()=>{ try{ edApply(); }catch(x){} },60);
+  const _prev=document.querySelector('.screen.active'); let _lv=null;
+  if(_prev&&_prev.id!==screenId&&_prev.id!=='reader'&&screenId!=='reader'){ try{ const sy=window.scrollY||0; const f=_prev.getBoundingClientRect().width/(_prev.offsetWidth||1)||1; _lv={el:_prev,top:-sy/f}; }catch(x){} }
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-  document.getElementById(screenId).classList.add('active');
+  { const nx=document.getElementById(screenId); nx.classList.remove('leaving'); nx.style.top=''; nx.classList.add('active'); }
+  if(_lv){ _lv.el.classList.add('leaving'); _lv.el.style.top=_lv.top+'px'; setTimeout(()=>{ _lv.el.classList.remove('leaving'); if(!_lv.el.classList.contains('active')) _lv.el.style.top=''; },140); }
   renderForScreen(screenId);
   updateNavButtons();
   updateTabbar(screenId);
@@ -2116,7 +2133,9 @@ function requestDeleteCategory(catId){
 /* ---------- 책 ---------- */
 function activeBooks(){return DATA.books.filter(b=>!b.deleted);}
 
-function renderBooks(){
+function softSwap(el){ if(!el) return; el.classList.remove('sft'); void el.offsetWidth; el.classList.add('sft'); }
+function renderBooks(){ renderBooks0(); try{ softSwap(document.getElementById('bookList')); softSwap(document.getElementById('todayPane')); }catch(e){} }
+function renderBooks0(){
   try{updateListHead();}catch(x){}
   const wrap = document.getElementById('bookList');
   const q = (document.getElementById('bookSearch').value||'').trim().toLowerCase();
@@ -4136,6 +4155,7 @@ function marksCtx(){ const cur=tabOrigin(); if(cur==='bookDetail') return 'book'
 function updateTabbar(id){
   { const inS=['settings','backup','trash','log','setMore','setInfo'].indexOf(id)>=0; const was=window._inSet; window._inSet=inS; if(was&&!inS){ try{ ackSettings(); }catch(e){} } }
   const ts=document.querySelector('.tab[data-tab=search]'), tm=document.querySelector('.tab[data-tab=marks]');
+  const _td=[...document.querySelectorAll('#tabbar .tab')].map(t=>t.style.display); const _ti=ts?ts.getAttribute('aria-label'):'';
   if(ts&&tm){
     if(!window._magSvg){ window._magSvg=ts.innerHTML; window._camSvg=document.querySelector('#library .fab').innerHTML; window._memoSvg=document.getElementById('helpBtn').innerHTML; }
     if(id!=='library'){ ts.innerHTML=window._memoSvg; ts.onclick=()=>openMemoWin(); ts.setAttribute('aria-label','메모'); }
@@ -4148,6 +4168,7 @@ function updateTabbar(id){
   { const th=document.getElementById('helpBtn'); if(th) th.style.display=(id==='library')?'':'none'; }
   const lt=document.querySelector('.tab[data-tab=library]'); const tf=document.getElementById('tabFs'); if(lt) lt.style.display=(id==='library')?'none':''; if(tf) tf.style.display=(id==='library')?'':'none';
   document.body.classList.toggle('hastab',show_);
+  try{ [...document.querySelectorAll('#tabbar .tab')].forEach((t,i)=>{ if((_td[i]!==t.style.display&&t.style.display!=='none')||(t===ts&&ts.getAttribute('aria-label')!==_ti)) softSwap(t); }); }catch(e){}
   document.querySelectorAll('.tab').forEach(t=>{
     const k=t.dataset.tab; t.classList.toggle('on',(k==='library'&&(id==='library'||id==='bookDetail'||id==='shelves'))||(k==='searchb'&&id==='search')||(k==='search'&&id==='memos')||(k==='marks'&&id==='marks')||(k==='memos'&&id==='memos')||(k==='settings'&&(id==='settings'||id==='backup'||id==='trash'||id==='log')));
   });
@@ -4333,13 +4354,13 @@ function openMemoWin(){
   memoWin={scope:inBook?'bookall':'all',catId:null,bookId:inBook?currentBookId:null,exId:null,sort:(memoWin&&memoWin.sort)||'date',inBook:inBook};
   tabGo('memos');
 }
-function mwClosePop(){ const p=document.querySelector('#mwLine .mwpop'); if(p) p.remove(); if(window._mwOff){ document.removeEventListener('pointerdown',window._mwOff,true); window._mwOff=null; } }
-function mwPop(items){ mwClosePop(); const lh=document.getElementById('mwLine'); const p=document.createElement('div'); p.className='mwpop';
+function mwClosePop(imm){ document.querySelectorAll('#mwLine .mwpop:not(.out)').forEach(p=>{ if(imm===true) p.remove(); else { p.classList.add('out'); setTimeout(()=>p.remove(),110); } }); if(window._mwOff){ document.removeEventListener('pointerdown',window._mwOff,true); window._mwOff=null; } }
+function mwPop(items){ mwClosePop(true); const lh=document.getElementById('mwLine'); const p=document.createElement('div'); p.className='mwpop';
   items.forEach(x=>{ const d=document.createElement('div'); d.className='pi'+(x.on?' on':''); const t=document.createElement('span'); t.className='t'; t.textContent=x.t; const c=document.createElement('span'); c.className='ck'; c.textContent=x.on?'✓':''; d.appendChild(t); d.appendChild(c); d.onclick=ev=>{ ev.stopPropagation(); mwClosePop(); x.fn(); }; p.appendChild(d); });
   lh.appendChild(p); window._mwOff=ev=>{ if(p.contains(ev.target)||(ev.target.closest&&ev.target.closest('#mwSort'))) return; mwClosePop(); };
   setTimeout(()=>{ if(window._mwOff) document.addEventListener('pointerdown',window._mwOff,true); },0); }
 function mwToggleSort(){
-  if(document.querySelector('#mwLine .mwpop')){ mwClosePop(); return; }
+  if(document.querySelector('#mwLine .mwpop:not(.out)')){ mwClosePop(); return; }
   const w=memoWin;
   if(!w.inBook&&w.scope==='shelf'){
     const bks=activeBooks().filter(b=>b.categoryId===w.catId);
@@ -4349,7 +4370,7 @@ function mwToggleSort(){
   mwPop([{t:'작성일 순',on:w.sort==='date',fn:()=>{ w.sort='date'; renderMemoWin(); }},{t:(w.inBook?'발췌 순':'책장 순'),on:w.sort!=='date',fn:()=>{ w.sort='order'; renderMemoWin(); }}]);
 }
 function renderMemoWin(){
-  mwClosePop();
+  mwClosePop(true);
   const w=memoWin; const seg=document.getElementById('mwSeg'), chips=document.getElementById('mwChips'), host=document.getElementById('mwList');
   if(!w.inBook&&w.scope!=='shelf') w.scope='all';
   const bk0=DATA.books.find(x=>x.id===w.bookId);
@@ -4378,7 +4399,7 @@ function renderMemoWin(){
   const sb=document.getElementById('mwSort'); sb.innerHTML=''; const sp=document.createElement('span'); sp.className='sbt';
   sp.textContent=shelfMode?(bk0?bk0.title:'전체 책'):(w.sort==='date'?'작성일 순':(w.inBook?'발췌 순':'책장 순')); sb.appendChild(sp); sb.appendChild(document.createTextNode(' ▾')); sb.setAttribute('aria-label','보기 바꾸기');
   document.getElementById('mwCount').textContent='메모 '+items.length+'개';
-  host.innerHTML='';
+  host.innerHTML=''; softSwap(host); softSwap(chips);
   if(!items.length){ host.innerHTML='<div class="empty">아직 메모가 없습니다.<br>읽기 화면에서 글을 길게 눌러 선택한 뒤<br>메모 아이콘을 눌러 남겨 보세요.</div>'; return; }
   let lastKey=null;
   items.forEach(x=>{
@@ -4915,7 +4936,7 @@ function renderSearchScreen(){
 function tabSearch(){ tabGo('search'); setTimeout(()=>{const i=document.getElementById('searchInput'); if(i) i.focus();},80); }
 
 /* ---------- 버전 · 업데이트 확인 ---------- */
-const APP_VERSION='2026.11.18-18';
+const APP_VERSION='2026.11.18-19';
 let updateAvail=false;
 let latestVer='';
 function pendingState(){
