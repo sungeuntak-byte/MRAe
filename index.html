@@ -924,6 +924,21 @@ html[data-mode=eink] body,html[data-mode=eink] .screen.active,html[data-mode=ein
 .shelfrow .edb.txtb{width:auto;font-size:13px;font-weight:600;padding:0 8px;color:#8C7D6E;}
 #shelfList.editing .shelfrow:not(.ed){opacity:.4;pointer-events:none;}
 #bookDetail .topbar h1,#bdFix .topbar h1{white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-size:16px;line-height:1.3;}
+/* ===== 색 테마 ===== */
+html[data-theme=moss][data-mode=light],html[data-theme=moss][data-mode=dark],html[data-theme=moss][data-mode=colorink]{--btn:#7A9A6C;--accent:#7A9A6C;--terracotta:#7A9A6C;--ico:#6E8F5C;--ico2:#8CA67E;--txa:#52713F;--pf:#7A9A6C;--pb:#BFD0B3;--pu:#52713F;}
+html[data-theme=moss][data-mode=light]{--ivory:#F3F3EA;--text:#2C3A26;--beige:#E3E6D6;--brown:#3F4A38;--surface:#FFFEF8;--tx2:#3A4733;--ic2:#7C8A70;--ar2:#B7BFA9;}
+html[data-theme=moss][data-mode=dark]{--ico:#9DBB8E;--txa:#A9C79A;--pb:#4F6644;--pu:#A9C79A;--pf:#6B8A5C;}
+html[data-theme=moss][data-mode=light] :is(.segbtn.on,#ordBtn.on,.gtab.on,.sharebtn.on,.pgseg button.on,.pkseg button.on,.pvtoggle .seg2 button.on,#imCapAl .btn.on,#ieSelBar .ier button.ic.on,.themechip.on,.fontchip.on),html[data-theme=moss][data-mode=colorink] :is(.segbtn.on,#ordBtn.on,.gtab.on,.sharebtn.on,.pgseg button.on,.pkseg button.on,.pvtoggle .seg2 button.on,#imCapAl .btn.on,#ieSelBar .ier button.ic.on,.themechip.on,.fontchip.on){background:#E8EEDD;color:#3F4A38;box-shadow:inset 0 0 0 2px #8FA67E;}
+html[data-theme=moss][data-mode=dark] :is(.segbtn.on,#ordBtn.on,.gtab.on,.sharebtn.on,.pgseg button.on,.pkseg button.on,.pvtoggle .seg2 button.on,#imCapAl .btn.on,#ieSelBar .ier button.ic.on,.themechip.on,.fontchip.on){background:#3A4434;color:#DDE8D2;box-shadow:inset 0 0 0 2px #7A9A6C;}
+html[data-theme=sky][data-mode=light],html[data-theme=sky][data-mode=dark],html[data-theme=sky][data-mode=colorink]{--btn:#5C8AB0;--accent:#5C8AB0;--terracotta:#5C8AB0;--ico:#4F7FA6;--ico2:#7FA3C2;--txa:#336492;--pf:#5C8AB0;--pb:#BCD0E3;--pu:#336492;}
+html[data-theme=sky][data-mode=light]{--ivory:#F4F6F9;--text:#243447;--beige:#E1E7EE;--brown:#34465A;--surface:#FFFFFF;--tx2:#2F4256;--ic2:#6E8196;--ar2:#B5C2D0;}
+html[data-theme=sky][data-mode=dark]{--ico:#8FB4D6;--txa:#9CC0E0;--pb:#3F5A75;--pu:#9CC0E0;--pf:#4F7BA3;}
+html[data-theme=sky][data-mode=light] :is(.segbtn.on,#ordBtn.on,.gtab.on,.sharebtn.on,.pgseg button.on,.pkseg button.on,.pvtoggle .seg2 button.on,#imCapAl .btn.on,#ieSelBar .ier button.ic.on,.themechip.on,.fontchip.on),html[data-theme=sky][data-mode=colorink] :is(.segbtn.on,#ordBtn.on,.gtab.on,.sharebtn.on,.pgseg button.on,.pkseg button.on,.pvtoggle .seg2 button.on,#imCapAl .btn.on,#ieSelBar .ier button.ic.on,.themechip.on,.fontchip.on){background:#E4ECF4;color:#2F4256;box-shadow:inset 0 0 0 2px #86A5C2;}
+html[data-theme=sky][data-mode=dark] :is(.segbtn.on,#ordBtn.on,.gtab.on,.sharebtn.on,.pgseg button.on,.pkseg button.on,.pvtoggle .seg2 button.on,#imCapAl .btn.on,#ieSelBar .ier button.ic.on,.themechip.on,.fontchip.on){background:#34424F;color:#DCE8F3;box-shadow:inset 0 0 0 2px #6F96BA;}
+html[data-theme=mocha][data-mode=dark]{--ivory:#2B2622;--surface:#353029;--text:#EFE6D8;--beige:#4A4238;--brown:#E3D6C3;--btn:#A98A7C;--accent:#A98A7C;--terracotta:#A98A7C;--ico:#C9A08E;--ico2:#A98A7C;--txa:#D4B3A2;--pf:#A98A7C;--pb:#6F5A50;--pu:#D9B8A6;--tx2:#E3D6C3;--ic2:#A39684;--ar2:#6F655A;}
+.thlab{margin:14px 0 2px;padding-top:14px;border-top:1px solid var(--beige);font-size:13px;font-weight:700;color:var(--brown);}
+.thdot{width:24px;height:24px;border-radius:50%;flex:0 0 auto;margin-left:auto;}
+.thhint{font-size:12px;color:var(--ic2,#8C7D6E);margin:2px 0 4px;}
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang&family=Gowun+Dodum&family=Nanum+Gothic&family=Nanum+Myeongjo&family=Noto+Sans+KR:wght@400;700&family=Noto+Serif+KR:wght@400;700&display=swap" rel="stylesheet">
@@ -1368,6 +1383,8 @@ html[data-mode=eink] body,html[data-mode=eink] .screen.active,html[data-mode=ein
     <h3>새 소식</h3>
     <div class="updbanner" id="newsUpd" style="display:none;margin:0 0 12px;"><span>🔔 새 업데이트가 있어요</span><button type="button" onclick="askConfirm('업데이트할까요? 저장한 글과 사진은 그대로 유지됩니다.',applyUpdate)">업데이트 적용</button></div>
     <div class="noticebody guidebody">
+      <h4>2026.11.18 (20)</h4>
+      <p>· ‘화면 스타일’에서 색 테마를 고를 수 있어요. 아이보리(기존), 모스 그린, 스카이 블루, 모카(어두운 화면) 4가지이고, 고르면 읽기 색도 어울리는 색으로 함께 바뀌어요. 흑백 e-ink 모드에서는 적용되지 않아요.</p>
       <h4>2026.11.18 (19)</h4>
       <p>· 화면을 오갈 때 이전 화면이 옅어지며 새 화면과 겹쳐 바뀌어요. 메모의 탭·정렬·책장 선택, 책 목록의 책장 바꾸기·보기 방식 전환도 목록 부분이 부드럽게 바뀌고, 정렬 메뉴도 부드럽게 열리고 닫혀요.</p>
       <h4>2026.11.18 (18)</h4>
@@ -1676,6 +1693,7 @@ html[data-mode=eink] body,html[data-mode=eink] .screen.active,html[data-mode=ein
   <div class="modal"><button class="xbtn ok" aria-label="완료" onclick="closeModal('modeBg')">✓</button>
     <h3>화면 스타일</h3>
     <div id="modeList"></div>
+    <div id="themeList"></div>
   </div>
 </div>
 <input id="imCam" type="file" accept="image/*" capture="environment" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0" onchange="imFiles(this)">
@@ -4085,6 +4103,8 @@ function fontKey(k){ if(k==='serif') return 'notoserif'; if(k==='sans') return '
 const THEMES={white:{n:'흰색',bg:'#FFFFFF',tx:'#38332F',bd:'#E9DED1',memo:'#F1ECE4',bb:'#F1E8DB',bl:'#C4A28C',bt:'#7A5A47'},
   beige:{n:'은은한 베이지',bg:'#F3EADB',tx:'#1F1E1D',bd:'#E4D8C4',memo:'#E8E6DC',bb:'#F9F3E8',bl:'#B8896D',bt:'#7A5A47'},
   brown:{n:'은은한 갈색',bg:'#D9C7B0',tx:'#2F2620',bd:'#C6B197',memo:'#CDB99F',bb:'#E8DBC8',bl:'#A07458',bt:'#6A4A38'},
+  moss:{n:'연한 이끼',bg:'#F4F5E8',tx:'#2C3A26',bd:'#DCE0C8',memo:'#E9EDDA',bb:'#F6F8EC',bl:'#8FA67E',bt:'#4A5F3C'},
+  sky:{n:'맑은 하늘',bg:'#F3F6FA',tx:'#243447',bd:'#D3DEE9',memo:'#E4ECF4',bb:'#F5F8FB',bl:'#86A5C2',bt:'#33506E'},
   dark:{n:'음영 반전',bg:'#1F1B18',tx:'#E8E6DC',bd:'#3A332D',memo:'#2E2823',bb:'#2E2823',bl:'#B98A6E',bt:'#DCC4AE'}};
 function RS(){ const s=DATA.settings; s.reader=Object.assign({theme:'beige',size:18,line:1.7,font:'serif',flow:'page',just:true,cut:true},s.reader||{}); return s.reader; }
 function applyReading(){
@@ -4174,10 +4194,16 @@ function updateTabbar(id){
   });
 }
 const MODES=[['light','라이트 모드'],['dark','다크 모드'],['eink','e-ink 모드'],['colorink','컬러 e-ink 모드'],['system','시스템 설정']];
-function modeName(){ const m=(DATA.settings.mode||'light'); return (MODES.find(x=>x[0]===m)||MODES[0])[1]; }
+const APP_THEMES=[['ivory','아이보리','#C65D3B','beige'],['moss','모스 그린','#7A9A6C','moss'],['sky','스카이 블루','#5C8AB0','sky'],['mocha','모카','#A98A7C','dark']];
+function modeName(){ const m=(DATA.settings.mode||'light'); const t=APP_THEMES.find(x=>x[0]===(DATA.settings.theme||'ivory')); return (MODES.find(x=>x[0]===m)||MODES[0])[1]+((t&&t[0]!=='ivory')?' · '+t[1]:''); }
+function renderThemeList(){ const host=document.getElementById('themeList'); if(!host) return; host.innerHTML='<div class="thlab">색 테마</div>'; const cur=DATA.settings.theme||'ivory'; const eink=(DATA.settings.mode||'light')==='eink';
+  APP_THEMES.forEach(t=>{ const d=document.createElement('div'); d.className='radrow'+(cur===t[0]?' on':''); d.innerHTML='<span class="radio"></span><span></span><span class="thdot"></span>'; d.children[1].textContent=t[1]; d.children[2].style.background=t[2];
+    d.onclick=()=>{ DATA.settings.theme=t[0]; RS().theme=t[3]; save(); applyMode(); renderThemeList(); try{ renderBooks(); }catch(e){} flashSaved(); }; host.appendChild(d); });
+  const h=document.createElement('div'); h.className='thhint'; h.textContent=eink?'e-ink 모드에서는 색 테마가 적용되지 않아요.':(cur==='mocha'?'모카는 어두운 화면으로 보여요.':''); if(h.textContent) host.appendChild(h); }
 function applyMode(){
   let m=DATA.settings.mode||'light';
   if(m==='system') m=(window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches)?'dark':'light';
+  { const th=(DATA.settings&&DATA.settings.theme)||'ivory'; if(th==='mocha'&&m!=='eink') m='dark'; document.documentElement.setAttribute('data-theme',th); }
   document.documentElement.setAttribute('data-mode',m);
   const ml=document.getElementById('modeLabel'); if(ml) ml.textContent=modeName()+' ›';
   try{applyReading();}catch(e){}
@@ -4187,7 +4213,7 @@ function openModeModal(){
   const cur=DATA.settings.mode||'light', host=document.getElementById('modeList'); host.innerHTML='';
   MODES.forEach(m=>{ const d=document.createElement('div'); d.className='radrow'+(cur===m[0]?' on':''); d.innerHTML='<span class="radio"></span><span></span>'; d.lastChild.textContent=m[1];
     d.onclick=()=>{ DATA.settings.mode=m[0]; save(); applyMode(); closeModal('modeBg'); flashSaved(); }; host.appendChild(d); });
-  document.getElementById('modeBg').classList.add('show');
+  renderThemeList(); document.getElementById('modeBg').classList.add('show');
 }
 let pg=0, pgCount=1, pgGeom=null, pgStarts=[0];
 function textLineRects(host){ const out=[]; host.querySelectorAll('.imgblk').forEach(f=>out.push(f.getBoundingClientRect())); const w=document.createTreeWalker(host,NodeFilter.SHOW_TEXT), r=document.createRange(); let n; while((n=w.nextNode())){ if(!n.nodeValue) continue; r.selectNodeContents(n); Array.prototype.push.apply(out,Array.from(r.getClientRects())); } return out; }
@@ -4936,7 +4962,7 @@ function renderSearchScreen(){
 function tabSearch(){ tabGo('search'); setTimeout(()=>{const i=document.getElementById('searchInput'); if(i) i.focus();},80); }
 
 /* ---------- 버전 · 업데이트 확인 ---------- */
-const APP_VERSION='2026.11.18-19';
+const APP_VERSION='2026.11.18-20';
 let updateAvail=false;
 let latestVer='';
 function pendingState(){
