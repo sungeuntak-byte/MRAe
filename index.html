@@ -381,6 +381,16 @@ mark{background:#FFE58A;color:inherit;border-radius:3px;padding:0 1px;}
 
 .cov{flex:0 0 auto;border-radius:6px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;overflow:hidden;background-size:cover;background-position:center;box-shadow:0 1px 3px rgba(0,0,0,.25);}
 .cardrow{display:flex;gap:12px;align-items:center;}
+#bookList{padding-top:4px;}
+#bookList .card.bkc{background:none;border:none;box-shadow:none;padding:0;margin-bottom:27px;border-radius:0;}
+#bookList.bgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:27px 14px;}
+.gcell{min-width:0;cursor:pointer;-webkit-tap-highlight-color:transparent;}
+.gcv{position:relative;}
+.gcv .cov{display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;overflow:hidden;box-sizing:border-box;}
+.gcv .gn{position:absolute;left:5px;bottom:5px;background:rgba(61,57,41,.82);color:#fff;font-size:10px;line-height:1.3;padding:1px 6px;border-radius:7px;}
+.gcv .gmore{position:absolute;top:3px;right:3px;width:26px;height:26px;border:none;border-radius:13px;background:rgba(255,255,255,.82);color:#5A4636;font-size:16px;line-height:1;padding:0;cursor:pointer;}
+.gt{margin-top:6px;font-size:12px;font-weight:600;color:var(--cdtx,#3A2E24);line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere;}
+.ga{margin-top:1px;font-size:11px;color:#8C7D6E;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .cardrow .txt{flex:1;min-width:0;}
 .catchip .cov{display:inline-flex;width:20px;height:20px;border-radius:50%;font-size:11px;vertical-align:middle;margin-right:6px;box-shadow:none;}
 .coverpick{margin:6px 0 4px;}
@@ -910,7 +920,7 @@ html[data-mode=eink] body,html[data-mode=eink] .screen.active,html[data-mode=ein
 <div class="screen" id="library">
 <div class="libhead">
   <div class="topbar">
-    <span class="spacer44" style="width:36px;flex:0 0 36px;"></span>
+    <button class="navbtn" id="viewBtn" onclick="toggleBookView()" aria-label="보기 방식 바꾸기" style="width:36px;height:36px;min-height:0;border-radius:11px;padding:0;display:flex;align-items:center;justify-content:center;flex:0 0 36px;visibility:hidden;"></button>
     <h1 id="libTitle" onclick="ttlOpen()">내 서재</h1>
     <button class="navbtn" id="libMoreBtn" onclick="openLibMore()" aria-label="더 보기" style="width:36px;height:36px;min-height:0;border-radius:11px;padding:0;display:flex;align-items:center;justify-content:center;flex:0 0 36px;"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><circle cx="5" cy="12" r="1.9"/><circle cx="12" cy="12" r="1.9"/><circle cx="19" cy="12" r="1.9"/></svg></button>
   </div>
@@ -1331,6 +1341,10 @@ html[data-mode=eink] body,html[data-mode=eink] .screen.active,html[data-mode=ein
     <h3>새 소식</h3>
     <div class="updbanner" id="newsUpd" style="display:none;margin:0 0 12px;"><span>🔔 새 업데이트가 있어요</span><button type="button" onclick="askConfirm('업데이트할까요? 저장한 글과 사진은 그대로 유지됩니다.',applyUpdate)">업데이트 적용</button></div>
     <div class="noticebody guidebody">
+      <h4>2026.11.18 (15)</h4>
+      <p>· 책 목록에서 왼쪽 위 버튼으로 ‘목록’과 ‘3열 격자’ 보기를 바꿀 수 있어요. 고른 방식은 기억해요.</p>
+      <p>· 책과 책 사이를 27px로 넓히고, 책장 이름 줄과 첫 책 사이도 띄웠어요. 책마다 두르던 테두리는 없앴어요.</p>
+      <p>· 표지 사진의 크기가 달라도 같은 틀에 넣고, 남는 자리는 사진 가장자리 색으로 채워 목록이 가지런해요.</p>
       <h4>2026.11.18 (14)</h4>
       <p>· ‘한 번 더 누르면 종료’ 안내가 뜬 직후 바로 뒤로가기를 눌러도 꺼지도록 고쳤어요. 꺼질 때는 화면이 부드럽게 옅어진 뒤 닫혀요.</p>
       <h4>2026.11.18 (13)</h4>
@@ -2098,11 +2112,20 @@ function renderBooks(){
     wrap.innerHTML = activeCats().length? '<div class="empty">아직 등록된 책이 없습니다.<br>오른쪽 아래 카메라 버튼으로 첫 책을 등록해 보세요.</div>' : '<div class="empty">책장이 아직 없습니다.<br>오른쪽 위 연필 아이콘으로 책장을 먼저 만든 뒤,<br>카메라 버튼으로 책을 등록해 보세요.</div>';
     return;
   }
+  const grid=(bookView()==='grid'&&!q); wrap.classList.toggle('bgrid',grid);
   books.forEach(b=>{
     const cat = DATA.categories.find(c=>c.id===b.categoryId);
     const exCount = DATA.excerpts.filter(e=>e.bookId===b.id && !e.deleted).length;
+    if(grid){
+      const g=document.createElement('div'); g.className='gcell';
+      g.innerHTML='<div class="gcv"><span class="gn"></span><button type="button" class="gmore" aria-label="더보기">⋮</button></div><div class="gt"></div><div class="ga"></div>';
+      const cv=coverEl(b.cover,b.title,0,0,30); cv.style.width='100%'; cv.style.height='auto'; cv.style.aspectRatio='3/4'; cv.style.borderRadius='6px'; g.querySelector('.gcv').prepend(cv);
+      g.querySelector('.gn').textContent=exCount; g.querySelector('.gt').textContent=b.title; g.querySelector('.ga').textContent=b.author||'';
+      g.querySelector('.gmore').onclick=ev=>{ev.stopPropagation();bookMenu(b.id);};
+      attachLongPress(g,()=>bookMenu(b.id)); g.onclick=()=>openBookDetail(b.id); wrap.appendChild(g); return;
+    }
     const card = document.createElement('div');
-    card.className = 'card';
+    card.className = 'card bkc';
     card.innerHTML = `<div class="cardrow"><div class="cvh"></div><div class="txt"><div class="cardtitle">${escapeHtml(b.title)} <span style="font-weight:400;color:#7A776E;font-size:14px;">(${exCount})</span></div></div></div>`;
     card.querySelector('.cvh').appendChild(coverEl(b.cover,b.title,48,64,20));
     const mb=document.createElement('button'); mb.type='button'; mb.className='morebtn'; mb.setAttribute('aria-label','더보기'); mb.textContent='⋮'; mb.onclick=ev=>{ev.stopPropagation();bookMenu(b.id);}; card.querySelector('.cardrow').appendChild(mb);
@@ -3453,10 +3476,14 @@ const COVER_COLORS=['#C25E3A','#D97757','#B5785F','#8A6F5E','#788C5D','#6A9BCC',
 let bkCoverDraft=null, catCoverId=null;
 function coverEl(cover,title,w,h,fs,noLetter){
   const d=document.createElement('div'); d.className='cov'; d.style.width=w+'px'; d.style.height=h+'px'; d.style.fontSize=(fs||18)+'px';
-  if(cover&&cover.type==='photo'&&cover.data){ d.style.backgroundImage='url("'+cover.data+'")'; d.style.backgroundSize='contain'; d.style.backgroundRepeat='no-repeat'; d.style.backgroundColor='var(--beige)'; }
+  if(cover&&cover.type==='photo'&&cover.data){ d.style.backgroundImage='url("'+cover.data+'")'; d.style.backgroundSize='contain'; d.style.backgroundRepeat='no-repeat'; d.style.backgroundColor=cover.edge||'var(--beige)'; if(!cover.edge) coverEdge(cover,d); }
   else{ const col=(cover&&cover.color)||COVER_COLORS[0]; d.style.background=col; if(!noLetter) d.textContent=(title||'책').trim().charAt(0); }
   return d;
 }
+function coverEdge(cover,d){ try{ const im=new Image(); im.onload=()=>{ try{ const W=24,H=24,c=document.createElement('canvas'); c.width=W; c.height=H; const x=c.getContext('2d'); x.drawImage(im,0,0,W,H); const px=x.getImageData(0,0,W,H).data; let r=0,g=0,b=0,n=0; for(let i=0;i<W;i++)for(let j=0;j<H;j++){ if(i>0&&i<W-1&&j>0&&j<H-1) continue; const k=(j*W+i)*4; r+=px[k]; g+=px[k+1]; b+=px[k+2]; n++; } cover.edge='rgb('+Math.round(r/n)+','+Math.round(g/n)+','+Math.round(b/n)+')'; d.style.backgroundColor=cover.edge; }catch(e){} }; im.src=cover.data; }catch(e){} }
+function bookView(){ return (DATA.settings&&DATA.settings.bookView==='grid')?'grid':'list'; }
+function updateViewBtn(){ const b=document.getElementById('viewBtn'); if(!b) return; const g=bookView()==='grid'; b.innerHTML=g?'<svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>':'<svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="4" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.5"/></svg>'; b.setAttribute('aria-label',g?'목록으로 보기':'격자로 보기'); b.style.visibility=(currentCatFilter===null)?'hidden':'visible'; }
+function toggleBookView(){ DATA.settings.bookView=(bookView()==='grid')?'list':'grid'; save(); updateViewBtn(); renderBooks(); }
 function photoToCover(file,cb){
   const fr=new FileReader();
   fr.onload=()=>{ const img=new Image(); img.onload=()=>{
@@ -3870,7 +3897,7 @@ async function selCopy(){ const e=curEx(); const t=selText(); if(!e||!t) return;
 function ttlParts(){ const t=(DATA.settings.todayTitle||'오늘 그리고').trim()||'오늘 그리고'; const w=t.split(/\s+/); return w.length<2?[t,'']:[w.slice(0,-1).join(' '),w[w.length-1]]; }
 function fitLibTitle(){ const h=document.getElementById('libTitle'); if(!h||!h.clientWidth) return; const t=h.querySelector('.tt1')||h; let fs=21; t.style.fontSize=fs+'px'; let g=0; while(h.scrollWidth>h.clientWidth+1&&fs>15&&g++<10){ fs--; t.style.fontSize=fs+'px'; } }
 function libName(){ return (DATA.settings&&DATA.settings.libName)||'내 서재'; }
-function updateListHead(){ setTimeout(()=>{ try{fitLibTitle();}catch(e){} },30); const m=document.getElementById('libMoreBtn'); if(m) m.style.visibility='visible';
+function updateListHead(){ try{updateViewBtn();}catch(e){} setTimeout(()=>{ try{fitLibTitle();}catch(e){} },30); const m=document.getElementById('libMoreBtn'); if(m) m.style.visibility='visible';
   const h=document.getElementById('libTitle'); if(h){ if(currentCatFilter===null){ const p=ttlParts(); h.innerHTML=''; h.classList.remove('plain'); const a=document.createElement('span'); a.className='tt1'; a.textContent=p[0]; h.appendChild(a); if(p[1]){ const b2=document.createElement('span'); b2.className='tt2'; b2.textContent=p[1]; h.appendChild(b2); } const d=document.createElement('span'); d.className='tt3'; d.textContent='···'; h.appendChild(d); h.style.cursor='pointer'; } else { h.innerHTML=''; const sp=document.createElement('span'); sp.className='tt1 plainsp'; sp.textContent=libName(); h.appendChild(sp); h.classList.add('plain'); h.style.cursor=''; } } }
 function openAct(title,items){ window._actFns=items.map(x=>x.fn); document.getElementById('actTitle').textContent=title; const l=document.getElementById('actList'); l.innerHTML='';
   items.forEach((x,i)=>{ const b=document.createElement('button'); b.type='button'; b.className='btn ghost'; b.style.cssText='width:100%;margin-bottom:10px;'+(x.danger?'color:var(--danger);':''); b.textContent=x.t; b.onclick=()=>{ closeModal('actBg'); setTimeout(()=>window._actFns[i](),60); }; l.appendChild(b); });
@@ -4668,7 +4695,7 @@ function ieOnState(){
     ['pointerdown','touchstart','pointerup','touchend','mouseup','keydown','click'].forEach(t=>window.addEventListener(t,topUp,{capture:true,passive:true}));
     window._armGuard=topUp;
     let armed=0; const guard=()=>{ if(gd===0){ try{ history.pushState({mrae:'guard',n:1},''); gd=1; }catch(e){} } };
-    window.addEventListener('pointerup',()=>{ if(armed&&Date.now()-armed<600) return; armed=0; },{capture:true,passive:true});
+    window.addEventListener('pointerup',()=>{ if(armed&&Date.now()-armed<350) return; armed=0; },{capture:true,passive:true});
     let fading=false; const doExit=()=>{ fading=true; const r=document.documentElement; r.style.transition='opacity .3s ease'; r.style.opacity='0'; setTimeout(()=>{ exiting=true; if(gd>0) history.go(-gd); else history.back(); },320); setTimeout(()=>{ if(fading){ fading=false; exiting=false; r.style.opacity=''; } },1800); };
     window.addEventListener('popstate',ev=>{
       const st=ev.state; gd=(st&&st.mrae==='guard')?(st.n||0):0;
@@ -4845,7 +4872,7 @@ function renderSearchScreen(){
 function tabSearch(){ tabGo('search'); setTimeout(()=>{const i=document.getElementById('searchInput'); if(i) i.focus();},80); }
 
 /* ---------- 버전 · 업데이트 확인 ---------- */
-const APP_VERSION='2026.11.18-14';
+const APP_VERSION='2026.11.18-15';
 let updateAvail=false;
 let latestVer='';
 function pendingState(){
