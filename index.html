@@ -260,6 +260,7 @@ html[data-mode=dark] .shwarn{background:#3A3936;color:#E8E6DC;}
 html[data-mode=dark] .topbar h1#libTitle.plain{color:#B8B3A6;}
 .listhead{display:flex;align-items:center;justify-content:space-between;margin:2px 0 10px;}
 .listhead .lt{font-size:13px;font-weight:700;color:var(--brown);}
+#memos .listhead{margin-top:16px;}
 .indsp{display:inline-block;width:1em;}
 .hd{font-weight:700;font-size:calc(1em + 1pt);}
 .hd1{font-size:calc(1em + 3pt);}
@@ -381,7 +382,10 @@ mark{background:#FFE58A;color:inherit;border-radius:3px;padding:0 1px;}
 
 .cov{flex:0 0 auto;border-radius:6px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;overflow:hidden;background-size:cover;background-position:center;box-shadow:0 1px 3px rgba(0,0,0,.25);}
 .cardrow{display:flex;gap:12px;align-items:center;}
-#bookList{padding-top:4px;}
+#bookList{padding-top:13px;}
+#bookList .cvh{flex:0 0 var(--cvw,57px);width:var(--cvw,57px);}
+#bookList .card.bkc .cardrow{gap:0;}
+#bookList .card.bkc .txt{margin-left:calc(var(--ttx,76px) - var(--cvw,57px));}
 #bookList .card.bkc{background:none;border:none;box-shadow:none;padding:0;margin-bottom:27px;border-radius:0;}
 #bookList.bgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:27px 14px;}
 .gcell{min-width:0;cursor:pointer;-webkit-tap-highlight-color:transparent;}
@@ -402,7 +406,8 @@ mark{background:#FFE58A;color:inherit;border-radius:3px;padding:0 1px;}
 .catrowcov{padding:0;border:none;background:none;cursor:pointer;}
 .booktop{display:flex;gap:14px;align-items:center;margin-bottom:14px;}
 #bookDetail .booktop{margin-top:8px;}
-#bdFix{position:fixed;left:0;right:0;top:0;z-index:30;display:none;zoom:var(--uz,1);}
+html,body{overscroll-behavior-y:none;overflow-anchor:none;}
+#bdFix{position:fixed;left:0;right:0;top:var(--vvt,0px);transform:translateZ(0);will-change:transform;z-index:30;display:none;zoom:var(--uz,1);}
 #bdFix .bdin{max-width:480px;margin:0 auto;padding:20px 18px 0;background:var(--ivory);}
 #bdFix .topbar{margin:0 0 8px;}
 #bdFix .listhead{margin:0;padding:6px 0 8px;background:var(--ivory);}
@@ -1341,6 +1346,10 @@ html[data-mode=eink] body,html[data-mode=eink] .screen.active,html[data-mode=ein
     <h3>새 소식</h3>
     <div class="updbanner" id="newsUpd" style="display:none;margin:0 0 12px;"><span>🔔 새 업데이트가 있어요</span><button type="button" onclick="askConfirm('업데이트할까요? 저장한 글과 사진은 그대로 유지됩니다.',applyUpdate)">업데이트 적용</button></div>
     <div class="noticebody guidebody">
+      <h4>2026.11.18 (16)</h4>
+      <p>· 목록형에서 표지가 Today 버튼 폭만큼 커지고, 제목은 책장 칩 왼쪽 선에서 시작해요. 책장 이름 줄과 첫 책 사이도 더 띄웠어요.</p>
+      <p>· 스크롤을 끝까지 내릴 때 위쪽 고정 부분이 출렁이던 것을 줄였어요.</p>
+      <p>· 메모창의 ‘순서대로’ 버튼에 ▾가 붙고, 누르면 순서를 고를 수 있어요. 되새김 제목은 ‘되새김’만 남기고 크게 했어요.</p>
       <h4>2026.11.18 (15)</h4>
       <p>· 책 목록에서 왼쪽 위 버튼으로 ‘목록’과 ‘3열 격자’ 보기를 바꿀 수 있어요. 고른 방식은 기억해요.</p>
       <p>· 책과 책 사이를 27px로 넓히고, 책장 이름 줄과 첫 책 사이도 띄웠어요. 책마다 두르던 테두리는 없앴어요.</p>
@@ -2127,13 +2136,16 @@ function renderBooks(){
     const card = document.createElement('div');
     card.className = 'card bkc';
     card.innerHTML = `<div class="cardrow"><div class="cvh"></div><div class="txt"><div class="cardtitle">${escapeHtml(b.title)} <span style="font-weight:400;color:#7A776E;font-size:14px;">(${exCount})</span></div></div></div>`;
-    card.querySelector('.cvh').appendChild(coverEl(b.cover,b.title,48,64,20));
+    { const cv=coverEl(b.cover,b.title,0,0,24); cv.style.width='100%'; cv.style.height='auto'; cv.style.aspectRatio='3/4'; card.querySelector('.cvh').appendChild(cv); }
     const mb=document.createElement('button'); mb.type='button'; mb.className='morebtn'; mb.setAttribute('aria-label','더보기'); mb.textContent='⋮'; mb.onclick=ev=>{ev.stopPropagation();bookMenu(b.id);}; card.querySelector('.cardrow').appendChild(mb);
     attachLongPress(card,()=>bookMenu(b.id));
     card.onclick = ()=>openBookDetail(b.id);
     wrap.appendChild(card);
   });
+  alignBookList(); setTimeout(alignBookList,80);
 }
+function alignBookList(){ try{ const w=document.getElementById('bookList'); const tc=document.querySelector('#catFix .todaychip'); const ch=document.querySelector('#catbar .catchip'); const bar=document.getElementById('catbar'); if(!w||!tc||!ch||!w.offsetWidth) return; const f=w.getBoundingClientRect().width/w.offsetWidth||1; const wl=w.getBoundingClientRect().left; const tr=tc.getBoundingClientRect(); const cl=ch.getBoundingClientRect().left+bar.scrollLeft; w.style.setProperty('--cvw',Math.round((tr.width/f)*10)/10+'px'); w.style.setProperty('--ttx',Math.round(((cl-wl)/f)*10)/10+'px'); }catch(e){} }
+window.addEventListener('resize',()=>{ try{alignBookList();}catch(e){} });
 
 function openBookModal(bookId){ openBookModal0(bookId); try{ const m=document.querySelector('#bookModalBg .modal'); m.scrollTop=0; setTimeout(()=>{ m.scrollTop=0; },60); }catch(x){} }
 function openBookModal0(bookId){
@@ -4279,7 +4291,7 @@ function renderMarks(){
   const st=marksState; const b=DATA.books.find(x=>x.id===st.bookId);
   const isBook=st.kind==='book'&&b; const mt=document.getElementById('marksTitle');
   let pill='내 서재'; if(isBook) pill=b.title; else if(st.kind==='shelf'){ const ct=DATA.categories.find(x=>x.id===st.catId); pill=ct?ct.name:'책장'; }
-  mt.innerHTML='<span class="scopepill"></span><span>되새김</span>'; mt.firstChild.textContent=pill; mt.style.fontSize='16px';
+  mt.innerHTML='<span>되새김</span>'; mt.style.fontSize='17px';
   document.getElementById('marksScope').style.display='none'; const bar=document.getElementById('marksFilter'); bar.innerHTML=''; bar.style.display='none';
   const items=[];
   orderedExcerpts().forEach(x=>{
@@ -4308,7 +4320,7 @@ function openMemoWin(){
   memoWin={scope:inBook?'bookall':'all',catId:null,bookId:inBook?currentBookId:null,exId:null,sort:(memoWin&&memoWin.sort)||'order',inBook:inBook};
   tabGo('memos');
 }
-function mwToggleSort(){ memoWin.sort=(memoWin.sort==='order')?'date':'order'; renderMemoWin(); }
+function mwToggleSort(){ const cur=memoWin.sort; openAct('정렬',[{t:(cur==='order'?'✓ ':'')+'순서대로',fn:()=>{ memoWin.sort='order'; renderMemoWin(); }},{t:(cur==='order'?'':'✓ ')+'작성일 순',fn:()=>{ memoWin.sort='date'; renderMemoWin(); }}]); }
 function renderMemoWin(){
   const w=memoWin; const seg=document.getElementById('mwSeg'), chips=document.getElementById('mwChips'), host=document.getElementById('mwList');
   const bk0=DATA.books.find(x=>x.id===w.bookId);
@@ -4333,7 +4345,7 @@ function renderMemoWin(){
     if((e.memo||'').trim()) items.push({e:e,bk:bk,m:null,ord:ord,at:e.memoAt||e.updatedAt||e.createdAt||0,q:'(발췌문 전체 메모)',memo:e.memo});
   });
   if(w.sort==='date') items.sort((a,b)=>b.at-a.at); else items.sort((a,b)=>(a.ord-b.ord)||((a.m?a.m.s:-1)-(b.m?b.m.s:-1)));
-  const sb=document.getElementById('mwSort'); sb.textContent=(w.sort==='order'?'순서대로':'작성일 순'); sb.setAttribute('aria-label','정렬 바꾸기');
+  const sb=document.getElementById('mwSort'); sb.textContent=(w.sort==='order'?'순서대로':'작성일 순')+' ▾'; sb.setAttribute('aria-label','정렬 바꾸기');
   document.getElementById('mwCount').textContent='메모 '+items.length+'개';
   host.innerHTML='';
   if(!items.length){ host.innerHTML='<div class="empty">아직 메모가 없습니다.<br>읽기 화면에서 글을 길게 눌러 선택한 뒤<br>메모 아이콘을 눌러 남겨 보세요.</div>'; return; }
@@ -4872,7 +4884,7 @@ function renderSearchScreen(){
 function tabSearch(){ tabGo('search'); setTimeout(()=>{const i=document.getElementById('searchInput'); if(i) i.focus();},80); }
 
 /* ---------- 버전 · 업데이트 확인 ---------- */
-const APP_VERSION='2026.11.18-15';
+const APP_VERSION='2026.11.18-16';
 let updateAvail=false;
 let latestVer='';
 function pendingState(){
