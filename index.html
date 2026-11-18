@@ -410,6 +410,7 @@ html,body{overscroll-behavior-y:none;overflow-anchor:none;}
 #bdFix{position:fixed;left:0;right:0;top:var(--vvt,0px);transform:translateZ(0);will-change:transform;z-index:30;display:none;zoom:var(--uz,1);}
 #bdFix .bdin{max-width:480px;margin:0 auto;padding:20px 18px 0;background:var(--ivory);}
 #bdFix .topbar{margin:0 0 8px;}
+#bdFix .bdin{padding-bottom:4px;}
 #bdFix .listhead{margin:0;padding:6px 0 8px;background:var(--ivory);}
 #bookDetailMeta{margin:0;font-size:14px;line-height:1.6;}
 .topbar h1{letter-spacing:-.2px;}
@@ -1346,6 +1347,8 @@ html[data-mode=eink] body,html[data-mode=eink] .screen.active,html[data-mode=ein
     <h3>새 소식</h3>
     <div class="updbanner" id="newsUpd" style="display:none;margin:0 0 12px;"><span>🔔 새 업데이트가 있어요</span><button type="button" onclick="askConfirm('업데이트할까요? 저장한 글과 사진은 그대로 유지됩니다.',applyUpdate)">업데이트 적용</button></div>
     <div class="noticebody guidebody">
+      <h4>2026.11.18 (17)</h4>
+      <p>· 책 화면에서 발췌문이 많아 스크롤할 때, 맨 위 제목 줄부터 표지·책 정보, ‘발췌 목록’ 줄까지 고정되고 발췌문만 스크롤돼요.</p>
       <h4>2026.11.18 (16)</h4>
       <p>· 목록형에서 표지가 Today 버튼 폭만큼 커지고, 제목은 책장 칩 왼쪽 선에서 시작해요. 책장 이름 줄과 첫 책 사이도 더 띄웠어요.</p>
       <p>· 스크롤을 끝까지 내릴 때 위쪽 고정 부분이 출렁이던 것을 줄였어요.</p>
@@ -2285,17 +2288,14 @@ function openBookDetail(bookId){
   function bdFixUpdate(){
     const bd=document.getElementById('bookDetail');
     if(!bd||!bd.classList.contains('active')){ if(fx) fx.style.display='none'; return; }
-    const tb=bd.querySelector(':scope>.topbar'), lh=bd.querySelector('.listhead'); if(!tb||!lh) return;
-    if(!fx){ fx=document.createElement('div'); fx.id='bdFix'; fx.innerHTML='<div class="bdin"><div class="bdt"></div><div class="bdl"></div></div>'; document.body.appendChild(fx); }
-    const showT = tb.getBoundingClientRect().bottom <= 4;
-    if(!showT){ fx.style.display='none'; return; }
-    const t=fx.querySelector('.bdt'), l=fx.querySelector('.bdl');
-    if(!t.firstChild){ const c=tb.cloneNode(true); c.removeAttribute('id'); c.querySelectorAll('[id]').forEach(e=>e.removeAttribute('id')); t.appendChild(c); }
-    const h=t.firstChild; const th=fx.style.display==='none'?0:0;
+    const tb=bd.querySelector(':scope>.topbar'), bt=bd.querySelector(':scope>.booktop'), lh=bd.querySelector('.listhead'); if(!tb||!bt||!lh) return;
+    const sy=window.scrollY||document.documentElement.scrollTop||0;
+    if(sy<=1){ if(fx) fx.style.display='none'; return; }
+    if(!fx){ fx=document.createElement('div'); fx.id='bdFix'; fx.innerHTML='<div class="bdin"><div class="bdt"></div><div class="bdb"></div><div class="bdl"></div></div>'; document.body.appendChild(fx); }
+    const t=fx.querySelector('.bdt'), m=fx.querySelector('.bdb'), l=fx.querySelector('.bdl');
+    const mk=(host,src,key)=>{ if(!host.firstChild||host.dataset.k!==key){ host.innerHTML=''; const c=src.cloneNode(true); c.removeAttribute('id'); c.querySelectorAll('[id]').forEach(e=>e.removeAttribute('id')); host.appendChild(c); host.dataset.k=key; const cs=getComputedStyle(src); c.style.margin=cs.marginTop+' 0 '+cs.marginBottom; } };
+    mk(t,tb,'t'); mk(m,bt,bt.innerHTML); mk(l,lh,lh.innerHTML);
     fx.style.display='block';
-    const t1=t.getBoundingClientRect().bottom;
-    const showL = lh.getBoundingClientRect().top <= t1+2;
-    if(showL){ if(!l.firstChild||l.dataset.k!==lh.innerHTML){ l.innerHTML=''; const c=lh.cloneNode(true); c.removeAttribute('id'); c.querySelectorAll('[id]').forEach(e=>e.removeAttribute('id')); l.appendChild(c); l.dataset.k=lh.innerHTML; } l.style.display='block'; } else l.style.display='none';
     const ttl=bd.querySelector('#bookDetailTitle'); const ct=t.querySelector('h1'); if(ttl&&ct&&ct.textContent!==ttl.textContent) ct.textContent=ttl.textContent;
   }
   window.bdFixUpdate=bdFixUpdate;
@@ -4884,7 +4884,7 @@ function renderSearchScreen(){
 function tabSearch(){ tabGo('search'); setTimeout(()=>{const i=document.getElementById('searchInput'); if(i) i.focus();},80); }
 
 /* ---------- 버전 · 업데이트 확인 ---------- */
-const APP_VERSION='2026.11.18-16';
+const APP_VERSION='2026.11.18-17';
 let updateAvail=false;
 let latestVer='';
 function pendingState(){
