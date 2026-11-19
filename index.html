@@ -776,6 +776,10 @@ html[data-mode=eink]{--rcbg:#FFFFFF;--rcln:#000000;--rcln2:#999999;--rctx:#00000
 .modal{zoom:var(--uz,1);}
 .tab .fsico{display:flex;align-items:baseline;justify-content:center;height:22px;font-weight:800;line-height:1;}
 .tab .fsico .s{font-size:11px;opacity:.5;}
+.inuse{display:inline-block;margin-left:6px;font-size:10px;font-weight:700;font-family:"PretendardM",sans-serif;padding:2px 5px;border-radius:6px;background:var(--btn);color:#fff;vertical-align:2px;}
+.selbar .inuse{background:rgba(255,255,255,.9);color:#5E574F;}
+.ftreset{border-style:dashed !important;font-size:13px !important;opacity:.9;}
+html.uiserif body{font-weight:500;}
 .uifrow{display:flex;gap:8px;margin-top:12px;}
 .uifbtn{flex:1;min-height:44px;border:2px solid var(--beige);background:var(--surface);color:var(--text);border-radius:12px;font-size:15px;}
 .uifbtn.on{font-weight:700;border-color:var(--btn);background:color-mix(in srgb,var(--btn) 10%,var(--surface));}
@@ -992,7 +996,7 @@ html[data-theme=mocha][data-mode=dark]{--ivory:#2B2622;--surface:#353029;--text:
 .thhint{font-size:12px;color:var(--ic2,#8C7D6E);margin:2px 0 4px;}
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang&family=Gowun+Dodum&family=Nanum+Gothic&family=Nanum+Myeongjo&family=Noto+Sans+KR:wght@400;700&family=Noto+Serif+KR:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang&family=Gowun+Dodum&family=Nanum+Gothic&family=Nanum+Myeongjo&family=Noto+Sans+KR:wght@400;700&family=Noto+Serif+KR:wght@400;500;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
@@ -1903,7 +1907,7 @@ html[data-theme=mocha][data-mode=dark]{--ivory:#2B2622;--surface:#353029;--text:
 <nav class="tabbar" id="tabbar"><div class="tabin">
   <button class="tab" data-tab="library" onclick="goMain()" aria-label="전체 책장"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 3.5h16v17H4z"/><path d="M4 12h16"/><path d="M8 5.5v4.5M11.5 6.5v3.5M15.5 5.5v4.5"/><path d="M8 14.5v4M12 15.5v3M16 14.5v4"/></svg></button>
   <button class="tab" id="helpBtn" data-tab="memos" onclick="openMemoWin()" aria-label="메모창" style="display:none;"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5l2.4 2.5L3 15.5" stroke-width="1.8" opacity=".6"/><path d="M11.5 4.5H19a2 2 0 0 1 2 2V17" opacity=".4"/><path d="M10 7.5h7a1.5 1.5 0 0 1 1.5 1.5v9.5A1.5 1.5 0 0 1 17 20h-7a1.5 1.5 0 0 1-1.5-1.5V9A1.5 1.5 0 0 1 10 7.5z" stroke-width="2.2"/><path d="M11.3 11.5h5M11.3 14.5h5M11.3 17.2h3" stroke-width="1.9"/></svg></button>
-  <button class="tab" id="tabFs" data-tab="fs" onclick="openFs()" aria-label="글자 크기" style="display:none;"><span class="fsico"><span class="s">가</span><span class="b" style="font-family:'Gowun Batang','Noto Serif KR',serif">가</span></span></button>
+  <button class="tab" id="tabFs" data-tab="fs" onclick="openFs()" aria-label="글자 크기" style="display:none;"><span class="fsico"><span class="s">가</span><span class="b" style="font-family:'Noto Serif KR',serif">가</span></span></button>
   <button class="tab" data-tab="search" onclick="tabSearch()" aria-label="검색"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/></svg></button>
   <button class="tab" id="tabMag" data-tab="searchb" onclick="tabSearch()" aria-label="검색" style="display:none;"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/></svg></button>
   <button class="tab" data-tab="marks" onclick="openMarks('all')" aria-label="되새김"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3.5h12v17l-6-4-6 4z"/></svg></button>
@@ -3737,7 +3741,7 @@ function selHeadLv(lv){
 function selHead(){ selHeadLv(2); }
 function selParasHit(){ const e=curEx(); const o=selR||rangeOffsets(); if(!e||!o||o.k!=='body') return null; const ps=bodyParas(e.body||'').filter(p=>p.s<o.e&&p.e>o.s); return ps.length?{e:e,o:o,ps:ps}:null; }
 function selAlign(a){ const c=selParasHit(); if(!c) return; fmtPush(c.e); c.e.al=(c.e.al||[]).filter(x=>!c.ps.some(p=>x.s<p.e&&x.e>p.s)); if(a) c.ps.forEach(p=>c.e.al.push({id:uid(),s:p.s,e:p.e,a:a})); fmtFin(c.e); showToast(a==='c'?'가운데 맞춤':(a==='r'?'오른쪽 맞춤':(a==='l'?'왼쪽 맞춤':(a==='j'?'양쪽 맞춤':'맞춤을 기본으로 돌렸어요.')))); }
-function selFont(k){ const e=curEx(); const o=selR||rangeOffsets(); if(!e||!o||o.k!=='body') return; fmtPush(e); let arr=removeRangeArr((e.marks||[]).slice(),'f',o.s,o.e); if(k) arr.push({id:uid(),t:'f',s:o.s,e:o.e,f:k}); e.marks=arr; fmtFin(e); showToast(k?(FONTS[k].n+' 글꼴'):'기본 글꼴'); }
+function selFont(k){ const e=curEx(); const o=selR||rangeOffsets(); if(!e||!o||o.k!=='body') return; fmtPush(e); let arr=removeRangeArr((e.marks||[]).slice(),'f',o.s,o.e); if(k) arr.push({id:uid(),t:'f',s:o.s,e:o.e,f:k}); e.marks=arr; fmtFin(e); showToast(k?(FONTS[k].n+' 글꼴'):'글꼴을 원래대로 되돌렸어요'); }
 function selIndent(scope,on){ const e=curEx(); if(!e) return; if(scope==='all'){ fmtPush(e); e.indent=!!on; e.ix=[]; fmtFin(e); showToast(on?'전체 들여쓰기를 켰어요.':'전체 들여쓰기를 껐어요.'); return; }
   const c=selParasHit(); if(!c) return; fmtPush(e); e.ix=(e.ix||[]).filter(x=>!c.ps.some(p=>x.s<p.e&&x.e>p.s)); c.ps.forEach(p=>e.ix.push({id:uid(),s:p.s,e:p.e,v:on?1:0})); fmtFin(e); showToast(on?'이 문단을 들여썼어요.':'이 문단 들여쓰기를 껐어요.'); }
 function selClear(scope){
@@ -3756,7 +3760,8 @@ function selSubOpen(k){
   if(k==='al'){ let cur=''; try{ const c=selParasHit(); const a=c&&(c.e.al||[]).find(x=>x.s<c.ps[0].e&&x.e>c.ps[0].s); cur=a?a.a:''; }catch(x){}
     const ab=(v,lab,d)=>'<button type="button" class="'+(cur===v?'on':'')+'" aria-label="'+lab+'" onclick="selAlign(\''+v+'\')">'+ic(d)+'</button>';
     h=ab('l','왼쪽 맞춤','M4 6h16M4 11h10M4 16h16M4 21h10')+ab('c','가운데 맞춤','M4 6h16M7 11h10M4 16h16M7 21h10')+ab('r','오른쪽 맞춤','M4 6h16M10 11h10M4 16h16M10 21h10')+ab('j','양쪽 맞춤','M4 6h16M4 11h16M4 16h16M4 21h16')+'<button type="button" class="'+(cur===''?'on':'')+'" onclick="selAlign(\'\')">기본</button>'; }
-  else if(k==='ft') h='<button type="button" onclick="selFont(\'\')">기본</button>'+Object.keys(FONTS).map(f=>'<button type="button" style="font-family:'+FONTS[f].f.replace(/"/g,"'")+'" onclick="selFont(\''+f+'\')">'+FONTS[f].n+'</button>').join('');
+  else if(k==='ft'){ let cf=''; try{ const e=curEx(), o=selR||rangeOffsets(); const m=e&&o&&(e.marks||[]).find(x=>x.t==='f'&&x.s<=o.s&&x.e>o.s); cf=m?m.f:fontKey(RS().font); }catch(x){ cf=fontKey(RS().font); }
+    h=FONT_LIST().map(f=>'<button type="button" class="'+(cf===f?'on':'')+'" style="font-family:'+FONTS[f].f.replace(/"/g,"'")+'" onclick="selFont(\''+f+'\')">'+FONTS[f].n+(cf===f?'<span class="inuse">사용 중</span>':'')+'</button>').join('')+'<button type="button" class="ftreset" onclick="selFont(\'\')">글꼴 원래대로</button>'; }
   else if(k==='ind'){ let pOn=true,aOn=true; try{ const c=selParasHit(); const e=curEx(); aOn=e.indent!==false; if(c){ const p0=c.ps[0]; const ov=(e.ix||[]).find(x=>x.s<p0.e&&x.e>p0.s); pOn=ov?ov.v!==0:aOn; } }catch(x){}
     h='<div class="indband full"><span class="indt">들여쓰기</span><label class="ck" onclick="selIndent(\'p\','+(!pOn)+')"><i class="'+(pOn?'on':'')+'"></i>이 문단</label><label class="ck" onclick="selIndent(\'all\','+(!aOn)+')"><i class="'+(aOn?'on':'')+'"></i>전체</label></div>'; }
   else if(k==='clr') h='<button type="button" onclick="selClear(\'sel\')">선택 부분 서식 지우기</button><button type="button" onclick="selClear(\'all\')">이 발췌문 전체</button>';
@@ -4169,6 +4174,7 @@ function remapMarks(marks,oldT,newT){
 /* ===== 읽기 설정 / 테마 ===== */
 const FONTS={notoserif:{n:'본명조',f:'"Noto Serif KR","Nanum Myeongjo",serif'},nanummyeongjo:{n:'나눔명조',f:'"Nanum Myeongjo","Noto Serif KR",serif'},gowunbatang:{n:'고운바탕',f:'"Gowun Batang","Noto Serif KR",serif'},
   notosans:{n:'본고딕',f:'"Noto Sans KR","Malgun Gothic",sans-serif'},nanumgothic:{n:'나눔고딕',f:'"Nanum Gothic","Noto Sans KR",sans-serif'},gowundodum:{n:'고운돋움',f:'"Gowun Dodum","Noto Sans KR",sans-serif'},system:{n:'기본 글꼴',f:'system-ui,-apple-system,"Noto Sans KR",sans-serif'}};
+const FONT_LIST=()=>Object.keys(FONTS).filter(k=>k!=='system');
 function fontKey(k){ if(k==='serif') return 'notoserif'; if(k==='sans') return 'notosans'; return FONTS[k]?k:'notoserif'; }
 const THEMES={white:{n:'흰색',bg:'#FFFFFF',tx:'#38332F',bd:'#E9DED1',memo:'#F1ECE4',bb:'#F1E8DB',bl:'#C4A28C',bt:'#7A5A47'},
   beige:{n:'은은한 베이지',bg:'#F3EADB',tx:'#1F1E1D',bd:'#E4D8C4',memo:'#E8E6DC',bb:'#F9F3E8',bl:'#B8896D',bt:'#7A5A47'},
@@ -4192,7 +4198,7 @@ function renderRsControls(){
   <div class="ctlrow"><span class="lab">줄 간격</span><button class="stepbtn" onclick="rsSet('line',RS().line-0.1)">−</button><span class="val">${r.line.toFixed(1)}</span><button class="stepbtn" onclick="rsSet('line',RS().line+0.1)">＋</button></div>
   <div class="ctlrow"><span class="lab">좌우 여백</span><button class="stepbtn" onclick="rsSet('pad',RS().pad-4)">−</button><span class="val">${r.pad}</span><button class="stepbtn" onclick="rsSet('pad',RS().pad+4)">＋</button></div>
   <div class="sectitle" style="margin-top:4px">글꼴</div>
-  <div class="fontgrid hsc">${Object.keys(FONTS).map(k=>`<button class="fontchip ${fontKey(r.font)===k?'on':''}" style="font-family:${FONTS[k].f}" onclick="rsSet('font','${k}')">${FONTS[k].n}</button>`).join('')}</div>
+  <div class="fontgrid hsc">${FONT_LIST().map(k=>`<button class="fontchip ${fontKey(r.font)===k?'on':''}" style="font-family:${FONTS[k].f}" onclick="rsSet('font','${k}')">${FONTS[k].n}${fontKey(r.font)===k?'<span class="inuse">사용 중</span>':''}</button>`).join('')}</div>
   <div class="ctlrow"><span class="lab">읽는 방식</span><button class="segbtn ${r.flow==='scroll'?'on':''}" onclick="rsSet('flow','scroll')">스크롤</button><button class="segbtn ${r.flow==='page'?'on':''}" onclick="rsSet('flow','page')">쪽 넘기기</button></div>
   <div class="ocrpair"><label class="ocropt"><input type="checkbox" ${r.just!==false?'checked':''} onchange="rsSet('just',this.checked)"> 양쪽 맞춤</label>
   <label class="ocropt"><input type="checkbox" ${r.cut!==false?'checked':''} onchange="rsSet('cut',this.checked)"> 한글 잘림 허용</label></div>
@@ -4633,7 +4639,7 @@ function cfSubOpen(k){ const sub=document.getElementById('cfSub'); if(!sub||!_cf
   if(k==='hl') h=HL_COLORS.map(c=>'<button type="button" aria-label="하이라이트 색" style="background:'+c+';width:38px;padding:0" onclick="cfMark(\'hl\',\''+c+'\')"></button>').join('')+'<button type="button" onclick="cfMark(\'hl\',\'\')">해제</button>';
   else if(k==='al'){ const ab=(v,lab,d)=>'<button type="button" class="'+((f.al||'')===v?'on':'')+'" aria-label="'+lab+'" onclick="cfPara(\'al\',\''+v+'\')">'+ic(d)+'</button>';
     h=ab('','기본 맞춤','M4 6h16M4 11h10M4 16h16M4 21h10')+ab('c','가운데 맞춤','M4 6h16M7 11h10M4 16h16M7 21h10')+ab('r','오른쪽 맞춤','M4 6h16M10 11h10M4 16h16M10 21h10')+ab('j','양쪽 맞춤','M4 6h16M4 11h16M4 16h16M4 21h16'); }
-  else if(k==='ft') h='<button type="button" onclick="cfPara(\'ff\',\'\')">기본</button>'+Object.keys(FONTS).map(x=>'<button type="button" class="'+(f.ff===x?'on':'')+'" style="font-family:'+FONTS[x].f.replace(/"/g,"'")+'" onclick="cfPara(\'ff\',\''+x+'\')">'+FONTS[x].n+'</button>').join('');
+  else if(k==='ft') h=FONT_LIST().map(x=>'<button type="button" class="'+(f.ff===x?'on':'')+'" style="font-family:'+FONTS[x].f.replace(/"/g,"'")+'" onclick="cfPara(\'ff\',\''+x+'\')">'+FONTS[x].n+(f.ff===x?'<span class="inuse">사용 중</span>':'')+'</button>').join('')+'<button type="button" class="ftreset" onclick="cfPara(\'ff\',\'\')">글꼴 원래대로</button>';
   else h='<button type="button" onclick="cfClear(\'sel\')">선택 부분 서식 지우기</button><button type="button" onclick="cfClear(\'all\')">이 카드 전체</button>';
   sub.innerHTML=h; sub.classList.add('on'); cfPlace(); }
 function cfPlace(){ const b=document.getElementById('cfBar'); const sel=getSelection(); if(!b||b.style.display==='none'||!sel.rangeCount||sel.isCollapsed) return; const rects=sel.getRangeAt(0).getClientRects(); if(!rects.length) return; const first=rects[0], last=rects[rects.length-1];
@@ -4719,8 +4725,8 @@ function uiLevel(){ const v=DATA.settings&&DATA.settings.uiScale; return (typeof
 setTimeout(()=>{ try{ applyUiFont(); }catch(e){} },0);
 function applyUiScale(){ try{ if(DATA.settings&&DATA.settings.uiScaleV!==2){ const o=DATA.settings.uiScale; if(typeof o==='number'){ DATA.settings.uiScale=[0,1,3,4][o]!=null?[0,1,3,4][o]:1; } DATA.settings.uiScaleV=2; save(); } }catch(x){}
   document.documentElement.style.setProperty('--uz',String(UI_SCALES[uiLevel()][1])); }
-const UI_FONTS=[['basic','기본','"PretendardM","Apple SD Gothic Neo","Noto Sans KR",sans-serif'],['batang','고운바탕','"Gowun Batang","Noto Serif KR",serif'],['dodum','고운돋움','"Gowun Dodum","Noto Sans KR",sans-serif']];
-function applyUiFont(){ const k=(DATA.settings&&DATA.settings.uiFont)||'basic'; const f=UI_FONTS.find(x=>x[0]===k)||UI_FONTS[0]; if(f[0]==='basic') document.documentElement.style.removeProperty('--uifont'); else document.documentElement.style.setProperty('--uifont',f[2]); }
+const UI_FONTS=[['basic','기본','"PretendardM","Apple SD Gothic Neo","Noto Sans KR",sans-serif'],['myeongjo','본명조','"Noto Serif KR","Nanum Myeongjo",serif'],['dodum','고운돋움','"Gowun Dodum","Noto Sans KR",sans-serif']];
+function applyUiFont(){ if(DATA.settings&&DATA.settings.uiFont==='batang') DATA.settings.uiFont='myeongjo'; const k=(DATA.settings&&DATA.settings.uiFont)||'basic'; document.documentElement.classList.toggle('uiserif',k==='myeongjo'); const f=UI_FONTS.find(x=>x[0]===k)||UI_FONTS[0]; if(f[0]==='basic') document.documentElement.style.removeProperty('--uifont'); else document.documentElement.style.setProperty('--uifont',f[2]); }
 function renderUiFont(){ const h=document.getElementById('uiFontRow'); if(!h) return; const k=DATA.settings.uiFont||'basic'; h.innerHTML=''; UI_FONTS.forEach(f=>{ const b=document.createElement('button'); b.type='button'; b.className='uifbtn'+(f[0]===k?' on':''); b.style.fontFamily=f[2]; b.textContent=f[1]; b.onclick=()=>{ DATA.settings.uiFont=f[0]; save(); applyUiFont(); renderUiFont(); }; h.appendChild(b); }); }
 function openFs(){ renderFs(); renderUiFont(); document.getElementById('fsBg').classList.add('show'); }
 function renderFs(){ const i=uiLevel(); const l=document.getElementById('fsLabel'); if(l) l.textContent=UI_SCALES[i][0]; const a=document.getElementById('fsMinus'), b=document.getElementById('fsPlus'); if(a) a.disabled=(i<=0); if(b) b.disabled=(i>=UI_SCALES.length-1); }
@@ -5038,7 +5044,7 @@ function renderSearchScreen(){
 function tabSearch(){ tabGo('search'); setTimeout(()=>{const i=document.getElementById('searchInput'); if(i) i.focus();},80); }
 
 /* ---------- 버전 · 업데이트 확인 ---------- */
-const APP_VERSION='2026.11.19-28';
+const APP_VERSION='2026.11.19-29';
 let updateAvail=false;
 let latestVer='';
 function pendingState(){
