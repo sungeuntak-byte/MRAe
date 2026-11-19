@@ -1,6 +1,6 @@
 /* MRAe 서비스 워커 — 버전을 올리면 앱이 새 파일로 갱신됩니다 */
-const VER = 'mrae-v2';
-const CORE = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png', './apple-touch-icon.png'];
+const VER = 'mrae-v3';
+const CORE = ['./', './index.html', './manifest.webmanifest', './icon-v2-192.png', './icon-v2-512.png', './apple-touch-icon-v2.png'];
 self.addEventListener('install', e => { e.waitUntil(caches.open(VER).then(c => c.addAll(CORE)).then(() => self.skipWaiting())); });
 self.addEventListener('activate', e => {
   e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k !== VER).map(k => caches.delete(k)))).then(() => self.clients.claim()));
