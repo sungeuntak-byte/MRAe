@@ -812,6 +812,9 @@ html[data-mode=dark] #libTitle .tt1{color:#B8B3A6;}
 .tddots{display:flex;justify-content:center;align-items:center;gap:9px;margin:13px 0 15px;min-height:14px;}
 .tddots i{display:block;border-radius:50%;background:var(--cdbd);cursor:pointer;}
 .tddots i.c{background:var(--btn);}
+html[data-theme=moss]:not([data-mode=eink]):not([data-mode=dark]) .tdband{--rcbg:#F7F9F1;--cdbd:#D6DEC8;--rctag:#6E8F5C;--rcq:#55624D;--rcchev:#8CA67E;--cdtx:#2C3A26;}
+html[data-theme=sky]:not([data-mode=eink]):not([data-mode=dark]) .tdband{--rcbg:#F3F7FB;--cdbd:#D2DEEA;--rctag:#4F7BA0;--rcq:#4A5A6B;--rcchev:#7FA2C2;--cdtx:#243447;}
+html[data-theme=mocha]:not([data-mode=eink]) .tdband{--rcbg:#353029;--cdbd:#4A4238;--rctag:#C9A898;--rcq:#CFC3B4;--rcchev:#A98A7C;--cdtx:#EFE6D8;}
 .tdband{position:relative;border:1.5px solid var(--cdbd);border-radius:5px;background:var(--rcbg);padding:12px 38px 12px 18px;cursor:pointer;overflow:hidden;}
 .tdband:before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--btn);}
 .tdband .bh{display:flex;justify-content:space-between;font-size:11px;font-weight:600;color:var(--rctag);margin-bottom:3px;}
@@ -955,7 +958,11 @@ html[data-theme=mocha][data-mode=dark]{--ivory:#2B2622;--surface:#353029;--text:
 .thprev .tpk i{width:22px;height:30px;border-radius:3px;display:inline-block}
 #modeBg.modal-bg{background:rgba(30,25,20,.10);}
 .thlab{margin:14px 0 2px;padding-top:14px;border-top:1px solid var(--beige);font-size:13px;font-weight:700;color:var(--brown);}
-.mldot{width:9px;height:9px;border-radius:50%;display:inline-block;margin-left:6px;flex:0 0 auto;}
+.mldot{width:15px;height:11px;border-radius:3px;display:inline-block;margin-left:9px;flex:0 0 auto;box-shadow:inset 0 0 0 1px rgba(0,0,0,.08);}
+.mlchev{margin-left:5px;}
+.tchip{flex:0 0 auto;font-size:12px;font-weight:600;line-height:1;padding:6px 8px;border-radius:6px;}
+.tchip+.tchip{margin-left:-10px;}
+.tnm{flex:1;}
 .thdot{width:24px;height:24px;border-radius:50%;flex:0 0 auto;margin-left:auto;}
 .thhint{font-size:12px;color:var(--ic2,#8C7D6E);margin:2px 0 4px;}
 </style>
@@ -4231,10 +4238,9 @@ function updateTabbar(id){
 }
 const MODES=[['light','라이트 모드'],['dark','다크 모드'],['eink','e-ink 모드'],['colorink','컬러 e-ink 모드'],['system','시스템 설정']];
 const APP_THEMES=[['ivory','아이보리','#C65D3B','beige',{bg:'#F5F4EE',sf:'#FFFFFF',bn:'#C25E3A',tx:'#3A352F',bd:'#E8E6DC'}],['moss','모스 그린','#7A9A6C','moss',{bg:'#F3F3EA',sf:'#FFFEF8',bn:'#7A9A6C',tx:'#2C3A26',bd:'#E3E6D6'}],['sky','스카이 블루','#5C8AB0','sky',{bg:'#F4F6F9',sf:'#FFFFFF',bn:'#5C8AB0',tx:'#243447',bd:'#E1E7EE'}],['mocha','모카','#A98A7C','dark',{bg:'#2B2622',sf:'#353029',bn:'#A98A7C',tx:'#EFE6D8',bd:'#4A4238'}]];
-function modeName(){ const m=(DATA.settings.mode||'light'); const t=APP_THEMES.find(x=>x[0]===(DATA.settings.theme||'ivory')); return (MODES.find(x=>x[0]===m)||MODES[0])[1]+(t?' · '+t[1]:''); }
+function modeName(){ const m=(DATA.settings.mode||'light'); const t=APP_THEMES.find(x=>x[0]===(DATA.settings.theme||'ivory')); return (MODES.find(x=>x[0]===m)||MODES[0])[1]; }
 function renderThemeList(){ const host=document.getElementById('themeList'); if(!host) return; host.innerHTML='<div class="thlab">색 테마</div>'; const cur=DATA.settings.theme||'ivory'; const eink=(DATA.settings.mode||'light')==='eink';
-  { const pt=(APP_THEMES.find(x=>x[0]===cur)||APP_THEMES[0])[4]; const pv=document.createElement('div'); pv.className='thprev'; pv.style.cssText='background:'+pt.bg+';border:1px solid '+pt.bd+';color:'+pt.tx; pv.innerHTML='<div class="tpr"><span class="tpc"></span><span class="tpo"></span></div><div class="tpk"><i></i><span>책 제목 (3)</span></div>'; pv.querySelector('.tpc').style.background=pt.bn; pv.querySelector('.tpo').style.cssText='border:1px solid '+pt.bd+';background:'+pt.sf; const k=pv.querySelector('.tpk'); k.style.cssText='background:'+pt.sf+';border:1px solid '+pt.bd; k.querySelector('i').style.background=pt.bn; host.appendChild(pv); }
-  APP_THEMES.forEach(t=>{ const d=document.createElement('div'); d.className='radrow'+(cur===t[0]?' on':''); d.innerHTML='<span class="radio"></span><span></span><span class="thdot"></span>'; d.children[1].textContent=t[1]; d.children[2].style.background=t[2];
+  APP_THEMES.forEach(t=>{ const d=document.createElement('div'); d.className='radrow'+(cur===t[0]?' on':''); d.innerHTML='<span class="radio"></span><span class="tchip">견본</span><span class="tchip">견본</span><span class="tnm"></span>'; d.children[1].style.cssText='background:'+t[4].bn+';color:#fff'; d.children[2].style.cssText='background:color-mix(in srgb,'+t[4].bn+' 16%,#fff);color:'+t[4].bn; d.children[3].textContent=t[1];
     d.onclick=()=>{ DATA.settings.theme=t[0]; RS().theme=t[3]; save(); applyMode(); renderThemeList(); try{ renderBooks(); }catch(e){} flashSaved(); }; host.appendChild(d); });
   const h=document.createElement('div'); h.className='thhint'; h.textContent=eink?'e-ink 모드에서는 색 테마가 적용되지 않아요.':(cur==='mocha'?'모카는 어두운 화면으로 보여요.':''); if(h.textContent) host.appendChild(h); }
 function applyMode(){
@@ -4242,7 +4248,7 @@ function applyMode(){
   if(m==='system') m=(window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches)?'dark':'light';
   { const th=(DATA.settings&&DATA.settings.theme)||'ivory'; if(th==='mocha'&&m!=='eink') m='dark'; document.documentElement.setAttribute('data-theme',th); }
   document.documentElement.setAttribute('data-mode',m);
-  const ml=document.getElementById('modeLabel'); if(ml){ const tt=APP_THEMES.find(x=>x[0]===(DATA.settings.theme||'ivory'))||APP_THEMES[0]; ml.innerHTML=''; ml.appendChild(document.createTextNode(modeName())); const dt=document.createElement('span'); dt.className='mldot'; dt.style.background=tt[2]; ml.appendChild(dt); ml.appendChild(document.createTextNode(' ›')); }
+  const ml=document.getElementById('modeLabel'); if(ml){ const tt=APP_THEMES.find(x=>x[0]===(DATA.settings.theme||'ivory'))||APP_THEMES[0]; ml.innerHTML=''; ml.appendChild(document.createTextNode(modeName())); if((DATA.settings.mode||'light')!=='eink'){ const dt=document.createElement('span'); dt.className='mldot'; dt.style.background=tt[2]; dt.setAttribute('role','img'); dt.setAttribute('aria-label',tt[1]); ml.appendChild(dt); } const cv=document.createElement('span'); cv.className='mlchev'; cv.textContent='›'; ml.appendChild(cv); }
   try{applyReading();}catch(e){}
 }
 if(window.matchMedia){ try{ matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>{ if(DATA.settings.mode==='system') applyMode(); }); }catch(e){} }
@@ -4999,7 +5005,7 @@ function renderSearchScreen(){
 function tabSearch(){ tabGo('search'); setTimeout(()=>{const i=document.getElementById('searchInput'); if(i) i.focus();},80); }
 
 /* ---------- 버전 · 업데이트 확인 ---------- */
-const APP_VERSION='2026.11.19-25';
+const APP_VERSION='2026.11.19-26';
 let updateAvail=false;
 let latestVer='';
 function pendingState(){
