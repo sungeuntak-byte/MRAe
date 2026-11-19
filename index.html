@@ -358,7 +358,7 @@ html[data-mode=dark] .topbar h1#libTitle.plain{color:#B8B3A6;}
 .mf{background:#FFD54A !important;color:#1F1E1D;border-radius:3px;}
 .memoico{display:inline-block;position:relative;width:20px;height:20px;border-radius:50%;vertical-align:text-bottom;margin:0 3px;cursor:pointer;background:var(--btn) url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2.6' stroke-linecap='round'><path d='M6 8h12M6 12h12M6 16h7'/></svg>") center/12px no-repeat;}
 .memoico::before{content:"";position:absolute;inset:-12px;}
-.selbar{position:fixed;left:8px;top:0;z-index:25;background:#4A443D;color:#fff;border-radius:14px;box-shadow:0 6px 22px rgba(0,0,0,.35);display:none;max-width:calc(100vw - 16px);overflow:hidden;}
+.selbar{position:fixed;left:8px;top:0;z-index:25;background:#5E574F;color:#fff;border-radius:14px;box-shadow:0 4px 16px rgba(0,0,0,.22);display:none;max-width:calc(100vw - 16px);overflow:hidden;}
 .selbar .selmain{display:flex;}
 .selbar .selmain button{flex:0 0 auto;min-height:46px;padding:0 13px;border:none;background:none;color:#fff;font-size:14.5px;font-weight:600;cursor:pointer;white-space:nowrap;}
 .selbar .selmain button+button{border-left:1px solid rgba(255,255,255,.14);}
@@ -482,6 +482,10 @@ body.hastab .toast{bottom:90px;}
 .readpaper.paged{margin-bottom:0;}
 .rtop,.rbot{position:fixed;left:0;right:0;z-index:20;background:var(--surface);display:none;}
 .rtop{top:0;border-bottom:1px solid var(--beige);padding:calc(8px + env(safe-area-inset-top,0px)) 10px 8px;}
+html:not([data-mode=eink]) :is(#rTop,#rBot){background:#5E574F;border-color:transparent;color:#F3EEE7;}
+html:not([data-mode=eink]) #rBot{box-shadow:0 -4px 14px rgba(0,0,0,.12);}
+html:not([data-mode=eink]) :is(#rTop,#rBot) :is(button,.navbtn,.btn){background:rgba(255,255,255,.07) !important;border-color:rgba(255,255,255,.2) !important;color:#F3EEE7 !important;}
+html:not([data-mode=eink]) :is(#rTop,#rBot) :is(span,div,b,.ico,svg){color:#F3EEE7;}
 .rbot{bottom:0;border-top:1px solid var(--beige);padding:10px 10px calc(10px + env(safe-area-inset-bottom,0px));box-shadow:0 -4px 14px rgba(0,0,0,.1);}
 .rtop.show,.rbot.show{display:block;}
 .rtopin,.rbotin{max-width:480px;margin:0 auto;}
@@ -859,6 +863,10 @@ html:has(#excerptEditor.active){scroll-padding-top:130px;}
 #pkAllBtn.on{color:#D9A227;}
 #pkAllBtn.on svg{fill:#D9A227;}
 .cardtitle .pks{color:#D9A227;margin-right:3px;}
+.ttlin{position:relative;}
+.ttlin .ico{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--btn);pointer-events:none;}
+.ttlin input{padding-left:40px !important;}
+#ttlPre button.on,.ttlin input.on{font-weight:700;box-shadow:inset 0 0 0 2px var(--btn);background:color-mix(in srgb,var(--btn) 10%,var(--surface));border-color:transparent;}
 #ttlPre{display:flex;flex-direction:column;gap:6px;margin:6px 0 10px;}
 #ttlPre button{padding:9px;border-radius:5px;border:1px solid var(--beige);background:var(--surface);color:var(--text);font-size:14px;}
 #ttlInput{width:100%;box-sizing:border-box;padding:10px;border:1px solid var(--beige);border-radius:5px;background:var(--surface);color:var(--text);font-size:15px;}
@@ -1758,7 +1766,7 @@ html[data-theme=mocha][data-mode=dark]{--ivory:#2B2622;--surface:#353029;--text:
   <div class="modal"><button class="xbtn ok" aria-label="완료" onclick="ttlOk()">✓</button>
     <h3>첫 화면 제목</h3>
     <div id="ttlPre"></div>
-    <input type="text" id="ttlInput" placeholder="직접 쓰기 (마지막 단어가 작게 보여요)">
+    <div class="ttlin"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4.5l3 3L8 17H5v-3z"/><path d="M4 21h16"/></svg><input type="text" id="ttlInput" placeholder="직접 쓰기 (마지막 단어가 작게 보여요)" oninput="ttlMark()"></div>
     <div class="hint" style="margin-top:8px;">예) 오늘 그리고 · 과거 현재 미래 · 어제와 오늘 그리고</div>
   </div>
 </div>
@@ -4652,7 +4660,8 @@ function pkMode(m){ const cur=DATA.settings.pickMode||'rand'; if(m==='manual'&&c
 function pkMove(items,i,d){ const ord=items.map(x=>x.key); const j=i+d; if(j<0||j>=ord.length) return; const t=ord[i]; ord[i]=ord[j]; ord[j]=t; DATA.settings.pickOrder=ord; save(); renderPicks(); }
 function pkRemove(it){ const e=DATA.excerpts.find(x=>x.id===it.eid); if(!e) return; if(it.whole) { e.pkAll=false; e.pkAt=0; } else e.marks=(e.marks||[]).filter(m=>m.id!==it.key); e.updatedAt=Date.now(); save(); renderPicks(); showToast('핵심 문장에서 뺐어요.'); }
 const TTL_PRE=['오늘 그리고','과거 현재 미래','어제와 오늘 그리고'];
-function ttlOpen(){ if(currentCatFilter!==null) return; const pre=document.getElementById('ttlPre'); pre.innerHTML=''; TTL_PRE.forEach(t=>{ const b=document.createElement('button'); b.type='button'; b.textContent=t; b.onclick=()=>{ document.getElementById('ttlInput').value=t; ttlOk(); }; pre.appendChild(b); }); document.getElementById('ttlInput').value=DATA.settings.todayTitle||'오늘 그리고'; document.getElementById('ttlBg').classList.add('show'); }
+function ttlOpen(){ if(currentCatFilter!==null) return; const pre=document.getElementById('ttlPre'); pre.innerHTML=''; TTL_PRE.forEach(t=>{ const b=document.createElement('button'); b.type='button'; b.textContent=t; b.onclick=()=>{ document.getElementById('ttlInput').value=t; ttlOk(); }; pre.appendChild(b); }); document.getElementById('ttlInput').value=DATA.settings.todayTitle||'오늘 그리고'; ttlMark(); document.getElementById('ttlBg').classList.add('show'); }
+function ttlMark(){ const v=document.getElementById('ttlInput').value.trim(); let hit=false; document.querySelectorAll('#ttlPre button').forEach(b=>{ const on=b.textContent===v; b.classList.toggle('on',on); if(on) hit=true; }); document.getElementById('ttlInput').classList.toggle('on',!hit&&!!v); }
 function ttlOk(){ const v=document.getElementById('ttlInput').value.trim(); DATA.settings.todayTitle=v||'오늘 그리고'; save(); closeModal('ttlBg'); updateListHead(); }
 function resumeReading(){ const lr=DATA.settings.lastRead; const e=lr&&DATA.excerpts.find(x=>x.id===lr.id&&!x.deleted); if(!e) return; currentBookId=e.bookId; window._startPg=lr.pg||0; openReader(e.id); }
 
@@ -5005,7 +5014,7 @@ function renderSearchScreen(){
 function tabSearch(){ tabGo('search'); setTimeout(()=>{const i=document.getElementById('searchInput'); if(i) i.focus();},80); }
 
 /* ---------- 버전 · 업데이트 확인 ---------- */
-const APP_VERSION='2026.11.19-26';
+const APP_VERSION='2026.11.19-27';
 let updateAvail=false;
 let latestVer='';
 function pendingState(){
