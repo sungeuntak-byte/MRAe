@@ -29,7 +29,7 @@ input,textarea,select,button{font-family:inherit;}
 *{box-sizing:inherit;}
 html{scroll-padding-top: env(safe-area-inset-top,0px);}
 body{margin:0;background:var(--ivory);color:var(--text);
-  font-family:"PretendardM","Apple SD Gothic Neo","Noto Sans KR",sans-serif;font-size:15px;
+  font-family:var(--uifont,"PretendardM","Apple SD Gothic Neo","Noto Sans KR",sans-serif);font-size:15px;
   min-height:100%;}
 button{font-family:inherit;}
 .screen{display:none;max-width:480px;margin:0 auto;padding:20px 18px 40px;min-height:100vh;}
@@ -387,6 +387,20 @@ html[data-mode=dark] .topbar h1#libTitle.plain{color:#B8B3A6;}
 .themechip{display:flex;flex-direction:column;align-items:center;gap:6px;padding:8px 2px;border:2px solid var(--beige);background:var(--surface);border-radius:12px;font-size:12px;color:var(--brown);cursor:pointer;}
 .themechip.on{border-color:var(--btn);font-weight:700;}
 .themechip .swatch{width:34px;height:34px;border-radius:50%;border:1px solid rgba(0,0,0,.18);}
+.readpaper{padding-left:var(--rpad,16px);padding-right:var(--rpad,16px);}
+#readSetBg .modal{display:flex;flex-direction:column;overflow:hidden;}
+#readSetBg #rsControlsM{overflow-y:auto;min-height:0;flex:1 1 auto;padding-top:12px;}
+#readSetBg #rsPrev{flex:0 0 auto;}
+.hsc{display:flex !important;overflow-x:auto;gap:8px;scrollbar-width:none;-webkit-overflow-scrolling:touch;padding:2px 1px 4px;}
+.hsc::-webkit-scrollbar{display:none;}
+.themes.hsc .themechip{flex:0 0 84px;}
+.fontgrid.hsc .fontchip{flex:0 0 auto;padding:6px 16px;white-space:nowrap;}
+.hsc .on{font-weight:700;}
+.ocrpair{display:flex;gap:18px;flex-wrap:wrap;}
+.gaset{position:relative;display:inline-block;width:24px;height:24px;}
+.gaset .g{position:absolute;left:-1px;top:-2px;font-size:17px;font-weight:800;line-height:1;}
+.gaset svg{position:absolute;right:-5px;bottom:-4px;width:17px;height:17px;padding:1px;background:var(--surface);border-radius:50%;}
+html:not([data-mode=eink]) #rBot .gaset svg{background:#5E574F;}
 .readprev{background:var(--rbg);color:var(--rtext);border:1px solid var(--rborder);border-radius:12px;padding:14px;font-family:var(--rfont);font-size:var(--rsize);line-height:var(--rline);word-break:keep-all;}
 .switchrow{display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:14px;color:var(--text);min-height:44px;}
 .switchrow input{width:24px;height:24px;accent-color:var(--btn);}
@@ -762,6 +776,9 @@ html[data-mode=eink]{--rcbg:#FFFFFF;--rcln:#000000;--rcln2:#999999;--rctx:#00000
 .modal{zoom:var(--uz,1);}
 .tab .fsico{display:flex;align-items:baseline;justify-content:center;height:22px;font-weight:800;line-height:1;}
 .tab .fsico .s{font-size:11px;opacity:.5;}
+.uifrow{display:flex;gap:8px;margin-top:12px;}
+.uifbtn{flex:1;min-height:44px;border:2px solid var(--beige);background:var(--surface);color:var(--text);border-radius:12px;font-size:15px;}
+.uifbtn.on{font-weight:700;border-color:var(--btn);background:color-mix(in srgb,var(--btn) 10%,var(--surface));}
 .tab .fsico .b{font-size:20px;}
 #fsBg{background:rgba(31,30,29,0.12);justify-content:center;}
 #fsBg .modal{width:min(300px,calc(100% - 28px));border-radius:18px;margin-bottom:calc(84px + env(safe-area-inset-bottom,0px));padding:10px 14px 14px;box-shadow:0 8px 28px rgba(60,50,40,.22);}
@@ -1155,7 +1172,7 @@ html[data-theme=mocha][data-mode=dark]{--ivory:#2B2622;--surface:#353029;--text:
   <div class="rbot" id="rBot"><div class="rbotin">
     <div class="pagenav" id="pageNav"><button class="stepbtn" onclick="pageGo(-1)" aria-label="이전 쪽">‹</button><span class="pgi" id="pgInd">1 / 1</span><button class="stepbtn" onclick="pageGo(1)" aria-label="다음 쪽">›</button></div>
     <div class="readactions">
-      <button class="ractbtn" onclick="openReadingSettings()" aria-label="읽기 설정"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 6.5h13M12 6.5V19"/></svg></button>
+      <button class="ractbtn" onclick="openReadingSettings()" aria-label="읽기 설정"><span class="gaset" aria-hidden="true"><span class="g">가</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3.2"/><path d="M12 2.8v2.6M12 18.6v2.6M2.8 12h2.6M18.6 12h2.6M5.5 5.5l1.8 1.8M16.7 16.7l1.8 1.8M5.5 18.5l1.8-1.8M16.7 7.3l1.8-1.8"/></svg></span></button>
       <button class="ractbtn" onclick="startInlineEdit()" aria-label="본문 수정"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16.5 3.4a2.1 2.1 0 0 1 3 3L8.3 17.6 4 18.7l1.1-4.3z"/><path d="m14.6 5.3 3 3"/><path d="M4 22h16" stroke-width="2.6"/></svg></button>
       <button class="ractbtn" onclick="addWholeMemo()" aria-label="메모 추가"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6"/><path d="M12 12.5v5M9.5 15h5"/></svg><i id="memoCount"></i></button>
       <button class="ractbtn" id="mergeBtn" onclick="openMergeMenu()" aria-label="합치기"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="2.5" width="7" height="5" rx="1"/><rect x="14" y="2.5" width="7" height="5" rx="1"/><path d="M6.5 7.5V9.5Q6.5 11.5 8.5 11.5H12M17.5 7.5V9.5Q17.5 11.5 15.5 11.5H12"/><path d="M12 11.5v4.5M10 14l2 2.3 2-2.3"/><rect x="6" y="17.8" width="12" height="4" rx="1"/></svg></button>
@@ -1238,15 +1255,15 @@ html[data-theme=mocha][data-mode=dark]{--ivory:#2B2622;--surface:#353029;--text:
     <button type="button" aria-label="하이라이트" onclick="selToggleHl()"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9.6 14.4 7.6-7.6a1.7 1.7 0 0 1 2.4 2.4L12 16.8z"/><path d="m9.6 14.4-3 3 1.2 1.9 4.2-.5"/><path d="M3.5 21.2h9.5" stroke="#FFE066" stroke-width="3.2"/></svg></button>
     <button type="button" aria-label="굵게" onclick="selApply('b')"><b class="gl">B</b></button>
     <button type="button" aria-label="밑줄" onclick="selApply('u')"><u class="gl">U</u></button>
-    <button type="button" id="selPkBtn" aria-label="핵심 문장 ★" onclick="selPick()"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.2l2.6 5.5 6 .8-4.4 4.2 1.1 6-5.3-2.9-5.3 2.9 1.1-6-4.4-4.2 6-.8z"/></svg></button>
+    <button type="button" aria-label="글꼴" onclick="selSubOpen('ft')"><span class="gl2">Aa</span></button>
     <button type="button" aria-label="서식 지우기" onclick="selSubOpen('clr')"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m8 20-4.5-4.5a2 2 0 0 1 0-2.8L13 3.2a2 2 0 0 1 2.8 0l4.9 4.9a2 2 0 0 1 0 2.8L12 19.6a2 2 0 0 1-1.4.4H8zM9 9l6 6M12 20h8"/></svg></button>
   </div>
   <div class="selmain selrow2">
     <button type="button" id="selH1Btn" aria-label="대제목" onclick="selHeadLv(1)"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round"><path d="M4 4.2h16" stroke-width="8"/><g style="opacity:.55" stroke-width="1.3"><path d="M4 13.5h16M4 17.2h16M4 20.9h11"/></g></svg></button>
     <button type="button" id="selHeadBtn" aria-label="소제목" onclick="selHead()"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round"><path d="M4 4h16" stroke-width="3.6"/><g style="opacity:.55" stroke-width="1.3"><path d="M4 12.5h16M4 16.2h16M4 19.9h11"/></g></svg></button>
     <button type="button" aria-label="맞춤" onclick="selSubOpen('al')"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M7 11h10M4 16h16M7 21h10"/></svg></button>
-    <button type="button" aria-label="글꼴" onclick="selSubOpen('ft')"><span class="gl2">Aa</span></button>
     <button type="button" aria-label="들여쓰기" onclick="selSubOpen('ind')"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16M12 10h8M12 15h8M4 20h16M4 9.5l3.5 2.5L4 14.5z"/></svg></button>
+    <button type="button" id="selPkBtn" aria-label="핵심 문장 ★" onclick="selPick()"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.2l2.6 5.5 6 .8-4.4 4.2 1.1 6-5.3-2.9-5.3 2.9 1.1-6-4.4-4.2 6-.8z"/></svg></button>
   </div>
   <div class="selmain selrow3">
     <button type="button" id="selMemoBtn" aria-label="부분 메모" onclick="selMemo()"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6"/><path d="M12 12.5v5M9.5 15h5"/></svg></button>
@@ -1787,6 +1804,7 @@ html[data-theme=mocha][data-mode=dark]{--ivory:#2B2622;--surface:#353029;--text:
   <div class="modal"><button class="xbtn xl" aria-label="닫기" onclick="closeModal('readSetBg')">✕</button><button class="xbtn ok" aria-label="완료" onclick="closeModal('readSetBg')">✓</button>
     <h3 class="ctr">읽기 설정</h3>
     <div class="savedtag" id="savedTag2" style="text-align:center;margin:-6px 0 8px;"></div>
+    <div class="readprev" id="rsPrev">미래는 오늘 읽는 한 줄에서 시작됩니다.</div>
     <div id="rsControlsM"></div>
   </div>
 </div>
@@ -1853,8 +1871,9 @@ html[data-theme=mocha][data-mode=dark]{--ivory:#2B2622;--surface:#353029;--text:
 </div>
 <div class="toast" id="toast"></div><div class="modal-bg" id="fsBg" onclick="closeOnBg(event,'fsBg')">
   <div class="modal"><button class="xbtn" aria-label="닫기" onclick="closeModal('fsBg')">✕</button>
-    <h3 class="ctr" style="font-size:15px;margin-bottom:4px;">화면 글자 크기</h3>
+    <h3 class="ctr" style="font-size:15px;margin-bottom:4px;">화면 글자 크기 · 글꼴</h3>
     <div class="fspm"><button type="button" id="fsMinus" aria-label="작게" onclick="fsStep(-1)">－</button><span id="fsLabel">보통</span><button type="button" id="fsPlus" aria-label="크게" onclick="fsStep(1)">＋</button></div>
+    <div class="uifrow" id="uiFontRow"></div>
   </div>
 </div>
 
@@ -1884,7 +1903,7 @@ html[data-theme=mocha][data-mode=dark]{--ivory:#2B2622;--surface:#353029;--text:
 <nav class="tabbar" id="tabbar"><div class="tabin">
   <button class="tab" data-tab="library" onclick="goMain()" aria-label="전체 책장"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 3.5h16v17H4z"/><path d="M4 12h16"/><path d="M8 5.5v4.5M11.5 6.5v3.5M15.5 5.5v4.5"/><path d="M8 14.5v4M12 15.5v3M16 14.5v4"/></svg></button>
   <button class="tab" id="helpBtn" data-tab="memos" onclick="openMemoWin()" aria-label="메모창" style="display:none;"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5l2.4 2.5L3 15.5" stroke-width="1.8" opacity=".6"/><path d="M11.5 4.5H19a2 2 0 0 1 2 2V17" opacity=".4"/><path d="M10 7.5h7a1.5 1.5 0 0 1 1.5 1.5v9.5A1.5 1.5 0 0 1 17 20h-7a1.5 1.5 0 0 1-1.5-1.5V9A1.5 1.5 0 0 1 10 7.5z" stroke-width="2.2"/><path d="M11.3 11.5h5M11.3 14.5h5M11.3 17.2h3" stroke-width="1.9"/></svg></button>
-  <button class="tab" id="tabFs" data-tab="fs" onclick="openFs()" aria-label="글자 크기" style="display:none;"><span class="fsico"><span class="s">가</span><span class="b">가</span></span></button>
+  <button class="tab" id="tabFs" data-tab="fs" onclick="openFs()" aria-label="글자 크기" style="display:none;"><span class="fsico"><span class="s">가</span><span class="b" style="font-family:'Gowun Batang','Noto Serif KR',serif">가</span></span></button>
   <button class="tab" data-tab="search" onclick="tabSearch()" aria-label="검색"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/></svg></button>
   <button class="tab" id="tabMag" data-tab="searchb" onclick="tabSearch()" aria-label="검색" style="display:none;"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/></svg></button>
   <button class="tab" data-tab="marks" onclick="openMarks('all')" aria-label="되새김"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3.5h12v17l-6-4-6 4z"/></svg></button>
@@ -4157,28 +4176,29 @@ const THEMES={white:{n:'흰색',bg:'#FFFFFF',tx:'#38332F',bd:'#E9DED1',memo:'#F1
   moss:{n:'연한 이끼',bg:'#F4F5E8',tx:'#2C3A26',bd:'#DCE0C8',memo:'#E9EDDA',bb:'#F6F8EC',bl:'#8FA67E',bt:'#4A5F3C'},
   sky:{n:'맑은 하늘',bg:'#F3F6FA',tx:'#243447',bd:'#D3DEE9',memo:'#E4ECF4',bb:'#F5F8FB',bl:'#86A5C2',bt:'#33506E'},
   dark:{n:'음영 반전',bg:'#1F1B18',tx:'#E8E6DC',bd:'#3A332D',memo:'#2E2823',bb:'#2E2823',bl:'#B98A6E',bt:'#DCC4AE'}};
-function RS(){ const s=DATA.settings; s.reader=Object.assign({theme:'beige',size:18,line:1.7,font:'serif',flow:'page',just:true,cut:true},s.reader||{}); return s.reader; }
+function RS(){ const s=DATA.settings; s.reader=Object.assign({theme:'beige',size:18,line:1.7,font:'serif',flow:'page',just:true,cut:true,pad:16},s.reader||{}); return s.reader; }
 function applyReading(){
   const r=RS(); let t=THEMES[r.theme]||THEMES.beige; const st=document.documentElement.style;
   if(document.documentElement.getAttribute('data-mode')==='eink') t={bg:'#FFFFFF',tx:'#000000',bd:'#000000',memo:'#E6E6E6',bb:'#E6E6E6',bl:'#000000',bt:'#000000'};
   st.setProperty('--rbandbg',t.bb||t.memo); st.setProperty('--rbandbd',t.bl||t.bd); st.setProperty('--rbandtx',t.bt||t.tx); st.setProperty('--rbg',t.bg); st.setProperty('--rtext',t.tx); st.setProperty('--rborder',t.bd); st.setProperty('--rmemo',t.memo);
   st.setProperty('--ralign',r.just===false?'left':'justify'); st.setProperty('--rbreak',r.cut===false?'keep-all':'normal'); st.setProperty('--rsize',r.size+'px'); st.setProperty('--rline',r.line);
-  st.setProperty('--rfont',FONTS[fontKey(r.font)].f);
+  st.setProperty('--rfont',FONTS[fontKey(r.font)].f); st.setProperty('--rpad',(r.pad==null?16:r.pad)+'px');
 }
-function rsSet(k,v){ const r=RS(); r[k]=v; if(k==='flow') pg=0; if(k==='font'&&document.fonts&&document.fonts.load){ document.fonts.load('16px '+FONTS[fontKey(v)].f.split(',')[0]).then(()=>{ if(document.getElementById('reader').classList.contains('active')) layoutPages(); }); } r.size=Math.max(14,Math.min(34,r.size)); r.line=Math.max(1.3,Math.min(2.4,Math.round(r.line*10)/10)); save(); applyReading(); renderRsControls(); if(document.getElementById('reader').classList.contains('active')) layoutPages(); flashSaved(); }
+function rsSet(k,v){ const r=RS(); r[k]=v; if(k==='flow') pg=0; if(k==='font'&&document.fonts&&document.fonts.load){ document.fonts.load('16px '+FONTS[fontKey(v)].f.split(',')[0]).then(()=>{ if(document.getElementById('reader').classList.contains('active')) layoutPages(); }); } r.size=Math.max(14,Math.min(34,r.size)); r.pad=Math.max(0,Math.min(40,Math.round((r.pad==null?16:r.pad)/4)*4)); r.line=Math.max(1.3,Math.min(2.4,Math.round(r.line*10)/10)); save(); applyReading(); renderRsControls(); if(document.getElementById('reader').classList.contains('active')) layoutPages(); flashSaved(); }
 function renderRsControls(){
   const r=RS();
-  const html=`<div class="sectitle" style="margin-top:0">배경색</div><div class="themes">${Object.keys(THEMES).map(k=>`<div class="themechip ${r.theme===k?'on':''}" onclick="rsSet('theme','${k}')"><div class="swatch" style="background:${THEMES[k].bg}"></div>${THEMES[k].n}</div>`).join('')}</div>
+  const html=`<div class="sectitle" style="margin-top:0">배경색</div><div class="themes hsc">${Object.keys(THEMES).map(k=>`<div class="themechip ${r.theme===k?'on':''}" onclick="rsSet('theme','${k}')"><div class="swatch" style="background:${THEMES[k].bg}"></div>${THEMES[k].n}</div>`).join('')}</div>
   <div class="ctlrow"><span class="lab">글자 크기</span><button class="stepbtn" onclick="rsSet('size',RS().size-1)">A−</button><span class="val">${r.size}</span><button class="stepbtn" onclick="rsSet('size',RS().size+1)">A+</button></div>
   <div class="ctlrow"><span class="lab">줄 간격</span><button class="stepbtn" onclick="rsSet('line',RS().line-0.1)">−</button><span class="val">${r.line.toFixed(1)}</span><button class="stepbtn" onclick="rsSet('line',RS().line+0.1)">＋</button></div>
+  <div class="ctlrow"><span class="lab">좌우 여백</span><button class="stepbtn" onclick="rsSet('pad',RS().pad-4)">−</button><span class="val">${r.pad}</span><button class="stepbtn" onclick="rsSet('pad',RS().pad+4)">＋</button></div>
   <div class="sectitle" style="margin-top:4px">글꼴</div>
-  <div class="fontgrid">${Object.keys(FONTS).map(k=>`<button class="fontchip ${fontKey(r.font)===k?'on':''}" style="font-family:${FONTS[k].f}" onclick="rsSet('font','${k}')">${FONTS[k].n}</button>`).join('')}</div>
+  <div class="fontgrid hsc">${Object.keys(FONTS).map(k=>`<button class="fontchip ${fontKey(r.font)===k?'on':''}" style="font-family:${FONTS[k].f}" onclick="rsSet('font','${k}')">${FONTS[k].n}</button>`).join('')}</div>
   <div class="ctlrow"><span class="lab">읽는 방식</span><button class="segbtn ${r.flow==='scroll'?'on':''}" onclick="rsSet('flow','scroll')">스크롤</button><button class="segbtn ${r.flow==='page'?'on':''}" onclick="rsSet('flow','page')">쪽 넘기기</button></div>
-  <label class="ocropt"><input type="checkbox" ${r.just!==false?'checked':''} onchange="rsSet('just',this.checked)"> 양쪽 맞춤</label>
-  <label class="ocropt"><input type="checkbox" ${r.cut!==false?'checked':''} onchange="rsSet('cut',this.checked)"> 한글 잘림 허용 (끄면 단어를 끊지 않아요)</label>
-  <div class="readprev">미래는 오늘 읽는 한 줄에서 시작됩니다.</div>
+  <div class="ocrpair"><label class="ocropt"><input type="checkbox" ${r.just!==false?'checked':''} onchange="rsSet('just',this.checked)"> 양쪽 맞춤</label>
+  <label class="ocropt"><input type="checkbox" ${r.cut!==false?'checked':''} onchange="rsSet('cut',this.checked)"> 한글 잘림 허용</label></div>
   <button class="btn txt" style="width:100%;margin-top:12px;" onclick="resetReading()">기본값으로 되돌리기</button>`;
-  ['rsControls','rsControlsM'].forEach(id=>{const el=document.getElementById(id); if(el) el.innerHTML=html;});
+  const keep={}; ['rsControls','rsControlsM'].forEach(id=>{ const el=document.getElementById(id); if(el){ keep[id]=[...el.querySelectorAll('.hsc')].map(x=>x.scrollLeft); keep[id+'y']=el.scrollTop; } });
+  ['rsControls','rsControlsM'].forEach(id=>{const el=document.getElementById(id); if(el){ el.innerHTML=html; const k=keep[id]; if(k){ el.querySelectorAll('.hsc').forEach((x,i)=>{ x.scrollLeft=k[i]||0; }); el.scrollTop=keep[id+'y']||0; } else el.querySelectorAll('.hsc .on').forEach(o=>{ try{ o.scrollIntoView({inline:'center',block:'nearest'}); }catch(e){} }); }});
 }
 function flashSaved(){ ['savedTag','savedTag2'].forEach(id=>{ const t=document.getElementById(id); if(!t) return; t.textContent='✓ 자동 저장됨'; t.classList.add('on'); clearTimeout(t._h); t._h=setTimeout(()=>t.classList.remove('on'),1600); }); }
 function resetReading(){ askConfirm('글자 크기·색상·글꼴·읽는 방식을 처음 기본값으로 되돌릴까요?',()=>{ delete DATA.settings.reader; save(); applyReading(); renderRsControls(); if(document.getElementById('reader').classList.contains('active')) layoutPages(); flashSaved(); showToast('기본값으로 되돌렸습니다.'); }); }
@@ -4696,9 +4716,13 @@ function saveInlineEdit(){
 /* ===== 앱 전체 글자 크기 ===== */
 const UI_SCALES=[['작게',0.92],['보통',1],['크게',1.06],['아주 크게',1.12],['가장 크게',1.25]];
 function uiLevel(){ const v=DATA.settings&&DATA.settings.uiScale; return (typeof v==='number'&&v>=0&&v<UI_SCALES.length)?v:1; }
+setTimeout(()=>{ try{ applyUiFont(); }catch(e){} },0);
 function applyUiScale(){ try{ if(DATA.settings&&DATA.settings.uiScaleV!==2){ const o=DATA.settings.uiScale; if(typeof o==='number'){ DATA.settings.uiScale=[0,1,3,4][o]!=null?[0,1,3,4][o]:1; } DATA.settings.uiScaleV=2; save(); } }catch(x){}
   document.documentElement.style.setProperty('--uz',String(UI_SCALES[uiLevel()][1])); }
-function openFs(){ renderFs(); document.getElementById('fsBg').classList.add('show'); }
+const UI_FONTS=[['basic','기본','"PretendardM","Apple SD Gothic Neo","Noto Sans KR",sans-serif'],['batang','고운바탕','"Gowun Batang","Noto Serif KR",serif'],['dodum','고운돋움','"Gowun Dodum","Noto Sans KR",sans-serif']];
+function applyUiFont(){ const k=(DATA.settings&&DATA.settings.uiFont)||'basic'; const f=UI_FONTS.find(x=>x[0]===k)||UI_FONTS[0]; if(f[0]==='basic') document.documentElement.style.removeProperty('--uifont'); else document.documentElement.style.setProperty('--uifont',f[2]); }
+function renderUiFont(){ const h=document.getElementById('uiFontRow'); if(!h) return; const k=DATA.settings.uiFont||'basic'; h.innerHTML=''; UI_FONTS.forEach(f=>{ const b=document.createElement('button'); b.type='button'; b.className='uifbtn'+(f[0]===k?' on':''); b.style.fontFamily=f[2]; b.textContent=f[1]; b.onclick=()=>{ DATA.settings.uiFont=f[0]; save(); applyUiFont(); renderUiFont(); }; h.appendChild(b); }); }
+function openFs(){ renderFs(); renderUiFont(); document.getElementById('fsBg').classList.add('show'); }
 function renderFs(){ const i=uiLevel(); const l=document.getElementById('fsLabel'); if(l) l.textContent=UI_SCALES[i][0]; const a=document.getElementById('fsMinus'), b=document.getElementById('fsPlus'); if(a) a.disabled=(i<=0); if(b) b.disabled=(i>=UI_SCALES.length-1); }
 function fsStep(d){ const i=Math.max(0,Math.min(UI_SCALES.length-1,uiLevel()+d)); DATA.settings.uiScale=i; save(); applyUiScale(); renderFs(); }
 
@@ -5014,7 +5038,7 @@ function renderSearchScreen(){
 function tabSearch(){ tabGo('search'); setTimeout(()=>{const i=document.getElementById('searchInput'); if(i) i.focus();},80); }
 
 /* ---------- 버전 · 업데이트 확인 ---------- */
-const APP_VERSION='2026.11.19-27';
+const APP_VERSION='2026.11.19-28';
 let updateAvail=false;
 let latestVer='';
 function pendingState(){
